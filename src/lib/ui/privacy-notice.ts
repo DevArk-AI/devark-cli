@@ -12,7 +12,7 @@ export async function showPrivacyNotice(): Promise<boolean> {
   console.log(colors.primary(box.doubleTopLeft + box.doubleHorizontal.repeat(58) + box.doubleTopRight));
   console.log(
     colors.primary(box.doubleVertical) + 
-    colors.highlight('  Setting up vibe-log cloud mode...                   ') +
+    colors.highlight('  Setting up devark cloud mode...                   ') +
     colors.primary(box.doubleVertical)
   );
   console.log(colors.primary(box.tLeft + box.horizontal.repeat(58) + box.tRight));
@@ -31,13 +31,13 @@ export async function showPrivacyNotice(): Promise<boolean> {
   console.log('');
   console.log(colors.accent('  🔒 Privacy Notice:'));
   console.log('');
-  console.log(' We take privacy seriously, vibe-log cloud will:');
+  console.log(' We take privacy seriously, devark cloud will:');
   console.log(colors.success(`  ${icons.check} Analyze sessions on our infrastructure`));
   console.log(colors.success(`  ${icons.check} Your code and personal data never leaves your machine`));
   console.log('');
   console.log(colors.subdued('  Your code and sensitive information stay private.'));
   console.log('');
-  console.log(colors.subdued('  Read our privacy policy: ') + colors.primary('https://vibe-log.dev/privacy'));
+  console.log(colors.subdued('  Read our privacy policy: ') + colors.primary('https://devark.dev/privacy'));
   console.log('');
   console.log(colors.primary(box.bottomLeft + box.horizontal.repeat(58) + box.bottomRight));
   console.log('');
@@ -64,7 +64,7 @@ export async function showPrivacyReminder(): Promise<boolean> {
   console.log(colors.subdued('• Cloud mode uses our infrastructure (0 tokens)'));
   console.log(colors.subdued('• We store anonymized metrics only'));
   console.log(colors.subdued('• Your code remains private'));
-  console.log(colors.subdued('• Privacy policy: https://vibe-log.dev/privacy'));
+  console.log(colors.subdued('• Privacy policy: https://devark.dev/privacy'));
   console.log('');
   
   const { proceed } = await inquirer.prompt([

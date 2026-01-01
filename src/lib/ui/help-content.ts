@@ -1,12 +1,12 @@
 import { colors } from './styles';
 
 /**
- * Display the help content for vibe-log
+ * Display the help content for devark
  * Shared between main menu and first-time welcome
  */
 export function showHelpContent(): void {
   console.log('');
-  console.log(colors.primary('📊 Vibe-Log - Measure, Learn & Improve Your AI Coding'));
+  console.log(colors.primary('📊 DevArk - Measure, Learn & Improve Your AI Coding'));
   console.log('');
   console.log(colors.subdued('Understand how you work with Claude Code. Track patterns, measure'));
   console.log(colors.subdued('productivity, and discover what makes your AI coding sessions effective.'));
@@ -32,18 +32,18 @@ export function showHelpContent(): void {
   console.log('    └─ Day 1: 2 pts, Day 2: 4 pts... Day 7+: 128 pts max');
   console.log('  • ' + colors.highlight('📊 Volume Bonus') + ' - 1 point per session uploaded (max 30/day)');
   console.log('  • ' + colors.highlight('🏅 Instant Feedback') + ' - See points earned after CLI uploads');
-  console.log('  • ' + colors.highlight('📈 Compete') + ' - Check leaderboard at app.vibe-log.dev');
+  console.log('  • ' + colors.highlight('📈 Compete') + ' - Check leaderboard at app.devark.dev');
   console.log('  • ' + colors.subdued('Note: Share sessions on the web for extra points'));
   console.log('');
   console.log(colors.accent('⚡ Getting Started:'));
-  console.log('  1. Run ' + colors.primary('npx vibe-log-cli') + ' to open this menu');
+  console.log('  1. Run ' + colors.primary('npx devark-cli') + ' to open this menu');
   console.log('  2. Choose your analysis mode (Cloud or Local)');
-  console.log('  3. Start coding with Claude - vibe-log tracks automatically');
+  console.log('  3. Start coding with Claude - devark tracks automatically');
   console.log('  4. Review insights to improve your AI coding workflow');
   console.log('');
   console.log(colors.accent('📚 Learn More:'));
-  console.log('  • Documentation: ' + colors.primary('https://vibe-log.dev'));
-  console.log('  • View Dashboard: ' + colors.primary('https://app.vibe-log.dev'));
-  console.log('  • GitHub: ' + colors.primary('https://github.com/vibe-log'));
+  console.log('  • Documentation: ' + colors.primary('https://devark.dev'));
+  console.log('  • View Dashboard: ' + colors.primary('https://app.devark.dev'));
+  console.log('  • GitHub: ' + colors.primary('https://github.com/devark'));
   console.log('');
 }

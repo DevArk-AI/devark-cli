@@ -3,7 +3,7 @@ import { status } from '../status';
 import * as tokenAuth from '../../lib/auth/token';
 import { apiClient } from '../../lib/api-client';
 import * as ui from '../../lib/ui';
-import { VibelogError } from '../../utils/errors';
+import { DevArkError } from '../../utils/errors';
 import { logger } from '../../utils/logger';
 
 // Mock dependencies
@@ -44,7 +44,7 @@ describe.skip('Status Command', () => {
     {
       timestamp: '2024-01-15T10:00:00Z',
       duration: 3600,
-      projectName: 'vibe-log',
+      projectName: 'devark',
     },
     {
       timestamp: '2024-01-14T14:00:00Z',
@@ -95,7 +95,7 @@ describe.skip('Status Command', () => {
       expect(mockSpinner.succeed).toHaveBeenCalledWith('Stats loaded!');
       
       // Check displayed information
-      expect(console.log).toHaveBeenCalledWith(expect.stringContaining('Your vibe-log Stats'));
+      expect(console.log).toHaveBeenCalledWith(expect.stringContaining('Your devark Stats'));
       expect(console.log).toHaveBeenCalledWith(expect.stringContaining('Current Streak: 5 days'));
       expect(console.log).toHaveBeenCalledWith(expect.stringContaining('Longest Streak: 10 days'));
       expect(console.log).toHaveBeenCalledWith(expect.stringContaining('Total Points: 150'));
@@ -108,7 +108,7 @@ describe.skip('Status Command', () => {
 
       expect(mockApiClient.getRecentSessions).toHaveBeenCalledWith(5);
       expect(console.log).toHaveBeenCalledWith(expect.stringContaining('Recent Sessions:'));
-      expect(console.log).toHaveBeenCalledWith(expect.stringContaining('vibe-log'));
+      expect(console.log).toHaveBeenCalledWith(expect.stringContaining('devark'));
       expect(console.log).toHaveBeenCalledWith(expect.stringContaining('test-project'));
     });
 
@@ -188,10 +188,10 @@ describe.skip('Status Command', () => {
   describe('error handling', () => {
     it('should handle authentication failure', async () => {
       mockTokenAuth.requireAuth.mockRejectedValue(
-        new VibelogError('Not authenticated', 'AUTH_REQUIRED')
+        new DevArkError('Not authenticated', 'AUTH_REQUIRED')
       );
 
-      await expect(status()).rejects.toThrow(VibelogError);
+      await expect(status()).rejects.toThrow(DevArkError);
       await expect(status()).rejects.toThrow('Not authenticated');
       
       expect(mockSpinner.start).not.toHaveBeenCalled();
@@ -201,7 +201,7 @@ describe.skip('Status Command', () => {
       const apiError = new Error('Network error');
       mockApiClient.getStreak.mockRejectedValue(apiError);
 
-      await expect(status()).rejects.toThrow(VibelogError);
+      await expect(status()).rejects.toThrow(DevArkError);
       await expect(status()).rejects.toThrow('Failed to fetch your stats');
       
       expect(mockSpinner.fail).toHaveBeenCalledWith('Failed to fetch stats');
@@ -215,7 +215,7 @@ describe.skip('Status Command', () => {
         points: null,
       } as any);
 
-      await expect(status()).rejects.toThrow(VibelogError);
+      await expect(status()).rejects.toThrow(DevArkError);
       await expect(status()).rejects.toThrow('Failed to fetch your stats. Please try again.');
       expect(mockSpinner.fail).toHaveBeenCalled();
     });
@@ -223,7 +223,7 @@ describe.skip('Status Command', () => {
     it('should handle missing streak data', async () => {
       mockApiClient.getStreak.mockResolvedValue(null as any);
 
-      await expect(status()).rejects.toThrow(VibelogError);
+      await expect(status()).rejects.toThrow(DevArkError);
       await expect(status()).rejects.toThrow('Failed to fetch your stats. Please try again.');
     });
 
@@ -240,8 +240,8 @@ describe.skip('Status Command', () => {
       );
     });
 
-    it('should rethrow VibelogError without wrapping', async () => {
-      const customError = new VibelogError('Custom error', 'CUSTOM_CODE');
+    it('should rethrow DevArkError without wrapping', async () => {
+      const customError = new DevArkError('Custom error', 'CUSTOM_CODE');
       mockApiClient.getStreak.mockRejectedValue(customError);
 
       await expect(status()).rejects.toThrow(customError);
@@ -316,7 +316,7 @@ describe.skip('Status Command', () => {
       await status();
 
       // Verify color usage (mocked chalk returns plain text in tests)
-      expect(console.log).toHaveBeenCalledWith(expect.stringContaining('📊 Your vibe-log Stats'));
+      expect(console.log).toHaveBeenCalledWith(expect.stringContaining('📊 Your devark Stats'));
       expect(console.log).toHaveBeenCalledWith(expect.stringContaining('🔥 Current Streak'));
       expect(console.log).toHaveBeenCalledWith(expect.stringContaining('🏆 Longest Streak'));
       expect(console.log).toHaveBeenCalledWith(expect.stringContaining('⭐ Total Points'));
@@ -403,7 +403,7 @@ describe.skip('Status Command', () => {
         todaySessions: 2,
       });
 
-      await expect(status()).rejects.toThrow(VibelogError);
+      await expect(status()).rejects.toThrow(DevArkError);
       await expect(status()).rejects.toThrow('Failed to fetch your stats. Please try again.');
     });
 
@@ -449,7 +449,7 @@ describe.skip('Status Command', () => {
       const timeoutError = new Error('ETIMEDOUT');
       mockApiClient.getStreak.mockRejectedValue(timeoutError);
 
-      await expect(status()).rejects.toThrow(VibelogError);
+      await expect(status()).rejects.toThrow(DevArkError);
       expect(mockLogger.error).toHaveBeenCalledWith('Failed to fetch status', timeoutError);
     });
   });

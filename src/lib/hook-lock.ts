@@ -11,7 +11,7 @@ export class HookLock {
   private lockTimeout: number = 60000; // 60 seconds max lock time
 
   constructor() {
-    this.lockPath = path.join(homedir(), '.vibe-log', 'hook.lock');
+    this.lockPath = path.join(homedir(), '.devark', 'hook.lock');
   }
 
   /**

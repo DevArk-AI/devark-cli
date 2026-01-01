@@ -1,5 +1,5 @@
 /**
- * Types for vibe-log prompt orchestration
+ * Types for devark prompt orchestration
  */
 
 export interface PromptContext {

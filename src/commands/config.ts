@@ -9,7 +9,7 @@ import {
   setCliPath,
 } from '../lib/config';
 import { showSuccess, showInfo } from '../lib/ui';
-import { VibelogError } from '../utils/errors';
+import { DevArkError } from '../utils/errors';
 import { validateUrl } from '../lib/input-validator';
 
 interface ConfigOptions {
@@ -23,7 +23,7 @@ export async function config(options: ConfigOptions): Promise<void> {
     // List all configuration
     const allConfig = getAllConfig();
     
-    console.log(chalk.cyan('\n⚙️  vibe-log Configuration'));
+    console.log(chalk.cyan('\n⚙️  devark Configuration'));
     console.log(chalk.gray('═══════════════════════════════\n'));
     
     console.log(chalk.cyan('Config File:'), getConfigPath());
@@ -47,7 +47,7 @@ export async function config(options: ConfigOptions): Promise<void> {
     const validKeys = ['apiUrl', 'token', 'lastSync', 'preferences'];
     
     if (!validKeys.includes(options.get)) {
-      throw new VibelogError(
+      throw new DevArkError(
         `Invalid configuration key. Valid keys: ${validKeys.join(', ')}`,
         'INVALID_CONFIG_KEY'
       );
@@ -72,7 +72,7 @@ export async function config(options: ConfigOptions): Promise<void> {
     const value = valueParts.join('=');
     
     if (!key || !value) {
-      throw new VibelogError(
+      throw new DevArkError(
         'Invalid format. Use: --set key=value',
         'INVALID_FORMAT'
       );
@@ -89,7 +89,7 @@ export async function config(options: ConfigOptions): Promise<void> {
         
       case 'preferences.colorScheme':
         if (!['default', 'minimal'].includes(value)) {
-          throw new VibelogError(
+          throw new DevArkError(
             'Invalid color scheme. Use: default or minimal',
             'INVALID_VALUE'
           );
@@ -112,7 +112,7 @@ export async function config(options: ConfigOptions): Promise<void> {
         break;
         
       default:
-        throw new VibelogError(
+        throw new DevArkError(
           `Cannot set '${key}'. Configurable keys: apiUrl, cliPath, preferences.colorScheme, preferences.verboseOutput`,
           'INVALID_CONFIG_KEY'
         );
@@ -122,15 +122,15 @@ export async function config(options: ConfigOptions): Promise<void> {
   }
   
   // No options provided, show help
-  console.log(chalk.cyan('\n⚙️  vibe-log Configuration'));
+  console.log(chalk.cyan('\n⚙️  devark Configuration'));
   console.log(chalk.gray('\nUsage:'));
-  console.log('  vibe-log config --list              List all configuration');
-  console.log('  vibe-log config --get <key>         Get a configuration value');
-  console.log('  vibe-log config --set <key=value>   Set a configuration value');
+  console.log('  devark config --list              List all configuration');
+  console.log('  devark config --get <key>         Get a configuration value');
+  console.log('  devark config --set <key=value>   Set a configuration value');
   console.log(chalk.gray('\nExamples:'));
-  console.log('  vibe-log config --list');
-  console.log('  vibe-log config --get apiUrl');
-  console.log('  vibe-log config --set apiUrl=https://api.vibe-log.dev');
-  console.log('  vibe-log config --set cliPath="/path/to/vibe-log.js"');
-  console.log('  vibe-log config --set preferences.colorScheme=minimal');
+  console.log('  devark config --list');
+  console.log('  devark config --get apiUrl');
+  console.log('  devark config --set apiUrl=https://api.devark.dev');
+  console.log('  devark config --set cliPath="/path/to/devark.js"');
+  console.log('  devark config --set preferences.colorScheme=minimal');
 }

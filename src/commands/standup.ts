@@ -1,7 +1,7 @@
 import chalk from 'chalk';
 import { requireAuth } from '../lib/auth/token';
 import { createSpinner } from '../lib/ui';
-import { VibelogError } from '../utils/errors';
+import { DevArkError } from '../utils/errors';
 import { logger } from '../utils/logger';
 import { readClaudeSessions } from '../lib/readers/claude';
 import { SessionData } from '../lib/readers/types';
@@ -269,12 +269,12 @@ export async function standup(options?: { skipAuth?: boolean }): Promise<void> {
     logger.error('Standup generation failed with error:', error);
     logger.error('Error stack:', error instanceof Error ? error.stack : 'No stack trace');
 
-    if (error instanceof VibelogError) {
+    if (error instanceof DevArkError) {
       throw error;
     }
 
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-    throw new VibelogError(`Failed to generate standup summary: ${errorMessage}`, 'STANDUP_ERROR');
+    throw new DevArkError(`Failed to generate standup summary: ${errorMessage}`, 'STANDUP_ERROR');
   }
 }
 

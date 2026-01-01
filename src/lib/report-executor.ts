@@ -84,14 +84,14 @@ export async function executeClaudePrompt(
               if (isError) {
                 // Don't show tool failures - they're usually expected (file not found, etc.)
                 // Only show in debug mode
-                if (process.env.VIBELOG_DEBUG) {
+                if (process.env.DEVARK_DEBUG) {
                   console.log(colors.dim(formatTimestamp(now)) + ' ❌ ' + colors.error('Tool failed'));
                 }
               } else {
                 console.log(colors.dim(formatTimestamp(now)) + ' ✓ ' + colors.success('Tool completed'));
                 
                 // Show brief result preview in debug mode
-                if (process.env.VIBELOG_DEBUG && content.content) {
+                if (process.env.DEVARK_DEBUG && content.content) {
                   const resultPreview = String(content.content).slice(0, 100);
                   console.log(colors.dim(`     Result: ${resultPreview}${resultPreview.length >= 100 ? '...' : ''}`));
                 }
@@ -171,7 +171,7 @@ export async function executeClaudePrompt(
                 console.log(colors.dim(formatTimestamp(now)) + ' 🚀 ' + colors.accent(`Launching sub-agent: ${subagentType}...`));
                 
                 // Start capturing when report generator is launched
-                if (subagentType === 'vibe-log-report-generator') {
+                if (subagentType === 'devark-report-generator') {
                   reportGenerator.startCapture();
                 }
               } else {
@@ -179,7 +179,7 @@ export async function executeClaudePrompt(
               }
               
               // Show tool input if in debug mode
-              if (process.env.VIBELOG_DEBUG && content.input) {
+              if (process.env.DEVARK_DEBUG && content.input) {
                 const inputPreview = JSON.stringify(content.input).slice(0, 200);
                 console.log(colors.dim(`     Input: ${inputPreview}${inputPreview.length >= 200 ? '...' : ''}`));
               }
@@ -279,7 +279,7 @@ export async function executeClaudePrompt(
           hasContent: !!event.content,
         });
         
-        if (process.env.VIBELOG_DEBUG) {
+        if (process.env.DEVARK_DEBUG) {
           console.log(colors.dim(`[DEBUG] ${formatTimestamp(now)} Unhandled: type=${event.type}`));
         }
     }
@@ -314,7 +314,7 @@ export async function executeClaudePrompt(
       }
 
       // Debug logging to understand report capture status
-      if (process.env.VIBELOG_DEBUG) {
+      if (process.env.DEVARK_DEBUG) {
         console.log(colors.dim(`[DEBUG] Checking for captured report...`));
         console.log(colors.dim(`[DEBUG] hasReport: ${reportGenerator.hasReport()}`));
         console.log(colors.dim(`[DEBUG] isCapturing: ${reportGenerator.isCapturing()}`));
@@ -329,7 +329,7 @@ export async function executeClaudePrompt(
         console.log();
         
         if (result.success) {
-          if (process.env.VIBELOG_DEBUG) {
+          if (process.env.DEVARK_DEBUG) {
             console.log(colors.dim(`[DEBUG] Report saved successfully`));
           }
           reportGenerator.displayCompletionMessage();
@@ -344,7 +344,7 @@ export async function executeClaudePrompt(
         // Check if an HTML file was created anyway (by the old 3-agent system)
         const fs = await import('fs').then(m => m.promises);
         const files = await fs.readdir(process.cwd());
-        const htmlFiles = files.filter(f => f.startsWith('vibe-log-report-') && f.endsWith('.html'));
+        const htmlFiles = files.filter(f => f.startsWith('devark-report-') && f.endsWith('.html'));
         
         if (htmlFiles.length > 0) {
           console.log(colors.success(`${icons.check} Report generation complete!`));
@@ -371,11 +371,11 @@ export async function executeClaudePrompt(
   await executeClaude(prompt, claudeOptions);
   
   // Wait for the report display to complete
-  if (process.env.VIBELOG_DEBUG) {
+  if (process.env.DEVARK_DEBUG) {
     console.log(colors.dim('[DEBUG] Waiting for report display to complete...'));
   }
   await reportDisplayComplete;
-  if (process.env.VIBELOG_DEBUG) {
+  if (process.env.DEVARK_DEBUG) {
     console.log(colors.dim('[DEBUG] Report display complete'));
   }
   
@@ -385,13 +385,13 @@ export async function executeClaudePrompt(
   // Check if we showed a report
   const fs = await import('fs').then(m => m.promises);
   const files = await fs.readdir(process.cwd());
-  const htmlFiles = files.filter(f => f.startsWith('vibe-log-report-') && f.endsWith('.html'));
+  const htmlFiles = files.filter(f => f.startsWith('devark-report-') && f.endsWith('.html'));
   
   if (reportGenerator.hasReport() || htmlFiles.length > 0) {
     // We showed a report, so wait for user input
     console.log();
     console.log(colors.muted('Press Enter to continue...'));
-    if (process.env.VIBELOG_DEBUG) {
+    if (process.env.DEVARK_DEBUG) {
       console.log(colors.dim('[DEBUG] Setting up raw stdin handler...'));
       
       // Check stdin state before we start
@@ -403,12 +403,12 @@ export async function executeClaudePrompt(
     
     // Clear any pending data first
     if (process.stdin.readable && !process.stdin.isPaused()) {
-      if (process.env.VIBELOG_DEBUG) {
+      if (process.env.DEVARK_DEBUG) {
         console.log(colors.dim('[DEBUG] Draining any pending stdin data...'));
       }
       let chunk;
       while ((chunk = process.stdin.read()) !== null) {
-        if (process.env.VIBELOG_DEBUG) {
+        if (process.env.DEVARK_DEBUG) {
           console.log(colors.dim(`[DEBUG] Drained: ${chunk.toString('hex')}`));
         }
       }
@@ -417,21 +417,21 @@ export async function executeClaudePrompt(
     // Wait for ENTER key specifically
     await new Promise<void>(resolve => {
       try {
-        if (process.env.VIBELOG_DEBUG) {
+        if (process.env.DEVARK_DEBUG) {
           console.log(colors.dim('[DEBUG] Enabling raw mode...'));
         }
         process.stdin.setRawMode(true);
-        if (process.env.VIBELOG_DEBUG) {
+        if (process.env.DEVARK_DEBUG) {
           console.log(colors.dim('[DEBUG] Resuming stdin...'));
         }
         process.stdin.resume();
-        if (process.env.VIBELOG_DEBUG) {
+        if (process.env.DEVARK_DEBUG) {
           console.log(colors.dim('[DEBUG] Waiting for Enter key...'));
         }
         
         const handleKeyPress = (data: Buffer | any) => {
           // Simple console.log without colors to avoid formatting issues
-          if (process.env.VIBELOG_DEBUG) {
+          if (process.env.DEVARK_DEBUG) {
             console.log('[DEBUG] Raw data received, type:', typeof data);
             console.log('[DEBUG] Data length:', data.length);
           }
@@ -441,7 +441,7 @@ export async function executeClaudePrompt(
             const str = data.toString();
             const charCode = str.charCodeAt(0);
             
-            if (process.env.VIBELOG_DEBUG) {
+            if (process.env.DEVARK_DEBUG) {
               console.log('[DEBUG] String:', JSON.stringify(str));
               console.log('[DEBUG] CharCode at 0:', charCode);
               console.log('[DEBUG] Is Buffer?', Buffer.isBuffer(data));
@@ -451,7 +451,7 @@ export async function executeClaudePrompt(
             // "\r" is carriage return (Enter on most systems)
             // "\n" is line feed (Enter on some systems)
             if (str === '\r' || str === '\n' || charCode === 13 || charCode === 10) {
-              if (process.env.VIBELOG_DEBUG) {
+              if (process.env.DEVARK_DEBUG) {
                 console.log('[DEBUG] Enter key detected!');
               }
               process.stdin.setRawMode(false);
@@ -459,7 +459,7 @@ export async function executeClaudePrompt(
               process.stdin.removeListener('data', handleKeyPress);
               resolve();
             } else if (charCode === 3) {
-              if (process.env.VIBELOG_DEBUG) {
+              if (process.env.DEVARK_DEBUG) {
                 console.log('[DEBUG] Ctrl+C detected, exiting...');
               }
               process.stdin.setRawMode(false);
@@ -467,12 +467,12 @@ export async function executeClaudePrompt(
               process.stdin.removeListener('data', handleKeyPress);
               process.exit(0);
             } else {
-              if (process.env.VIBELOG_DEBUG) {
+              if (process.env.DEVARK_DEBUG) {
                 console.log('[DEBUG] Key ignored, waiting for Enter. CharCode was:', charCode);
               }
             }
           } else {
-            if (process.env.VIBELOG_DEBUG) {
+            if (process.env.DEVARK_DEBUG) {
               console.log('[DEBUG] Empty data received');
             }
           }
@@ -480,7 +480,7 @@ export async function executeClaudePrompt(
         
         process.stdin.on('data', handleKeyPress);
       } catch (err) {
-        if (process.env.VIBELOG_DEBUG) {
+        if (process.env.DEVARK_DEBUG) {
           console.log(colors.error(`[DEBUG] Error setting up stdin: ${err}`));
           console.log(colors.error(`[DEBUG] Stack: ${err instanceof Error ? err.stack : 'N/A'}`));
         }
@@ -492,7 +492,7 @@ export async function executeClaudePrompt(
   
   // Now call the original onComplete callback if provided
   if (options?.onComplete) {
-    if (process.env.VIBELOG_DEBUG) {
+    if (process.env.DEVARK_DEBUG) {
       console.log(colors.dim('[DEBUG] Calling original onComplete callback...'));
     }
     options.onComplete(exitCode);

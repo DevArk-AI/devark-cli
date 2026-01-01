@@ -53,7 +53,7 @@ export async function getCCUsageMetrics(
   logger.debug('No cache hit, calling ccusage...');
 
   // Set up cross-platform debug log path
-  const debugLogPath = path.join(os.homedir(), '.vibe-log', 'ccusage-debug.log');
+  const debugLogPath = path.join(os.homedir(), '.devark', 'ccusage-debug.log');
 
   return new Promise((resolve) => {
     let output = '';

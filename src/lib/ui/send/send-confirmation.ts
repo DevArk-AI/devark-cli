@@ -22,7 +22,7 @@ export class SendConfirmationUI {
 
   showCancelled() {
     console.log(chalk.yellow('\nUpload cancelled.'));
-    console.log(chalk.blueBright('💡 Tip: Use "vibe-log privacy" to preview what gets sent'));
+    console.log(chalk.blueBright('💡 Tip: Use "devark privacy" to preview what gets sent'));
   }
 
   async showNextSteps() {
@@ -30,7 +30,7 @@ export class SendConfirmationUI {
 
     console.log('\n📋 What to do next:');
     console.log('');
-    console.log(`  🌐 Visit vibe-log web dashboard   ${getDashboardUrl()}`);
+    console.log(`  🌐 Visit devark web dashboard   ${getDashboardUrl()}`);
     console.log('');
     
     // Prompt to continue after upload completes

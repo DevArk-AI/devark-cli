@@ -1,6 +1,6 @@
 import { requireAuth } from '../lib/auth/token';
 import { showHooksManagementMenu } from '../lib/ui/hooks-menu';
-import { VibelogError } from '../utils/errors';
+import { DevArkError } from '../utils/errors';
 import { logger } from '../utils/logger';
 
 /**
@@ -17,11 +17,11 @@ export async function hooksManage(): Promise<void> {
   } catch (error) {
     logger.error('Failed to manage hooks', error);
     
-    if (error instanceof VibelogError) {
+    if (error instanceof DevArkError) {
       throw error;
     }
     
-    throw new VibelogError(
+    throw new DevArkError(
       'Failed to manage hooks. Please try again.',
       'HOOKS_MANAGE_FAILED'
     );

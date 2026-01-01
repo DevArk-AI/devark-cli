@@ -7,7 +7,7 @@ import {
   setLastSyncSummary
 } from '../config';
 import { parseProjectName } from '../ui/project-display';
-import { VibelogError } from '../../utils/errors';
+import { DevArkError } from '../../utils/errors';
 import { logger } from '../../utils/logger';
 import { MessageSanitizer } from '../message-sanitizer';
 import { logHookError } from '../hook-utils';
@@ -88,7 +88,7 @@ export class SendOrchestrator {
       if (!token) {
         await logHookError('Auth check', new Error('No authentication token found'));
         logger.error('No auth token, skipping silent send');
-        throw new VibelogError('Not authenticated', 'AUTH_REQUIRED');
+        throw new DevArkError('Not authenticated', 'AUTH_REQUIRED');
       }
     } else {
       await requireAuth();
@@ -338,7 +338,7 @@ export class SendOrchestrator {
         }
         
         // For regular sync, throw error
-        throw new VibelogError(
+        throw new DevArkError(
           `All ${filteredCount} session(s) were shorter than 4 minutes. Sessions must be at least 4 minutes long to upload.`,
           'VALIDATION_ERROR'
         );
@@ -354,17 +354,17 @@ export class SendOrchestrator {
     onProgress?: (current: number, total: number, sizeKB?: number) => void
   ): Promise<any> {
     try {
-      if (process.env.VIBELOG_DEBUG === 'true') {
+      if (process.env.DEVARK_DEBUG === 'true') {
         console.log('[DEBUG] SendOrchestrator.uploadSessions called with', apiSessions.length, 'sessions');
       }
       logger.debug(`Uploading ${apiSessions.length} sessions to API`);
       const result = await apiClient.uploadSessions(apiSessions, onProgress);
-      if (process.env.VIBELOG_DEBUG === 'true') {
+      if (process.env.DEVARK_DEBUG === 'true') {
         console.log('[DEBUG] Upload completed successfully');
       }
       return result;
     } catch (error) {
-      if (process.env.VIBELOG_DEBUG === 'true') {
+      if (process.env.DEVARK_DEBUG === 'true') {
         console.log('[DEBUG] SendOrchestrator upload error:', error);
       }
       if (options.silent) {

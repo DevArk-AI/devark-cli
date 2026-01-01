@@ -1,7 +1,7 @@
 import fs from 'fs/promises';
 import path from 'path';
 import os from 'os';
-import { VIBE_LOG_SUB_AGENTS, SubAgentName } from './constants';
+import { DEVARK_SUB_AGENTS, SubAgentName } from './constants';
 import { SUB_AGENT_TEMPLATES } from './templates';
 import { logger } from '../../utils/logger';
 import { icons } from '../ui/styles';
@@ -48,25 +48,25 @@ export async function checkInstalledSubAgents(): Promise<{
     await fs.access(dir);
     const files = await fs.readdir(dir);
     
-    const installed = VIBE_LOG_SUB_AGENTS.filter(agent => 
+    const installed = DEVARK_SUB_AGENTS.filter(agent => 
       files.includes(agent)
     ) as SubAgentName[];
     
-    const missing = VIBE_LOG_SUB_AGENTS.filter(agent => 
+    const missing = DEVARK_SUB_AGENTS.filter(agent => 
       !files.includes(agent)
     ) as SubAgentName[];
     
     return {
       installed,
       missing,
-      total: VIBE_LOG_SUB_AGENTS.length
+      total: DEVARK_SUB_AGENTS.length
     };
   } catch {
     // Directory doesn't exist or can't be accessed
     return {
       installed: [],
-      missing: [...VIBE_LOG_SUB_AGENTS] as SubAgentName[],
-      total: VIBE_LOG_SUB_AGENTS.length
+      missing: [...DEVARK_SUB_AGENTS] as SubAgentName[],
+      total: DEVARK_SUB_AGENTS.length
     };
   }
 }
@@ -103,7 +103,7 @@ export async function installSubAgents(options?: {
   
   // Check current state
   const status = await checkInstalledSubAgents();
-  const toInstall = force ? VIBE_LOG_SUB_AGENTS : status.missing;
+  const toInstall = force ? DEVARK_SUB_AGENTS : status.missing;
   
   const results = {
     installed: [] as SubAgentName[],
@@ -169,11 +169,11 @@ export async function removeSubAgent(name: SubAgentName): Promise<void> {
 }
 
 /**
- * Remove all vibe-log sub-agents
+ * Remove all devark sub-agents
  */
 export async function removeAllSubAgents(): Promise<number> {
   let removed = 0;
-  for (const agent of VIBE_LOG_SUB_AGENTS) {
+  for (const agent of DEVARK_SUB_AGENTS) {
     try {
       await removeSubAgent(agent);
       removed++;

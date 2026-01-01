@@ -53,7 +53,7 @@ function showLocalReportExplanation(): void {
   // Section 3: Privacy note
   console.log(colors.success(`${icons.lock} ${format.bold('100% Private')}`));
   console.log(colors.muted('All analysis happens locally using your Claude Code tokens.'));
-  console.log(colors.muted('No data is sent to vibe-log servers in local mode.'));
+  console.log(colors.muted('No data is sent to devark servers in local mode.'));
   console.log();
   
   // Section 4: First-time user guidance
@@ -197,7 +197,7 @@ export async function generateLocalReportInteractive(): Promise<void> {
     // Sub-agents are missing, prompt to install
     console.clear();
     console.log('📊 Generate Local Report\n');
-    console.log('This feature requires vibe-log sub-agents to be installed.');
+    console.log('This feature requires devark sub-agents to be installed.');
     console.log('Sub-agents are local AI components that analyze your sessions.\n');
     console.log('Current status: Not installed\n');
     console.log('This is a one-time installation (~2 minutes).\n');
@@ -375,7 +375,7 @@ export async function generateLocalReportInteractive(): Promise<void> {
   
   console.log(colors.primary('Generated Command:'));
   console.log();
-  console.log(colors.accent('This command will orchestrate vibe-log sub-agents to:'));
+  console.log(colors.accent('This command will orchestrate devark sub-agents to:'));
   console.log(colors.highlight('  1. Fetch and organize your Claude Code sessions into chunks'));
   console.log(colors.highlight(`  2. Run ${days > 1 ? `${Math.min(days, 7)} parallel analyzers` : '1 analyzer'} to extract patterns`));
   console.log(colors.highlight('  3. Generate a concise HTML report'));
@@ -425,7 +425,7 @@ export async function generateLocalReportInteractive(): Promise<void> {
     
     try {
       // Create temp directory for session files within the report directory
-      const tempDir = path.join(tempReportDir, '.vibe-log-temp');
+      const tempDir = path.join(tempReportDir, '.devark-temp');
       
       // Remove old temp directory if it exists
       try {
@@ -455,8 +455,8 @@ export async function generateLocalReportInteractive(): Promise<void> {
       // Process each selected project
       for (const project of selectedProjects) {
         // Extract Claude folder name from the project ID
-        // On Windows: project.id is like C:\Users\97254\.claude\projects\C--vibelog-vibe-log-cli
-        // On Mac/Linux: project.id is like ~/.claude/projects/-home-user-projects-vibe-log
+        // On Windows: project.id is like C:\Users\97254\.claude\projects\C--devark-devark-cli
+        // On Mac/Linux: project.id is like ~/.claude/projects/-home-user-projects-devark
         
         let sourceDir: string;
         let claudeFolderName: string;
@@ -553,7 +553,7 @@ export async function generateLocalReportInteractive(): Promise<void> {
       // Update the prompt to reference the temp directory
       const updatedPrompt = orchestrated.prompt.replace(
         'Projects to analyze:',
-        `Session files have been copied to: .vibe-log-temp/\nManifest available at: .vibe-log-temp/manifest.json\n\nProjects to analyze:`
+        `Session files have been copied to: .devark-temp/\nManifest available at: .devark-temp/manifest.json\n\nProjects to analyze:`
       );
       
       // Execute directly with Claude
@@ -572,7 +572,7 @@ export async function generateLocalReportInteractive(): Promise<void> {
           
           // Clean up temp directory
           try {
-            const tempDir = path.join(tempReportDir, '.vibe-log-temp');
+            const tempDir = path.join(tempReportDir, '.devark-temp');
             await fs.rm(tempDir, { recursive: true, force: true });
             console.log(colors.muted('Cleaned up temporary session files'));
           } catch (e) {
@@ -584,7 +584,7 @@ export async function generateLocalReportInteractive(): Promise<void> {
           console.log(colors.error(`${icons.error} Failed to execute Claude: ${error.message}`));
           
           // Show detailed error for debugging
-          if (process.env.VIBELOG_DEBUG || error.stack) {
+          if (process.env.DEVARK_DEBUG || error.stack) {
             console.log(colors.muted('Error details:'));
             console.log(colors.muted(error.stack || error.toString()));
           }
@@ -599,7 +599,7 @@ export async function generateLocalReportInteractive(): Promise<void> {
           console.log();
           
           // Clean up temp directory before exiting
-          const tempDir = path.join(tempReportDir, '.vibe-log-temp');
+          const tempDir = path.join(tempReportDir, '.devark-temp');
           fs.rm(tempDir, { recursive: true, force: true }).catch(() => {
             // Ignore cleanup errors
           });
@@ -614,7 +614,7 @@ export async function generateLocalReportInteractive(): Promise<void> {
       console.log(colors.error(`Failed to start Claude: ${error instanceof Error ? error.message : String(error)}`));
       
       // Show detailed error for debugging
-      if (process.env.VIBELOG_DEBUG || (error instanceof Error && error.stack)) {
+      if (process.env.DEVARK_DEBUG || (error instanceof Error && error.stack)) {
         console.log(colors.muted('Error details:'));
         console.log(colors.muted(error instanceof Error ? error.stack : String(error)));
       }
@@ -629,7 +629,7 @@ export async function generateLocalReportInteractive(): Promise<void> {
       console.log();
       
       // Clean up temp directory before exiting
-      const tempDir = path.join(tempReportDir, '.vibe-log-temp');
+      const tempDir = path.join(tempReportDir, '.devark-temp');
       await fs.rm(tempDir, { recursive: true, force: true }).catch(() => {
         // Ignore cleanup errors
       });
@@ -661,7 +661,7 @@ export async function generateLocalReportInteractive(): Promise<void> {
     console.log();
     console.log(colors.accent('👋 Ready to generate your report!'));
     console.log(colors.muted('Run the command in your terminal to start the analysis.'));
-    console.log(colors.warning(`📁 Report will be saved as: vibe-log-report-${new Date().toISOString().split('T')[0]}.pdf`));
+    console.log(colors.warning(`📁 Report will be saved as: devark-report-${new Date().toISOString().split('T')[0]}.pdf`));
     process.exit(0);
   } else if (action === 'view') {
     // Show the full prompt

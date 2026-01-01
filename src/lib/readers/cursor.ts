@@ -2,7 +2,7 @@ import Database from 'better-sqlite3';
 import path from 'path';
 import os from 'os';
 import fs from 'fs';
-import { VibelogError } from '../../utils/errors';
+import { DevArkError } from '../../utils/errors';
 
 interface CursorConversation {
   composerId: string;
@@ -198,12 +198,12 @@ export async function getCursorMessagesSince(
     };
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
-      throw new VibelogError(
+      throw new DevArkError(
         'Cursor IDE data not found.',
         'CURSOR_NOT_FOUND'
       );
     }
-    throw new VibelogError(
+    throw new DevArkError(
       `Failed to read Cursor messages: ${error instanceof Error ? error.message : 'Unknown error'}`,
       'CURSOR_READ_ERROR'
     );
@@ -302,13 +302,13 @@ export async function countCursorMessages(options?: {
     };
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
-      throw new VibelogError(
+      throw new DevArkError(
         'Cursor IDE data not found. Make sure Cursor is installed and you have used it at least once.',
         'CURSOR_NOT_FOUND'
       );
     }
 
-    throw new VibelogError(
+    throw new DevArkError(
       `Failed to read Cursor database: ${error instanceof Error ? error.message : 'Unknown error'}`,
       'CURSOR_READ_ERROR'
     );

@@ -3,7 +3,7 @@ import path from 'path';
 import os from 'os';
 import { getAllConfig, getToken as getConfigToken, getLastSyncSummary, getDashboardUrl, getPushUpChallengeConfig } from './config';
 import { logger } from '../utils/logger';
-import { VIBE_LOG_SUB_AGENTS } from './sub-agents/constants';
+import { DEVARK_SUB_AGENTS } from './sub-agents/constants';
 import { getHookMode, getTrackedProjects as getHookTrackedProjects } from './claude-settings-reader';
 import { getStatusLineStatus, StatusLineStatus } from './status-line-manager';
 
@@ -47,7 +47,7 @@ export async function detectSetupState(): Promise<StateDetails> {
     hasAuth: false,
     hasAgents: false,
     agentCount: 0,
-    totalAgents: VIBE_LOG_SUB_AGENTS.length,
+    totalAgents: DEVARK_SUB_AGENTS.length,
     hasHooks: false,
     hasStatusLine: false,
     statusLineStatus: 'not-installed',
@@ -87,7 +87,7 @@ export async function detectSetupState(): Promise<StateDetails> {
       await fs.access(agentsPath);
       const files = await fs.readdir(agentsPath);
       const installedAgents = files.filter(f => 
-        VIBE_LOG_SUB_AGENTS.includes(f as any) && f.endsWith('.md')
+        DEVARK_SUB_AGENTS.includes(f as any) && f.endsWith('.md')
       );
       details.agentCount = installedAgents.length;
       details.hasAgents = installedAgents.length > 0;

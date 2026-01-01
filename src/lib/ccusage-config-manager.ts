@@ -1,6 +1,6 @@
 /**
  * CCUsage Configuration Manager
- * Manages the integration of ccusage metrics with vibe-log statusline
+ * Manages the integration of ccusage metrics with devark statusline
  */
 
 import { logger } from '../utils/logger';

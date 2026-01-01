@@ -61,7 +61,7 @@ export function generateMenuItems(context: MenuContext): MenuItem[] {
     items.push({
       id: 'retry-setup',
       label: `${icons.refresh} Retry setup`,
-      description: 'Try setting up vibe-log again',
+      description: 'Try setting up devark again',
       icon: '',
       action: 'auth'
     });

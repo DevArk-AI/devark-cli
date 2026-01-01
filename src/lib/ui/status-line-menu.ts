@@ -146,7 +146,7 @@ async function displayEducationalHeader(config: StatusLineConfig): Promise<void>
   }
   
   console.log('');
-  console.log(colors.dim('📖 Learn more: https://github.com/vibe-log/vibe-log-cli#status-line'));
+  console.log(colors.dim('📖 Learn more: https://github.com/devark/devark-cli#status-line'));
   console.log('');
   console.log(box.horizontal.repeat(60));
   console.log('');
@@ -189,7 +189,7 @@ async function performInstallation(): Promise<void> {
   console.log('');
   console.log(colors.primary('  ✓ Strategic guidance') + colors.subdued(' on your development approach'));
   console.log(colors.primary('  ✓ Actionable next steps') + colors.subdued(' to keep moving forward'));
-  console.log(colors.primary('  ✓ Choose your advisor') + colors.subdued(' (Gordon/Vibe-Log/Custom)'));
+  console.log(colors.primary('  ✓ Choose your advisor') + colors.subdued(' (Gordon/DevArk/Custom)'));
   console.log('');
   
   console.log(colors.info('Technical setup:'));
@@ -337,8 +337,8 @@ async function performUninstall(): Promise<void> {
           name: 'restoreChoice',
           message: 'What would you like to do?',
           choices: [
-            { name: 'Remove vibe-log and restore original status line', value: 'restore' },
-            { name: 'Remove vibe-log completely (no status line)', value: 'remove' },
+            { name: 'Remove devark and restore original status line', value: 'restore' },
+            { name: 'Remove devark completely (no status line)', value: 'remove' },
             { name: 'Cancel', value: 'cancel' }
           ]
         }
@@ -424,9 +424,9 @@ async function managePersonality(): Promise<void> {
       disabled: currentPersonality === 'gordon' ? 'Currently active' : false
     },
     {
-      name: `💜 Vibe-Log ${currentPersonality === 'vibe-log' ? colors.success('(Active)') : ''}`,
-      value: 'vibe-log',
-      disabled: currentPersonality === 'vibe-log' ? 'Currently active' : false
+      name: `💜 DevArk ${currentPersonality === 'devark' ? colors.success('(Active)') : ''}`,
+      value: 'devark',
+      disabled: currentPersonality === 'devark' ? 'Currently active' : false
     },
     new inquirer.Separator(),
     {
@@ -476,7 +476,7 @@ async function managePersonality(): Promise<void> {
       break;
       
     case 'gordon':
-    case 'vibe-log':
+    case 'devark':
       setStatusLinePersonality(choice);
       console.log('');
       showSuccess(`Personality switched to ${getPersonalityDisplayName(choice)}!`);

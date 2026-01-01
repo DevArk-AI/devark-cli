@@ -10,7 +10,7 @@ import { syncPushUpStats } from './push-up-sync';
 import { logger } from '../utils/logger';
 
 // Import the config store instance
-const configStore = new Conf({ projectName: 'vibe-log' });
+const configStore = new Conf({ projectName: 'devark' });
 
 /**
  * Check if daily reset is needed and perform it

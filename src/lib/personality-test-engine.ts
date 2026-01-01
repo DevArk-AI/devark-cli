@@ -30,7 +30,7 @@ export interface PersonalityTestResult {
  */
 export interface PersonalityTestOptions {
   verbose?: boolean;
-  personality?: 'gordon' | 'vibe-log' | 'custom';
+  personality?: 'gordon' | 'devark' | 'custom';
   onProgress?: (message: string) => void;
 }
 

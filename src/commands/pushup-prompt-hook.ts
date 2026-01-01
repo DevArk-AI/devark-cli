@@ -11,8 +11,8 @@ import * as path from 'path';
 import { homedir } from 'os';
 import { logger } from '../utils/logger';
 
-const VIBE_LOG_DIR = path.join(homedir(), '.vibe-log');
-const PROMPT_FILE = path.join(VIBE_LOG_DIR, 'push-up-prompt.json');
+const DEVARK_DIR = path.join(homedir(), '.devark');
+const PROMPT_FILE = path.join(DEVARK_DIR, 'push-up-prompt.json');
 
 interface PendingPrompt {
   timestamp: number;
@@ -85,8 +85,8 @@ questions: [{
 }]
 
 AFTER USER RESPONDS:
-- If "Already did them": Execute: npx vibe-log-cli pushup respond --done
-- If "Add to debt": Execute: npx vibe-log-cli pushup respond --debt
+- If "Already did them": Execute: npx devark-cli pushup respond --done
+- If "Add to debt": Execute: npx devark-cli pushup respond --debt
 
 THEN AND ONLY THEN: Proceed with the user's actual request below.
 

@@ -8,38 +8,38 @@
 <h3>Open-source CLI for analyzing Claude Code sessions locally and generating productivity reports</h3>
 <p></p>
 
-<a href="https://vibe-log.dev"><img src="https://img.shields.io/badge/by-vibe--log.dev-16A34A" alt="by vibe-log.dev"></a>
-<a href="https://www.npmjs.com/package/vibe-log-cli"><img src="https://img.shields.io/npm/v/vibe-log-cli.svg" alt="npm version"></a>
+<a href="https://devark.dev"><img src="https://img.shields.io/badge/by-vibe--log.dev-16A34A" alt="by devark.dev"></a>
+<a href="https://www.npmjs.com/package/devark-cli"><img src="https://img.shields.io/npm/v/devark-cli.svg" alt="npm version"></a>
 <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a>
-<a href="https://nodejs.org"><img src="https://img.shields.io/node/v/vibe-log-cli.svg" alt="Node.js Version"></a>
+<a href="https://nodejs.org"><img src="https://img.shields.io/node/v/devark-cli.svg" alt="Node.js Version"></a>
 
-<a href="https://github.com/vibe-log/vibe-log-cli/actions/workflows/tests.yml"><img src="https://github.com/vibe-log/vibe-log-cli/actions/workflows/tests.yml/badge.svg" alt="Tests"></a>
-<a href="https://github.com/vibe-log/vibe-log-cli/actions/workflows/npm-publish.yml"><img src="https://github.com/vibe-log/vibe-log-cli/actions/workflows/npm-publish.yml/badge.svg" alt="NPM Publish"></a>
-<a href="https://github.com/vibe-log/vibe-log-cli/actions/workflows/build-verification.yml"><img src="https://github.com/vibe-log/vibe-log-cli/actions/workflows/build-verification.yml/badge.svg" alt="Build Verification"></a>
+<a href="https://github.com/devark/devark-cli/actions/workflows/tests.yml"><img src="https://github.com/devark/devark-cli/actions/workflows/tests.yml/badge.svg" alt="Tests"></a>
+<a href="https://github.com/devark/devark-cli/actions/workflows/npm-publish.yml"><img src="https://github.com/devark/devark-cli/actions/workflows/npm-publish.yml/badge.svg" alt="NPM Publish"></a>
+<a href="https://github.com/devark/devark-cli/actions/workflows/build-verification.yml"><img src="https://github.com/devark/devark-cli/actions/workflows/build-verification.yml/badge.svg" alt="Build Verification"></a>
 <img src="./coverage/badges.svg" alt="Coverage">
 
 <a href="SECURITY.md"><img src="https://img.shields.io/badge/Security-Policy-blue.svg" alt="Security Policy"></a>
-<a href="https://github.com/vibe-log/vibe-log-cli?tab=readme-ov-file#-privacy--security"><img src="https://img.shields.io/badge/build-transparent-blue" alt="Transparent Build"></a>
+<a href="https://github.com/devark/devark-cli?tab=readme-ov-file#-privacy--security"><img src="https://img.shields.io/badge/build-transparent-blue" alt="Transparent Build"></a>
 
 <a href="CONTRIBUTING.md"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs Welcome"></a>
 <a href="https://x.com/Vibe_Log/"><img alt="X  Follow" src="https://img.shields.io/twitter/follow/Vibe_Log"></a>
-<a href="https://github.com/vibe-log/vibe-log-cli"><img src="https://img.shields.io/badge/⭐_Star-this_repo-22C55E?labelColor=000000" alt="Star this repo"></a>  
+<a href="https://github.com/devark/devark-cli"><img src="https://img.shields.io/badge/⭐_Star-this_repo-22C55E?labelColor=000000" alt="Star this repo"></a>  
  
 </p>
 </p>
 
-[Website](https://vibe-log.dev) • [Report Bug](https://github.com/vibe-log/vibe-log-cli/issues) • [Request Feature](https://github.com/vibe-log/vibe-log-cli/issues)
+[Website](https://devark.dev) • [Report Bug](https://github.com/devark/devark-cli/issues) • [Request Feature](https://github.com/devark/devark-cli/issues)
 </div>
 
 
-## What is Vibe-Log?
+## What is DevArk?
 
-Vibe-log-cli is an open-source command-line tool that analyzes your Claude Code sessions to extract productivity insights and generate reports. All analyses can run completely locally on your machine using Claude Code's capabilities. It also encompasses a statusline that help you get more from your sessions.  
+DevArk-cli is an open-source command-line tool that analyzes your Claude Code sessions to extract productivity insights and generate reports. All analyses can run completely locally on your machine using Claude Code's capabilities. It also encompasses a statusline that help you get more from your sessions.  
 
 ## Getting Started fast
 Just run: 
 ```bash
-npx vibe-log-cli@latest
+npx devark-cli@latest
 ```
  
 
@@ -51,7 +51,7 @@ New: Be prepared in 2-3 minutes for your daily standup meeting!
 
 ### 2. 📊 Claude Code Productivity Report Generation (Local) 
 Generate comprehensive productivity reports using Claude Code's sub-agents to analyze your sessions in parallel. No data leaves your machine.
-See example of locally generated report here: https://vibe-log.dev/example-daily-report
+See example of locally generated report here: https://devark.dev/example-daily-report
  
 
 ### 3. 🧠 Claude Code Co-pilot Statusline 
@@ -69,7 +69,7 @@ The standup feature analyzes your recent sessions and generates a concise summar
 * Next steps
 
 #### Improved Onboarding Experience 🚀
-Getting started with vibe-log is now smoother than ever:
+Getting started with devark is now smoother than ever:
 Better first-run setup flow
 Helpful prompts to guide you through configuration
 Improved error messages when things go wrong
@@ -112,14 +112,14 @@ flowchart LR
     end
 
     subgraph Analysis ["🧠 Local Prompt Analysis via Claude Code SDK"]
-        Hook --> CLI[Vibe-log CLI<br/>receives prompt]
+        Hook --> CLI[DevArk CLI<br/>receives prompt]
         CLI --> Check{Is new chat?}
         Check -->|No| Context[📝 Include previous<br/>conversation]
         Check -->|Yes| Direct[💭 Analyze prompt<br/>standalone]
         
         subgraph Personality ["🎭 Infuse Coach Personality"]
             Gordon[🧑‍🍳 Gordon<br/>Tough love]
-            Vibe[💜 Vibe-log<br/>Encouraging]
+            Vibe[💜 DevArk<br/>Encouraging]
             Custom[✨ Custom<br/>Your style]
         end
         
@@ -130,7 +130,7 @@ flowchart LR
     end
 
     subgraph Display ["💬 Status Line Feedback"]
-        Score --> Save[💾 Save to<br/>~/.vibe-log/analysis]
+        Score --> Save[💾 Save to<br/>~/.devark/analysis]
         Save --> Status[Status bar<br/>reads result]
         Status --> Show[🟢 85/100<br/>✨ Gordon says:<br/>Add more context chef!]
     end
@@ -140,20 +140,20 @@ flowchart LR
 
 ### Coach Personalities
 - **Gordon** - Sharp, pushy, business-focused. Creates urgency: "Ship by FRIDAY or you're fired!"
-- **Vibe-Log** - Supportive but pushy senior dev. Helps you ship: "MVP checklist: Auth works ✓ | Ship it!"
+- **DevArk** - Supportive but pushy senior dev. Helps you ship: "MVP checklist: Auth works ✓ | Ship it!"
 - **Custom** - User-defined personality with strategic focus
 
 ### Example Output
  
 
 ### Setup
-1. Run `npx vibe-log-cli`
+1. Run `npx devark-cli`
 2. Select "Configure prompt coach status line"
 3. Choose coach personality
 4. (Optional) Enable ccusage token metrics display
 5. Prompts will be analyzed locally in Claude Code
 
-**Note**: Installation automatically backs up your current status line (if any). When you uninstall vibe-log, your original configuration is instantly restored.
+**Note**: Installation automatically backs up your current status line (if any). When you uninstall devark, your original configuration is instantly restored.
 
 ## Local Report Generation Works
 
@@ -163,7 +163,7 @@ Generate comprehensive productivity reports using Claude Code's sub-agents to an
   
 ```mermaid
 flowchart TD
-    Start([📝 Claude Code Sessions]) --> Select[vibe-log-cli select time frame and projects]
+    Start([📝 Claude Code Sessions]) --> Select[devark-cli select time frame and projects]
     Select --> Extract[Extracts & prepares session data]
     Extract --> Launch[Launches Claude with instructions]
     Launch --> Parallel{Parallel sub-agents<br/> session analysis}
@@ -173,11 +173,11 @@ flowchart TD
     style Output fill:#d4edda
 ```
 ## Example of Local Report Output
-<img width="1920" height="4048" alt="screencapture-file-C-vibelog-vibe-log-cli-vibe-log-report-2025-09-05-2-html-2025-09-05-15_54_16" src="https://github.com/user-attachments/assets/545c0515-7649-4561-9e19-86b69a2e7103" />
+<img width="1920" height="4048" alt="screencapture-file-C-devark-devark-cli-devark-report-2025-09-05-2-html-2025-09-05-15_54_16" src="https://github.com/user-attachments/assets/545c0515-7649-4561-9e19-86b69a2e7103" />
 
 ## ☁️ Cloud Sync (Optional)
 
-Optionally sync your sanitized session data to the vibe-log dashboard for advanced analytics and tracking over time.
+Optionally sync your sanitized session data to the devark dashboard for advanced analytics and tracking over time.
 
 ### Features
 - **🎁 Free Forever**: Up to 1,000 session analyses per month
@@ -195,7 +195,7 @@ flowchart TD
         Select --> Privacy[🔒 Privacy Layer<br/>Removes code & secrets<br/>Keeps only patterns]
     end
     
-    subgraph Cloud ["☁️ Vibe-Log Cloud"]
+    subgraph Cloud ["☁️ DevArk Cloud"]
         Privacy --> Upload[Upload patterns]
         Upload --> Verify[Server verification]
         Verify --> Analysis[AI analysis]
@@ -215,7 +215,7 @@ flowchart TD
 ```
 ## Auto-Sync 
 ### What is Auto-Sync
-Claude Code Hooks allow Vibe-Log to automatically sync your Claude Code sessions.
+Claude Code Hooks allow DevArk to automatically sync your Claude Code sessions.
 
 What are Claude Code Hooks?
 
@@ -240,7 +240,7 @@ Why we recommend both:
   ✓ PreCompact syncs everything before Claude compresses context
     
 ### Setup Auto-sync
-1. Run `npx vibe-log-cli`
+1. Run `npx devark-cli`
 2. Authenticate with your Github account
 3. Enable auto-sync via CLI menu
 
@@ -259,17 +259,17 @@ Future:
 ## 🔒 Privacy & Security
 
 <div align="center">
-<a href="https://github.com/vibe-log/vibe-log-cli/actions/workflows/npm-publish.yml"><img src="https://img.shields.io/badge/Automated-Releases-success?logo=githubactions" alt="Automated Releases"></a>
-<a href="https://www.npmjs.com/package/vibe-log-cli"><img src="https://img.shields.io/badge/NPM-Provenance-green?logo=npm" alt="NPM Provenance"></a>
+<a href="https://github.com/devark/devark-cli/actions/workflows/npm-publish.yml"><img src="https://img.shields.io/badge/Automated-Releases-success?logo=githubactions" alt="Automated Releases"></a>
+<a href="https://www.npmjs.com/package/devark-cli"><img src="https://img.shields.io/badge/NPM-Provenance-green?logo=npm" alt="NPM Provenance"></a>
 <a href="#verify-our-package"><img src="https://img.shields.io/badge/SHA256-Checksums-blue?logo=shield" alt="SHA256 Checksums"></a>
-<a href="https://github.com/vibe-log/vibe-log-cli"><img src="https://img.shields.io/badge/Open-Source-orange?logo=github" alt="Open Source"></a>
+<a href="https://github.com/devark/devark-cli"><img src="https://img.shields.io/badge/Open-Source-orange?logo=github" alt="Open Source"></a>
 </div>
 
 <br>
 
 **This package is built with complete transparency:**
 
-- ✅ **Source Code**: Fully open source at [github.com/vibe-log/vibe-log-cli](https://github.com/vibe-log/vibe-log-cli)
+- ✅ **Source Code**: Fully open source at [github.com/devark/devark-cli](https://github.com/devark/devark-cli)
 - ✅ **Not Minified**: Published code is readable and verifiable
 - ✅ **Source Maps**: Included for debugging and verification
 - ✅ **Automated Builds**: All releases via GitHub Actions (no manual publishing)
@@ -280,8 +280,8 @@ Future:
 
 ```bash
 # Download and inspect the package
-npm pack vibe-log-cli@latest
-tar -xzf vibe-log-cli-*.tgz
+npm pack devark-cli@latest
+tar -xzf devark-cli-*.tgz
 head -100 package/dist/index.js  # Verify it's readable
 
 # Check checksums
@@ -321,17 +321,17 @@ Try the following:
 ### Debug Mode
 ```bash
 # Enable debug logging
-VIBELOG_DEBUG=1 npx vibe-log-cli send
+DEVARK_DEBUG=1 npx devark-cli send
 ```
 
 ## Contributing
 
-We love your input! We want to make contributing to Vibe-Log CLI as easy and transparent as possible. Please see our [Contributing Guide](CONTRIBUTING.md) for details.
+We love your input! We want to make contributing to DevArk CLI as easy and transparent as possible. Please see our [Contributing Guide](CONTRIBUTING.md) for details.
 
 ```bash
 # Clone the repository
-git clone https://github.com/vibe-log/vibe-log-cli.git
-cd vibe-log-cli
+git clone https://github.com/devark/devark-cli.git
+cd devark-cli
 
 # Install dependencies
 npm install
@@ -343,30 +343,30 @@ npm test
 npm run build
 ```
 
-Check out our [open issues](https://github.com/vibe-log/vibe-log-cli/issues) for a list of proposed features and known issues.
+Check out our [open issues](https://github.com/devark/devark-cli/issues) for a list of proposed features and known issues.
 
 ## Community
 
-- **GitHub**: Star us on [GitHub](https://github.com/vibe-log/vibe-log-cli)
-- **Issues**: Report bugs and request features in [GitHub Issues](https://github.com/vibe-log/vibe-log-cli/issues)
-- **Website**: Visit [vibe-log.dev](https://vibe-log.dev)
+- **GitHub**: Star us on [GitHub](https://github.com/devark/devark-cli)
+- **Issues**: Report bugs and request features in [GitHub Issues](https://github.com/devark/devark-cli/issues)
+- **Website**: Visit [devark.dev](https://devark.dev)
 
 ## Support
 
 Need help? Here are some ways to get support:
-- 🐛 Report bugs in [GitHub Issues](https://github.com/vibe-log/vibe-log-cli/issues)
-- 📧 Email us at support@vibe-log.dev
+- 🐛 Report bugs in [GitHub Issues](https://github.com/devark/devark-cli/issues)
+- 📧 Email us at support@devark.dev
 
 ## License
 
-MIT © Vibe-Log - see the [LICENSE](LICENSE) file for details.
+MIT © DevArk - see the [LICENSE](LICENSE) file for details.
 
 ## Acknowledgments
 
-Built with love by the Vibe-Log team [@mickmicksh](https://github.com/mickmicksh), [@dannyshmueli](https://github.com/dannyshmueli)
+Built with love by the DevArk team [@mickmicksh](https://github.com/mickmicksh), [@dannyshmueli](https://github.com/dannyshmueli)
 
 Special thanks to [ccusage](https://www.npmjs.com/package/ccusage) for providing token usage metrics integration for Claude Code sessions.
 
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=vibe-log/vibe-log-cli&type=Date)](https://www.star-history.com/#vibe-log/vibe-log-cli&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=devark/devark-cli&type=Date)](https://www.star-history.com/#devark/devark-cli&Date)

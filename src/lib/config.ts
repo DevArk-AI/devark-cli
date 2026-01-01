@@ -63,7 +63,7 @@ interface ConfigSchema {
     description: string;
   };
   statusLine?: {
-    personality: 'gordon' | 'vibe-log' | 'custom';
+    personality: 'gordon' | 'devark' | 'custom';
     customPersonality?: {
       name: string;
       description: string;
@@ -80,22 +80,22 @@ interface ConfigSchema {
     originalType?: string;
     originalPadding?: number;
     backupDate: string;
-    backupReason?: string; // Why it was backed up (e.g., "Replaced by vibe-log status line")
+    backupReason?: string; // Why it was backed up (e.g., "Replaced by devark status line")
   };
   pushUpChallenge?: PushUpChallengeConfig;
 }
 
 const config = new Conf<ConfigSchema>({
-  projectName: 'vibe-log',
-  cwd: join(homedir(), '.vibe-log'), // Store config in ~/.vibe-log instead of default location
+  projectName: 'devark',
+  cwd: join(homedir(), '.devark'), // Store config in ~/.devark instead of default location
   schema: {
     apiUrl: {
       type: 'string',
-      default: 'https://app.vibe-log.dev',
+      default: 'https://app.devark.dev',
     },
     cliPath: {
       type: 'string',
-      default: 'npx vibe-log-cli',
+      default: 'npx devark-cli',
     },
     token: {
       type: 'string',
@@ -122,7 +122,7 @@ const config = new Conf<ConfigSchema>({
 });
 
 // Secure key management
-const KEY_FILE = join(homedir(), '.vibe-log', '.key');
+const KEY_FILE = join(homedir(), '.devark', '.key');
 const algorithm = 'aes-256-gcm';
 
 async function getOrCreateKey(): Promise<Buffer> {
@@ -132,7 +132,7 @@ async function getOrCreateKey(): Promise<Buffer> {
   } catch (error) {
     // Generate new key if doesn't exist
     const key = crypto.randomBytes(32);
-    await fs.mkdir(join(homedir(), '.vibe-log'), { recursive: true });
+    await fs.mkdir(join(homedir(), '.devark'), { recursive: true });
     // Apply Unix file permissions only on non-Windows platforms
     const writeOptions = process.platform !== 'win32' ? { mode: 0o600 } : {};
     await fs.writeFile(KEY_FILE, key.toString('hex'), writeOptions);
@@ -202,7 +202,7 @@ export async function clearToken(): Promise<void> {
 }
 
 export function getApiUrl(): string {
-  const envUrl = process.env.VIBELOG_API_URL;
+  const envUrl = process.env.DEVARK_API_URL;
   const configUrl = config.get('apiUrl');
   const url = envUrl || configUrl;
   
@@ -224,9 +224,9 @@ export function getApiUrl(): string {
       return url;
     }
     
-    // Only allow *.vibe-log.dev domains in production
-    if (!parsed.hostname.endsWith('vibe-log.dev')) {
-      throw new Error(`Invalid API host: ${parsed.hostname}. Only *.vibe-log.dev domains allowed.`);
+    // Only allow *.devark.dev domains in production
+    if (!parsed.hostname.endsWith('devark.dev')) {
+      throw new Error(`Invalid API host: ${parsed.hostname}. Only *.devark.dev domains allowed.`);
     }
     
     return url;
@@ -242,9 +242,9 @@ export function getDashboardUrl(): string {
     const parsed = new URL(apiUrl);
     
     // Special handling for production API
-    if (parsed.hostname === 'vibe-log.dev' || parsed.hostname === 'www.vibe-log.dev') {
+    if (parsed.hostname === 'devark.dev' || parsed.hostname === 'www.devark.dev') {
       // Production API uses app subdomain for dashboard
-      return `${parsed.protocol}//app.vibe-log.dev/dashboard`;
+      return `${parsed.protocol}//app.devark.dev/dashboard`;
     }
     
     // For all other URLs (localhost, staging, etc.), append /dashboard
@@ -253,7 +253,7 @@ export function getDashboardUrl(): string {
     return `${baseUrl}/dashboard`;
   } catch (error) {
     // Fallback to production dashboard if URL parsing fails
-    return 'https://app.vibe-log.dev/dashboard';
+    return 'https://app.devark.dev/dashboard';
   }
 }
 
@@ -272,13 +272,13 @@ export function setApiUrl(url: string): void {
 
 export function getCliPath(): string {
   // Check environment variable first for override
-  const envPath = process.env.VIBELOG_CLI_PATH;
+  const envPath = process.env.DEVARK_CLI_PATH;
   if (envPath) {
     return envPath;
   }
   
   // Use configured path or default to npx command
-  return config.get('cliPath') || 'npx vibe-log-cli';
+  return config.get('cliPath') || 'npx devark-cli';
 }
 
 export function setCliPath(path: string): void {
@@ -294,7 +294,7 @@ export function getStatusLinePersonality(): NonNullable<ConfigSchema['statusLine
   return statusLine;
 }
 
-export function setStatusLinePersonality(personality: 'gordon' | 'vibe-log' | 'custom'): void {
+export function setStatusLinePersonality(personality: 'gordon' | 'devark' | 'custom'): void {
   const current = config.get('statusLine') || {};
   config.set('statusLine', {
     ...current,
@@ -364,7 +364,7 @@ export function setPreference<K extends keyof NonNullable<ConfigSchema['preferen
 export function getAllConfig(): ConfigSchema {
   // Only return config if the file actually exists
   // This prevents default values from being treated as configured state
-  const configPath = join(homedir(), '.vibe-log', 'config.json');
+  const configPath = join(homedir(), '.devark', 'config.json');
   try {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     require('fs').accessSync(configPath);

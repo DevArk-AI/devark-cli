@@ -5,7 +5,7 @@ import type { ReportData } from '../types/report-data';
 export class ReportTemplateEngine {
   private template: string = '';
   
-  // Activity color mapping - aligned with vibe-log-react-router
+  // Activity color mapping - aligned with devark-react-router
   private readonly ACTIVITY_COLORS: Record<string, string> = {
     'debugging': '#ef4444',
     'feature development': '#10b981',
@@ -39,14 +39,14 @@ export class ReportTemplateEngine {
       join(__dirname, '..', 'templates', 'report-template.html'),
       // Development - template is in src/templates
       join(process.cwd(), 'src', 'templates', 'report-template.html'),
-      join(process.cwd(), 'vibe-log-cli', 'src', 'templates', 'report-template.html'),
+      join(process.cwd(), 'devark-cli', 'src', 'templates', 'report-template.html'),
       // Fallback paths
       join(__dirname, '..', '..', 'src', 'templates', 'report-template.html'),
       join(__dirname, '..', '..', 'dist', 'report-template.html'),
     ];
     
     // Debug logging
-    if (process.env.VIBELOG_DEBUG === '1') {
+    if (process.env.DEVARK_DEBUG === '1') {
       console.log('[DEBUG] Looking for template file...');
       console.log('[DEBUG] __dirname:', __dirname);
       console.log('[DEBUG] process.cwd():', process.cwd());
@@ -57,12 +57,12 @@ export class ReportTemplateEngine {
       try {
         this.template = readFileSync(path, 'utf-8');
         templatePath = path;
-        if (process.env.VIBELOG_DEBUG === '1') {
+        if (process.env.DEVARK_DEBUG === '1') {
           console.log('[DEBUG] ✓ Found template at:', path);
         }
         break;
       } catch (err) {
-        if (process.env.VIBELOG_DEBUG === '1') {
+        if (process.env.DEVARK_DEBUG === '1') {
           console.log('[DEBUG] ✗ Not found at:', path);
         }
       }

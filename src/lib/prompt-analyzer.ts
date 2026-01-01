@@ -78,7 +78,7 @@ export class PromptAnalyzer {
   constructor() {
     // Set up the analysis directory
     const homeDir = os.homedir();
-    this.analysisDir = path.join(homeDir, '.vibe-log', 'analyzed-prompts');
+    this.analysisDir = path.join(homeDir, '.devark', 'analyzed-prompts');
   }
 
   /**
@@ -115,7 +115,7 @@ IMPORTANT Context Rules:
     const personalityPrompt = getPersonalitySystemPrompt();
     
     // Debug logging to verify personality is being applied
-    if (process.env.VIBELOG_DEBUG === 'true' || process.env.DEBUG_PERSONALITY === 'true') {
+    if (process.env.DEVARK_DEBUG === 'true' || process.env.DEBUG_PERSONALITY === 'true') {
       logger.debug('=== PERSONALITY SYSTEM PROMPT DEBUG ===');
       logger.debug('Personality prompt addition:', personalityPrompt);
       logger.debug('=======================================');
@@ -174,10 +174,10 @@ Emoji selection:
 
     // RECURSION PREVENTION: Check for HTML comment guard FIRST
     // This guard is invisible to Claude but prevents infinite recursion
-    if (promptText.includes('<!--VIBE_LOG_GUARD:')) {
-      logger.debug('Detected vibe-log guard - preventing infinite recursion');
+    if (promptText.includes('<!--DEVARK_GUARD:')) {
+      logger.debug('Detected devark guard - preventing infinite recursion');
       await this.logToDebugFile(`HTML GUARD DETECTED: Preventing recursion for ${sessionId}`);
-      return this.getSkipResponse(sessionId, 'vibe-log-guard-detected');
+      return this.getSkipResponse(sessionId, 'devark-guard-detected');
     }
     
     // Note: We removed the loading state check here because it was preventing
@@ -194,7 +194,7 @@ Emoji selection:
     
     // Add a small delay to ensure loading state is visible
     // This helps with very fast analyses that complete in <100ms
-    if (process.env.VIBELOG_DEBUG === 'true') {
+    if (process.env.DEVARK_DEBUG === 'true') {
       logger.debug('Loading state written, ensuring visibility...');
     }
     await new Promise(resolve => setTimeout(resolve, 100));
@@ -331,7 +331,7 @@ Respond with JSON only, no explanation.`;
     
     // Add invisible HTML comment guard to prevent recursion
     // This guard is detected if the SDK tries to analyze this prompt
-    analysisPrompt += '\n<!--VIBE_LOG_GUARD:1-->';
+    analysisPrompt += '\n<!--DEVARK_GUARD:1-->';
 
     let analysisResult: PromptAnalysis | null = null;
     let rawResponse = '';
@@ -584,7 +584,7 @@ Respond with JSON only, no explanation.`;
   // Note: Removed checkExistingLoadingState method as it was causing issues
   // The signature-based recursion prevention is sufficient
 
-  // Note: Removed containsVibeLogSignature method - no longer needed
+  // Note: Removed containsDevArkSignature method - no longer needed
   // We now use HTML comment guard which is cleaner and more reliable
 
   /**

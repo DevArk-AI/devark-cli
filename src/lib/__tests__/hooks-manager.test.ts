@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { promises as fs } from 'fs';
 import {
-  uninstallVibeLogHooks,
+  uninstallDevArkHooks,
   getHookStatus,
   areHooksInstalled,
   validateHookCommands,
@@ -25,11 +25,11 @@ vi.mock('os', () => ({
 }));
 
 vi.mock('../config', () => ({
-  getCliPath: vi.fn(() => '/usr/local/bin/vibe-log')
+  getCliPath: vi.fn(() => '/usr/local/bin/devark')
 }));
 
 vi.mock('../hooks/hooks-controller', () => ({
-  isVibeLogCommand: (cmd: string) => cmd.includes('vibe-log')
+  isDevArkCommand: (cmd: string) => cmd.includes('devark')
 }));
 
 describe('hooks-manager - Hook Preservation Tests', () => {
@@ -43,15 +43,15 @@ describe('hooks-manager - Hook Preservation Tests', () => {
     vi.restoreAllMocks();
   });
 
-  describe('uninstallVibeLogHooks', () => {
-    it('should ONLY remove vibe-log hooks, preserving other hooks', async () => {
+  describe('uninstallDevArkHooks', () => {
+    it('should ONLY remove devark hooks, preserving other hooks', async () => {
       const existingSettings = {
         hooks: {
           PreCompact: [{
             matcher: '',
             hooks: [
               { type: 'command' as const, command: 'echo "keep this"' },
-              { type: 'command' as const, command: '/usr/local/bin/vibe-log send' },
+              { type: 'command' as const, command: '/usr/local/bin/devark send' },
               { type: 'command' as const, command: 'echo "keep this too"' }
             ]
           }]
@@ -62,25 +62,25 @@ describe('hooks-manager - Hook Preservation Tests', () => {
       (fs.writeFile as any).mockResolvedValue(undefined);
       (fs.rename as any).mockResolvedValue(undefined);
 
-      await uninstallVibeLogHooks();
+      await uninstallDevArkHooks();
 
       const writeCall = (fs.writeFile as any).mock.calls[0];
       const writtenSettings = JSON.parse(writeCall[1]);
 
-      // Should have 2 hooks left (vibe-log removed)
+      // Should have 2 hooks left (devark removed)
       expect(writtenSettings.hooks.PreCompact).toBeDefined();
       expect(writtenSettings.hooks.PreCompact[0].hooks).toHaveLength(2);
       expect(writtenSettings.hooks.PreCompact[0].hooks[0].command).toBe('echo "keep this"');
       expect(writtenSettings.hooks.PreCompact[0].hooks[1].command).toBe('echo "keep this too"');
     });
 
-    it('should remove PreCompact entirely if only vibe-log hooks exist', async () => {
+    it('should remove PreCompact entirely if only devark hooks exist', async () => {
       const existingSettings = {
         hooks: {
           PreCompact: [{
             matcher: '',
             hooks: [
-              { type: 'command' as const, command: '/usr/local/bin/vibe-log send' }
+              { type: 'command' as const, command: '/usr/local/bin/devark send' }
             ]
           }],
           SessionStart: [{
@@ -96,7 +96,7 @@ describe('hooks-manager - Hook Preservation Tests', () => {
       (fs.writeFile as any).mockResolvedValue(undefined);
       (fs.rename as any).mockResolvedValue(undefined);
 
-      await uninstallVibeLogHooks();
+      await uninstallDevArkHooks();
 
       const writeCall = (fs.writeFile as any).mock.calls[0];
       const writtenSettings = JSON.parse(writeCall[1]);
@@ -106,15 +106,15 @@ describe('hooks-manager - Hook Preservation Tests', () => {
       expect(writtenSettings.hooks.SessionStart).toBeDefined();
     });
 
-    it('should handle multiple vibe-log hooks in same config', async () => {
+    it('should handle multiple devark hooks in same config', async () => {
       const existingSettings = {
         hooks: {
           PreCompact: [{
             matcher: '',
             hooks: [
               { type: 'command' as const, command: 'echo "keep this"' },
-              { type: 'command' as const, command: '/usr/local/bin/vibe-log send --hook-trigger=precompact' },
-              { type: 'command' as const, command: '@vibe-log/cli send' },
+              { type: 'command' as const, command: '/usr/local/bin/devark send --hook-trigger=precompact' },
+              { type: 'command' as const, command: '@devark/cli send' },
               { type: 'command' as const, command: 'echo "keep this too"' }
             ]
           }]
@@ -125,12 +125,12 @@ describe('hooks-manager - Hook Preservation Tests', () => {
       (fs.writeFile as any).mockResolvedValue(undefined);
       (fs.rename as any).mockResolvedValue(undefined);
 
-      await uninstallVibeLogHooks();
+      await uninstallDevArkHooks();
 
       const writeCall = (fs.writeFile as any).mock.calls[0];
       const writtenSettings = JSON.parse(writeCall[1]);
 
-      // Should have 2 non-vibe-log hooks left
+      // Should have 2 non-devark hooks left
       expect(writtenSettings.hooks.PreCompact[0].hooks).toHaveLength(2);
       expect(writtenSettings.hooks.PreCompact[0].hooks[0].command).toBe('echo "keep this"');
       expect(writtenSettings.hooks.PreCompact[0].hooks[1].command).toBe('echo "keep this too"');
@@ -143,18 +143,18 @@ describe('hooks-manager - Hook Preservation Tests', () => {
 
       (fs.readFile as any).mockResolvedValue(JSON.stringify(existingSettings));
 
-      await expect(uninstallVibeLogHooks()).rejects.toThrow('No vibe-log hooks found to uninstall');
+      await expect(uninstallDevArkHooks()).rejects.toThrow('No devark hooks found to uninstall');
     });
   });
 
   describe('getHookStatus', () => {
-    it('should detect vibe-log hooks correctly', async () => {
+    it('should detect devark hooks correctly', async () => {
       const existingSettings = {
         hooks: {
           PreCompact: [{
             matcher: '',
             hooks: [
-              { type: 'command' as const, command: '/usr/local/bin/vibe-log send' }
+              { type: 'command' as const, command: '/usr/local/bin/devark send' }
             ]
           }]
         }
@@ -166,10 +166,10 @@ describe('hooks-manager - Hook Preservation Tests', () => {
 
       expect(status.installed).toBe(true);
       expect(status.preCompactHook).toBe(true);
-      expect(status.hookCommands.preCompact).toContain('vibe-log');
+      expect(status.hookCommands.preCompact).toContain('devark');
     });
 
-    it('should not be confused by non-vibe-log hooks', async () => {
+    it('should not be confused by non-devark hooks', async () => {
       const existingSettings = {
         hooks: {
           PreCompact: [{
@@ -185,7 +185,7 @@ describe('hooks-manager - Hook Preservation Tests', () => {
 
       const status = await getHookStatus();
 
-      // The status should still be false because the mock isVibeLogCommand checks for 'vibe-log'
+      // The status should still be false because the mock isDevArkCommand checks for 'devark'
       expect(status.installed).toBe(false);
       expect(status.preCompactHook).toBe(false);
     });
@@ -197,7 +197,7 @@ describe('hooks-manager - Hook Preservation Tests', () => {
             matcher: '',
             hooks: [
               { type: 'command' as const, command: 'echo "other"' },
-              { type: 'command' as const, command: '/usr/local/bin/vibe-log send' },
+              { type: 'command' as const, command: '/usr/local/bin/devark send' },
               { type: 'command' as const, command: 'echo "another"' }
             ]
           }]
@@ -214,13 +214,13 @@ describe('hooks-manager - Hook Preservation Tests', () => {
   });
 
   describe('areHooksInstalled', () => {
-    it('should return true when vibe-log hooks are installed', async () => {
+    it('should return true when devark hooks are installed', async () => {
       const existingSettings = {
         hooks: {
           PreCompact: [{
             matcher: '',
             hooks: [
-              { type: 'command' as const, command: '/usr/local/bin/vibe-log send' }
+              { type: 'command' as const, command: '/usr/local/bin/devark send' }
             ]
           }]
         }
@@ -233,7 +233,7 @@ describe('hooks-manager - Hook Preservation Tests', () => {
       expect(installed).toBe(true);
     });
 
-    it('should return false when no vibe-log hooks exist', async () => {
+    it('should return false when no devark hooks exist', async () => {
       const existingSettings = {
         hooks: {}
       };
@@ -253,7 +253,7 @@ describe('hooks-manager - Hook Preservation Tests', () => {
           PreCompact: [{
             matcher: '',
             hooks: [
-              { type: 'command' as const, command: '/usr/local/bin/vibe-log send --hook-trigger=precompact' }
+              { type: 'command' as const, command: '/usr/local/bin/devark send --hook-trigger=precompact' }
             ]
           }]
         }
@@ -287,7 +287,7 @@ describe('hooks-manager - Hook Preservation Tests', () => {
           PreCompact: [{
             matcher: '',
             hooks: [
-              { type: 'command' as const, command: '/usr/local/bin/vibe-log send' }
+              { type: 'command' as const, command: '/usr/local/bin/devark send' }
             ]
           }]
         }
@@ -299,7 +299,7 @@ describe('hooks-manager - Hook Preservation Tests', () => {
       const result = await validateHookCommands();
 
       expect(result.valid).toBe(false);
-      expect(result.errors).toContain('CLI command not found: /usr/local/bin/vibe-log');
+      expect(result.errors).toContain('CLI command not found: /usr/local/bin/devark');
     });
 
     it('should return error when hook uses different CLI path', async () => {
@@ -308,7 +308,7 @@ describe('hooks-manager - Hook Preservation Tests', () => {
           PreCompact: [{
             matcher: '',
             hooks: [
-              { type: 'command' as const, command: '/different/path/vibe-log send' }
+              { type: 'command' as const, command: '/different/path/devark send' }
             ]
           }]
         }
@@ -320,7 +320,7 @@ describe('hooks-manager - Hook Preservation Tests', () => {
       const result = await validateHookCommands();
 
       expect(result.valid).toBe(false);
-      expect(result.errors).toContain('PreCompact hook uses different CLI path: /different/path/vibe-log send');
+      expect(result.errors).toContain('PreCompact hook uses different CLI path: /different/path/devark send');
     });
   });
 

@@ -20,7 +20,7 @@ type OutputFormat = 'compact' | 'detailed' | 'emoji' | 'minimal' | 'json';
 function debugLog(message: string): void {
   try {
     const homeDir = os.homedir();
-    const debugFile = path.join(homeDir, '.vibe-log', 'statusline-debug.log');
+    const debugFile = path.join(homeDir, '.devark', 'statusline-debug.log');
     const timestamp = new Date().toISOString();
     appendFileSync(debugFile, `[${timestamp}] ${message}\n`);
   } catch (err) {
@@ -402,7 +402,7 @@ export function createStatuslineCommand(): Command {
 
         // Build path to session-specific analysis file
         const homeDir = os.homedir();
-        const analysisFile = path.join(homeDir, '.vibe-log', 'analyzed-prompts', `${currentSessionId}.json`);
+        const analysisFile = path.join(homeDir, '.devark', 'analyzed-prompts', `${currentSessionId}.json`);
         debugLog(`DECISION POINT: Looking for analysis file at: ${analysisFile}`);
         logger.debug(`Statusline looking for analysis file: ${analysisFile}`);
 

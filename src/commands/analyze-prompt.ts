@@ -99,7 +99,7 @@ export function createAnalyzePromptCommand(): Command {
                 logger.warn('Unable to determine home directory for debug logging');
                 return;
               }
-              const logDir = path.join(homeDir, '.vibe-log');
+              const logDir = path.join(homeDir, '.devark');
               await fs.mkdir(logDir, { recursive: true }).catch(() => {});
               const logFile = path.join(logDir, 'hook-debug.log');
               const timestamp = new Date().toISOString();
@@ -198,7 +198,7 @@ export function createAnalyzePromptCommand(): Command {
             logger.warn('Unable to determine home directory for pending analysis');
             return;
           }
-          const pendingPath = path.join(homeDir, '.vibe-log', 'analyzed-prompts', `${sessionId}.json`);
+          const pendingPath = path.join(homeDir, '.devark', 'analyzed-prompts', `${sessionId}.json`);
           const personality = getStatusLinePersonality();
           const customName = personality.personality === 'custom' ? personality.customPersonality?.name : undefined;
           const pendingState = {
@@ -233,7 +233,7 @@ export function createAnalyzePromptCommand(): Command {
           const child = spawn('node', backgroundArgs, {
             detached: true,
             stdio: 'ignore',
-            env: { ...process.env, VIBE_LOG_BACKGROUND: 'true' }
+            env: { ...process.env, DEVARK_BACKGROUND: 'true' }
           });
           
           // Unref to allow parent to exit
@@ -315,7 +315,7 @@ export function createAnalyzePromptCommand(): Command {
             logger.warn('Unable to determine home directory for analysis storage');
             return;
           }
-          const logDir = path.join(homeDir, '.vibe-log', 'analyzed-prompts');
+          const logDir = path.join(homeDir, '.devark', 'analyzed-prompts');
           const sessionPath = path.join(logDir, `${sessionId}.json`);
           
           try {

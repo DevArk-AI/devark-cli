@@ -30,16 +30,16 @@ const CACHE_DURATION = 5 * 60 * 1000;
  * Get the version cache file path
  */
 function getVersionCachePath(): string {
-  const vibelogDir = path.join(os.homedir(), '.vibe-log');
-  return path.join(vibelogDir, 'version-cache.json');
+  const devarkDir = path.join(os.homedir(), '.devark');
+  return path.join(devarkDir, 'version-cache.json');
 }
 
 /**
  * Get the update log file path
  */
 function getUpdateLogPath(): string {
-  const vibelogDir = path.join(os.homedir(), '.vibe-log');
-  return path.join(vibelogDir, 'update.log');
+  const devarkDir = path.join(os.homedir(), '.devark');
+  return path.join(devarkDir, 'update.log');
 }
 
 /**
@@ -47,8 +47,8 @@ function getUpdateLogPath(): string {
  */
 async function logUpdateEvent(message: string): Promise<void> {
   try {
-    const vibelogDir = path.join(os.homedir(), '.vibe-log');
-    await fs.mkdir(vibelogDir, { recursive: true });
+    const devarkDir = path.join(os.homedir(), '.devark');
+    await fs.mkdir(devarkDir, { recursive: true });
 
     const timestamp = new Date().toISOString();
     const logEntry = `[${timestamp}] ${message}\n`;
@@ -86,8 +86,8 @@ async function readVersionCache(): Promise<VersionCache | null> {
  */
 async function writeVersionCache(latestVersion: string): Promise<void> {
   try {
-    const vibelogDir = path.join(os.homedir(), '.vibe-log');
-    await fs.mkdir(vibelogDir, { recursive: true });
+    const devarkDir = path.join(os.homedir(), '.devark');
+    await fs.mkdir(devarkDir, { recursive: true });
 
     const cache: VersionCache = {
       latestVersion,
@@ -110,10 +110,10 @@ async function fetchLatestVersion(): Promise<string | null> {
     const https = await import('https');
 
     return new Promise((resolve) => {
-      const req = https.get('https://registry.npmjs.org/vibe-log-cli/latest', {
+      const req = https.get('https://registry.npmjs.org/devark-cli/latest', {
         timeout: 5000,
         headers: {
-          'User-Agent': 'vibe-log-cli-version-check'
+          'User-Agent': 'devark-cli-version-check'
         }
       }, (res) => {
         let data = '';
@@ -175,8 +175,8 @@ export async function checkForUpdate(currentVersion: string): Promise<VersionChe
   await logUpdateEvent(`Checking version: current=${currentVersion}`);
 
   // Skip update check if environment variable is set
-  if (process.env.VIBE_LOG_SKIP_UPDATE === '1') {
-    await logUpdateEvent('Skipping version check due to VIBE_LOG_SKIP_UPDATE=1');
+  if (process.env.DEVARK_SKIP_UPDATE === '1') {
+    await logUpdateEvent('Skipping version check due to DEVARK_SKIP_UPDATE=1');
     return {
       isOutdated: false,
       currentVersion,
@@ -249,7 +249,7 @@ export async function checkForUpdate(currentVersion: string): Promise<VersionChe
 }
 
 /**
- * Spawn a process using npx vibe-log-cli@latest
+ * Spawn a process using npx devark-cli@latest
  * This ensures we always use the latest version
  */
 export async function spawnLatestVersion(
@@ -264,7 +264,7 @@ export async function spawnLatestVersion(
 
   // Build command - use npx to get latest version
   const command = 'npx';
-  const spawnArgs = ['vibe-log-cli@latest', ...args];
+  const spawnArgs = ['devark-cli@latest', ...args];
 
   const spawnOptions: SpawnOptions = {
     detached: options?.detached || false,

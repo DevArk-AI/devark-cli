@@ -8,7 +8,7 @@ export const setStatusLinePersonality = setStatusLinePersonalityConfig;
 /**
  * Personality type definitions
  */
-export type PersonalityType = 'gordon' | 'vibe-log' | 'custom';
+export type PersonalityType = 'gordon' | 'devark' | 'custom';
 
 /**
  * Score range type for categorizing prompt quality
@@ -62,7 +62,7 @@ export function transformSuggestion(
     }
 
     // Debug logging
-    if (process.env.VIBELOG_DEBUG === 'true' || process.env.DEBUG_PERSONALITY === 'true') {
+    if (process.env.DEVARK_DEBUG === 'true' || process.env.DEBUG_PERSONALITY === 'true') {
       logger.debug('=== PERSONALITY TRANSFORMATION DEBUG ===');
       logger.debug('Active personality:', personality);
       logger.debug('Score:', score);
@@ -92,7 +92,7 @@ export function transformSuggestion(
     return originalSuggestion;
   } finally {
     // Log the final result
-    if (process.env.VIBELOG_DEBUG === 'true' || process.env.DEBUG_PERSONALITY === 'true') {
+    if (process.env.DEVARK_DEBUG === 'true' || process.env.DEBUG_PERSONALITY === 'true') {
       logger.debug('Final suggestion:', originalSuggestion);
       logger.debug('========================================');
     }
@@ -111,7 +111,7 @@ export function getPersonalityIcon(personality?: PersonalityType): string {
   switch (personality) {
     case 'gordon':
       return '🔥';
-    case 'vibe-log':
+    case 'devark':
       return '💜';
     case 'custom':
       return '✨';
@@ -137,8 +137,8 @@ export function getPersonalityDisplayName(personality?: PersonalityType): string
   switch (personality) {
     case 'gordon':
       return 'Gordon';
-    case 'vibe-log':
-      return 'Vibe-Log';
+    case 'devark':
+      return 'DevArk';
     case 'custom': {
       // Try to get custom name from config
       const config = getStatusLinePersonalityConfig();
@@ -184,13 +184,13 @@ EXCELLENT actionableSteps examples (create similar energy):
 
 Remember: Gordon pushes people to DELIVER, not philosophize. Be sharp, specific, and create urgency.`;
 
-    case 'vibe-log':
+    case 'devark':
       return `
 
-PERSONALITY MODE: Vibe-Log Senior Dev - Supportive but Pushy
+PERSONALITY MODE: DevArk Senior Dev - Supportive but Pushy
 You're a senior dev who wants to see the team SHIP - supportive but with urgency.
 
-CRITICAL RULES FOR VIBE-LOG MODE:
+CRITICAL RULES FOR DEVARK MODE:
 1. Your suggestion acknowledges progress but points out what's blocking shipping
 2. Your actionableSteps gives CONCRETE next steps with specifics to ship faster
 3. Be encouraging but create urgency - deadlines matter

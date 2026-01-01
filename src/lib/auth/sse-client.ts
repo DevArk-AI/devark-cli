@@ -1,5 +1,5 @@
 import { EventSourcePolyfill } from 'event-source-polyfill';
-import { VibelogError } from '../../utils/errors';
+import { DevArkError } from '../../utils/errors';
 
 export interface AuthEvent {
   status: 'success' | 'expired' | 'error' | 'timeout';
@@ -43,7 +43,7 @@ export async function waitForAuthSSE(
     eventSource.onerror = (_error: any) => {
       eventSource.close();
       // Fall back to long polling or regular polling
-      reject(new VibelogError('SSE connection failed', 'SSE_FAILED'));
+      reject(new DevArkError('SSE connection failed', 'SSE_FAILED'));
     };
     
     // Timeout after 5 minutes
@@ -78,7 +78,7 @@ export async function waitForAuthLongPoll(
   });
   
   if (!response.ok) {
-    throw new VibelogError(`Long poll failed: ${response.statusText}`, 'LONGPOLL_FAILED');
+    throw new DevArkError(`Long poll failed: ${response.statusText}`, 'LONGPOLL_FAILED');
   }
   
   const data = await response.json();

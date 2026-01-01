@@ -3,7 +3,7 @@ import path from 'path';
 import { homedir } from 'os';
 import { logger } from '../utils/logger';
 import { getCliPath } from './config';
-import { isVibeLogCommand } from './hooks/hooks-controller';
+import { isDevArkCommand } from './hooks/hooks-controller';
 
 
 /**
@@ -104,27 +104,27 @@ export async function readClaudeSettings(): Promise<{
 }
 
 /**
- * Check if a hook contains vibe-log command
+ * Check if a hook contains devark command
  */
-function isVibeLogHook(hookConfig: HookConfig[] | undefined): boolean {
+function isDevArkHook(hookConfig: HookConfig[] | undefined): boolean {
   if (!hookConfig) return false;
   
   return hookConfig.some(config => 
     config.hooks?.some(hook => 
-      isVibeLogCommand(hook.command)
+      isDevArkCommand(hook.command)
     )
   );
 }
 
 /**
- * Get the vibe-log command from a hook config
+ * Get the devark command from a hook config
  */
-function getVibeLogCommand(hookConfig: HookConfig[] | undefined): string | undefined {
+function getDevArkCommand(hookConfig: HookConfig[] | undefined): string | undefined {
   if (!hookConfig) return undefined;
   
   for (const config of hookConfig) {
     for (const hook of config.hooks || []) {
-      if (isVibeLogCommand(hook.command)) {
+      if (isDevArkCommand(hook.command)) {
         return hook.command;
       }
     }
@@ -134,7 +134,7 @@ function getVibeLogCommand(hookConfig: HookConfig[] | undefined): string | undef
 }
 
 /**
- * Check if vibe-log hooks are installed and get their status
+ * Check if devark hooks are installed and get their status
  * Only checks settings.json (not settings.local.json)
  */
 export async function getHookStatus(): Promise<HookStatus> {
@@ -142,12 +142,12 @@ export async function getHookStatus(): Promise<HookStatus> {
   const settings = await readSettingsFile(settingsPath);
 
   // Check for PreCompact hook (PascalCase only)
-  const preCompactHook = isVibeLogHook(settings?.hooks?.PreCompact);
+  const preCompactHook = isDevArkHook(settings?.hooks?.PreCompact);
 
   // Get hook commands
   const hookCommands: HookStatus['hookCommands'] = {};
   if (preCompactHook) {
-    hookCommands.preCompact = getVibeLogCommand(settings?.hooks?.PreCompact);
+    hookCommands.preCompact = getDevArkCommand(settings?.hooks?.PreCompact);
   }
 
   return {
@@ -167,23 +167,23 @@ export async function areHooksInstalled(): Promise<boolean> {
 }
 
 /**
- * Helper function to filter out vibe-log commands from hook configurations
- * Preserves non-vibe-log hooks in the array
+ * Helper function to filter out devark commands from hook configurations
+ * Preserves non-devark hooks in the array
  */
-function filterVibeLogHooks(hookConfigs: HookConfig[]): HookConfig[] {
+function filterDevArkHooks(hookConfigs: HookConfig[]): HookConfig[] {
   return hookConfigs
     .map(config => ({
       ...config,
-      hooks: config.hooks.filter(hook => !isVibeLogCommand(hook.command))
+      hooks: config.hooks.filter(hook => !isDevArkCommand(hook.command))
     }))
     .filter(config => config.hooks.length > 0);
 }
 
 /**
- * Uninstall vibe-log hooks
+ * Uninstall devark hooks
  * Only removes from settings.json (not settings.local.json)
  */
-export async function uninstallVibeLogHooks(): Promise<void> {
+export async function uninstallDevArkHooks(): Promise<void> {
   const settingsPath = getSettingsPath();
   const settings = await readSettingsFile(settingsPath);
   
@@ -193,10 +193,10 @@ export async function uninstallVibeLogHooks(): Promise<void> {
   
   let modified = false;
 
-  // Filter out vibe-log commands from PreCompact hook (preserves non-vibe-log hooks)
+  // Filter out devark commands from PreCompact hook (preserves non-devark hooks)
   if (settings.hooks.PreCompact) {
     const originalPreCompact = settings.hooks.PreCompact;
-    const filteredConfigs = filterVibeLogHooks(originalPreCompact);
+    const filteredConfigs = filterDevArkHooks(originalPreCompact);
 
     if (filteredConfigs.length !== originalPreCompact.length ||
         filteredConfigs.some((config, i) => config.hooks.length !== originalPreCompact[i].hooks.length)) {
@@ -211,7 +211,7 @@ export async function uninstallVibeLogHooks(): Promise<void> {
   }
 
   if (!modified) {
-    throw new Error('No vibe-log hooks found to uninstall.');
+    throw new Error('No devark hooks found to uninstall.');
   }
   
   // Remove empty hooks object

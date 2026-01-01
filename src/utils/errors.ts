@@ -1,10 +1,10 @@
 import chalk from 'chalk';
 import { isNetworkError, getNetworkErrorMessage } from '../lib/errors/network-errors';
 
-export class VibelogError extends Error {
+export class DevArkError extends Error {
   constructor(message: string, public code: string) {
     super(message);
-    this.name = 'VibelogError';
+    this.name = 'DevArkError';
   }
 }
 
@@ -12,7 +12,7 @@ export class VibelogError extends Error {
  * Display error without exiting the process - for interactive mode
  */
 export function displayError(error: unknown): void {
-  if (error instanceof VibelogError) {
+  if (error instanceof DevArkError) {
     console.error(chalk.red(`\n❌ Error: ${error.message}`));
     
     switch (error.code) {
@@ -78,14 +78,14 @@ export function displayError(error: unknown): void {
       console.log(chalk.yellow('💡 Permission denied. Check file permissions'));
     }
     
-    if (process.env.DEBUG || process.env.VIBELOG_DEBUG) {
+    if (process.env.DEBUG || process.env.DEVARK_DEBUG) {
       console.error(chalk.gray('\nStack trace:'));
       console.error(chalk.gray(error.stack));
     }
   } else {
     console.error(chalk.red('\n❌ An unexpected error occurred'));
     
-    if (process.env.DEBUG || process.env.VIBELOG_DEBUG) {
+    if (process.env.DEBUG || process.env.DEVARK_DEBUG) {
       console.error(error);
     }
   }
@@ -97,23 +97,23 @@ export function displayError(error: unknown): void {
  * Fatal error handler - exits the process (for CLI commands)
  */
 export function handleError(error: unknown): void {
-  if (error instanceof VibelogError) {
+  if (error instanceof DevArkError) {
     console.error(chalk.red(`\n❌ Error: ${error.message}`));
     
     switch (error.code) {
       case 'AUTH_REQUIRED':
-        console.log(chalk.yellow('💡 Run: npx vibe-log-cli'));
+        console.log(chalk.yellow('💡 Run: npx devark-cli'));
         break;
       case 'AUTH_EXPIRED':
       case 'AUTH_FAILED':
       case 'INVALID_TOKEN':
-        console.log(chalk.yellow('💡 Run: npx vibe-log-cli and authenticate'));
+        console.log(chalk.yellow('💡 Run: npx devark-cli and authenticate'));
         break;
       case 'AUTH_NOT_COMPLETED':
         console.log(chalk.yellow('💡 Complete the authentication in your browser, then try again'));
         break;
       case 'AUTH_CHECK_FAILED':
-        console.log(chalk.yellow('💡 Try running: npx vibe-log-cli and re-authenticate'));
+        console.log(chalk.yellow('💡 Try running: npx devark-cli and re-authenticate'));
         break;
       case 'NETWORK_ERROR':
         console.log(chalk.yellow('💡 Check your internet connection'));
@@ -129,25 +129,25 @@ export function handleError(error: unknown): void {
   } else if (error instanceof Error) {
     console.error(chalk.red(`\n❌ Error: ${error.message}`));
     
-    if (process.env.DEBUG || process.env.VIBELOG_DEBUG) {
+    if (process.env.DEBUG || process.env.DEVARK_DEBUG) {
       console.error(chalk.gray('\nStack trace:'));
       console.error(chalk.gray(error.stack));
     }
   } else {
     console.error(chalk.red('\n❌ An unknown error occurred'));
     
-    if (process.env.DEBUG || process.env.VIBELOG_DEBUG) {
+    if (process.env.DEBUG || process.env.DEVARK_DEBUG) {
       console.error(error);
     }
   }
   
-  console.log(chalk.gray('\n💬 Need help? Visit: https://vibe-log.dev/help'));
+  console.log(chalk.gray('\n💬 Need help? Visit: https://devark.dev/help'));
   
   process.exit(1);
 }
 
 export function logDebug(message: string, data?: any): void {
-  if (process.env.DEBUG || process.env.VIBELOG_DEBUG) {
+  if (process.env.DEBUG || process.env.DEVARK_DEBUG) {
     console.log(chalk.gray(`[DEBUG] ${message}`));
     if (data) {
       console.log(chalk.gray(JSON.stringify(data, null, 2)));

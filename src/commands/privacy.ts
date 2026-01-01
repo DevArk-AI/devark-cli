@@ -20,7 +20,7 @@ interface PrivacyOptions {
 export async function privacy(options: PrivacyOptions): Promise<void> {
   console.clear();
   console.log(chalk.cyan('\n🔒 Privacy & Data Preview\n'));
-  console.log(chalk.gray('See exactly what vibe-log sends to the cloud'));
+  console.log(chalk.gray('See exactly what devark sends to the cloud'));
   console.log(chalk.gray('─'.repeat(50)));
   console.log('');
 
@@ -300,7 +300,7 @@ async function exportSanitizedData(exportPath?: string): Promise<void> {
   }));
 
   // Determine export path
-  const defaultPath = `vibe-log-sanitized-${new Date().toISOString().split('T')[0]}.json`;
+  const defaultPath = `devark-sanitized-${new Date().toISOString().split('T')[0]}.json`;
   const finalPath = exportPath || defaultPath;
 
   // Write to file
@@ -317,7 +317,7 @@ async function exportSanitizedData(exportPath?: string): Promise<void> {
 async function showPrivacyInfo(): Promise<void> {
   console.log(chalk.cyan('\n📚 Privacy Protection Information\n'));
   
-  console.log(chalk.yellow('How vibe-log protects your privacy:'));
+  console.log(chalk.yellow('How devark protects your privacy:'));
   console.log('');
   
   console.log(chalk.green('✓ Local Processing'));
@@ -349,5 +349,5 @@ async function showPrivacyInfo(): Promise<void> {
   console.log('  • Company-specific data');
   console.log('');
   
-  console.log(chalk.dim('Learn more: https://vibe-log.dev/privacy'));
+  console.log(chalk.dim('Learn more: https://devark.dev/privacy'));
 }

@@ -8,16 +8,16 @@ import { showPrivacyPreview } from '../lib/ui/privacy-preview';
 import { parseProjectName } from '../lib/ui/project-display';
 import { countTotalRedactions } from '../lib/ui/sanitization-display';
 import { showUploadResults } from '../lib/ui';
-import { VibelogError } from '../utils/errors';
+import { DevArkError } from '../utils/errors';
 import { logger } from '../utils/logger';
 import { isNetworkError, createNetworkError } from '../lib/errors/network-errors';
 import { checkForUpdate, shouldSpawnLatestForHook, spawnLatestVersion } from '../utils/version-check';
 import chalk from 'chalk';
 
 /**
- * Send session data to Vibelog API
+ * Send session data to DevArk API
  * 
- * This command orchestrates the upload of Claude Code session data to the Vibelog platform.
+ * This command orchestrates the upload of Claude Code session data to the DevArk platform.
  * It supports multiple modes of operation:
  * 
  * 1. **Interactive Mode** (default): Shows UI, prompts for confirmation
@@ -37,7 +37,7 @@ export async function send(options: SendOptions): Promise<void> {
   try {
     // Check for version updates when triggered by hooks
     // Skip if we're already running from @latest spawn to prevent infinite loops
-    if (options.hookTrigger && !process.env.VIBE_LOG_SPAWNED_LATEST) {
+    if (options.hookTrigger && !process.env.DEVARK_SPAWNED_LATEST) {
       const currentVersion = process.env.SIMULATE_OLD_VERSION || require('../../package.json').version;
       logger.debug(`Checking version update: hookTrigger=${options.hookTrigger}, currentVersion=${currentVersion}`);
       const versionCheck = await checkForUpdate(currentVersion);
@@ -66,7 +66,7 @@ export async function send(options: SendOptions): Promise<void> {
             silent: true,
             env: {
               ...process.env,
-              VIBE_LOG_SPAWNED_LATEST: '1' // Prevent infinite loops
+              DEVARK_SPAWNED_LATEST: '1' // Prevent infinite loops
             }
           });
           return;
@@ -77,7 +77,7 @@ export async function send(options: SendOptions): Promise<void> {
             silent: options.silent,
             env: {
               ...process.env,
-              VIBE_LOG_SPAWNED_LATEST: '1' // Prevent infinite loops
+              DEVARK_SPAWNED_LATEST: '1' // Prevent infinite loops
             }
           });
           return;
@@ -204,7 +204,7 @@ async function executeInteractiveSend(options: SendOptions): Promise<void> {
     let results;
     try {
       // Show initial progress
-      if (process.env.VIBELOG_DEBUG === 'true') {
+      if (process.env.DEVARK_DEBUG === 'true') {
         console.log('[DEBUG] Starting upload of', apiSessions.length, 'sessions');
       }
       progressUI.showUploadProgress(0, apiSessions.length);
@@ -213,7 +213,7 @@ async function executeInteractiveSend(options: SendOptions): Promise<void> {
         apiSessions, 
         options,
         (current, total, sizeKB) => {
-          if (process.env.VIBELOG_DEBUG === 'true') {
+          if (process.env.DEVARK_DEBUG === 'true') {
             console.log('[DEBUG] Progress update:', current, '/', total, sizeKB ? `(${sizeKB.toFixed(2)} KB)` : '');
           }
           progressUI.showUploadProgress(current, total, sizeKB);
@@ -226,7 +226,7 @@ async function executeInteractiveSend(options: SendOptions): Promise<void> {
       uploadSpinner.succeed('Sessions uploaded!');
     } catch (uploadError) {
       // Clear progress bar on error
-      if (process.env.VIBELOG_DEBUG === 'true') {
+      if (process.env.DEVARK_DEBUG === 'true') {
         console.log('[DEBUG] Upload error caught:', uploadError);
       }
       progressUI.completeUploadProgress();
@@ -293,7 +293,7 @@ function handleSendError(error: unknown, options: SendOptions): void {
   // Always throw errors so they can be caught and displayed properly
   // The menu will catch these and display them with displayError()
 
-  if (error instanceof VibelogError) {
+  if (error instanceof DevArkError) {
     throw error;
   }
 
@@ -306,7 +306,7 @@ function handleSendError(error: unknown, options: SendOptions): void {
     
     // Disk space errors
     if (error.message.includes('ENOSPC')) {
-      throw new VibelogError(
+      throw new DevArkError(
         'Insufficient disk space. Please free up some space and try again.',
         'DISK_FULL'
       );
@@ -314,7 +314,7 @@ function handleSendError(error: unknown, options: SendOptions): void {
     
     // Permission errors
     if (error.message.includes('EACCES') || error.message.includes('EPERM')) {
-      throw new VibelogError(
+      throw new DevArkError(
         'Permission denied. Please check file permissions.',
         'PERMISSION_DENIED'
       );
@@ -322,7 +322,7 @@ function handleSendError(error: unknown, options: SendOptions): void {
   }
 
   logger.error('Failed to send sessions', error);
-  throw new VibelogError(
+  throw new DevArkError(
     'Failed to send sessions. Please try again.',
     'SEND_FAILED'
   );

@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { waitForAuthSSE, waitForAuthLongPoll } from '../sse-client'
 import { EventSourcePolyfill } from 'event-source-polyfill'
-import { VibelogError } from '../../../utils/errors'
+import { DevArkError } from '../../../utils/errors'
 
 // Mock dependencies
 vi.mock('event-source-polyfill')
@@ -86,7 +86,7 @@ describe('SSE Client', () => {
         mockEventSource.onerror(new Error('Connection failed'))
       }, 100)
       
-      await expect(promise).rejects.toThrow(VibelogError)
+      await expect(promise).rejects.toThrow(DevArkError)
       await expect(promise).rejects.toThrow('SSE connection failed')
       expect(mockEventSource.close).toHaveBeenCalled()
     })
@@ -202,7 +202,7 @@ describe('SSE Client', () => {
       
       await expect(
         waitForAuthLongPoll('http://localhost:3000', 'session-123')
-      ).rejects.toThrow(VibelogError)
+      ).rejects.toThrow(DevArkError)
       
       await expect(
         waitForAuthLongPoll('http://localhost:3000', 'session-123')

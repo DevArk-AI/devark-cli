@@ -135,7 +135,7 @@ export async function showPrivacyPreview(
     console.log(`  🔑 ${redactionCounts.credentials} credentials`);
     
     // Show debug info if available and in debug mode
-    if (debugCredentials && debugCredentials.length > 0 && process.env.VIBELOG_DEBUG === 'true') {
+    if (debugCredentials && debugCredentials.length > 0 && process.env.DEVARK_DEBUG === 'true') {
       console.log('');
       console.log(chalk.yellow('  Debug: Detected credentials (first 20 chars):'));
       debugCredentials.slice(0, 5).forEach(({ text, pattern }) => {
@@ -169,7 +169,7 @@ export async function showPrivacyPreview(
   }
   
   console.log('');
-  console.log(chalk.blueBright('💡 For detailed preview: vibe-log privacy'));
+  console.log(chalk.blueBright('💡 For detailed preview: devark privacy'));
   console.log('');
   
   // Ask for confirmation
@@ -184,7 +184,7 @@ export async function showPrivacyPreview(
   
   if (!proceed) {
     console.log(chalk.yellow('\nUpload cancelled.'));
-    console.log(chalk.blueBright('💡 Tip: Use "vibe-log privacy" to preview what gets sent'));
+    console.log(chalk.blueBright('💡 Tip: Use "devark privacy" to preview what gets sent'));
   }
   
   return proceed;

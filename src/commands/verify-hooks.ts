@@ -35,10 +35,10 @@ async function testHookExecution(): Promise<boolean> {
 }
 
 /**
- * Verify that vibe-log hooks are properly installed and configured
+ * Verify that devark hooks are properly installed and configured
  */
 export async function verifyHooks(): Promise<void> {
-  console.log(chalk.cyan('🔍 Verifying Vibe-Log Hooks...\n'));
+  console.log(chalk.cyan('🔍 Verifying DevArk Hooks...\n'));
   
   // 1. Check authentication
   console.log(chalk.gray('1. Checking authentication...'));
@@ -47,7 +47,7 @@ export async function verifyHooks(): Promise<void> {
     showSuccess('  ✓ Authenticated');
   } else {
     showWarning('  ⚠ Not authenticated (hooks will skip sending)');
-    showInfo('    Run "npx vibe-log-cli" and authenticate');
+    showInfo('    Run "npx devark-cli" and authenticate');
   }
   
   // 2. Check hooks installation
@@ -56,7 +56,7 @@ export async function verifyHooks(): Promise<void> {
   
   if (!hookStatus.installed) {
     showError('  ✗ No hooks installed');
-    showInfo('    Run "vibe-log install-hooks" to install');
+    showInfo('    Run "devark install-hooks" to install');
     return;
   }
   
@@ -101,7 +101,7 @@ export async function verifyHooks(): Promise<void> {
     });
   } else if (trackingMode === 'none' || trackedProjects.length === 0) {
     showWarning('  ⚠ No projects are being tracked');
-    showInfo('    Use "vibe-log projects" to select projects to track');
+    showInfo('    Use "devark projects" to select projects to track');
     console.log(chalk.yellow('    Hooks will run but won\'t send any data'));
   }
   
@@ -112,7 +112,7 @@ export async function verifyHooks(): Promise<void> {
     showSuccess('  ✓ Hook command can execute');
   } else {
     showWarning('  ⚠ Hook command test failed');
-    showInfo('    This might be normal if vibe-log is not in PATH');
+    showInfo('    This might be normal if devark is not in PATH');
   }
   
   // Validate hook commands
@@ -133,7 +133,7 @@ export async function verifyHooks(): Promise<void> {
   }
   const logPath = path.join(
     homeDir,
-    '.vibe-log',
+    '.devark',
     'hooks.log'
   );
   
@@ -141,7 +141,7 @@ export async function verifyHooks(): Promise<void> {
     const stats = await fs.stat(logPath);
     if (stats.size > 0) {
       showWarning(`  ⚠ Hook errors logged at: ${logPath}`);
-      showInfo('    Run "vibe-log hooks-log" to view errors');
+      showInfo('    Run "devark hooks-log" to view errors');
     } else {
       showSuccess('  ✓ No hook errors');
     }
@@ -159,5 +159,5 @@ export async function verifyHooks(): Promise<void> {
   }
   
   console.log('');
-  console.log(chalk.gray('For more help: https://docs.vibe-log.dev/cli/hooks'));
+  console.log(chalk.gray('For more help: https://docs.devark.dev/cli/hooks'));
 }

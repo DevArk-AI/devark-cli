@@ -6,9 +6,9 @@
 import { parseProjectName } from './ui/project-display';
 
 export interface ClaudeProject {
-  name: string;              // Display name (e.g., "vibe-log")
-  claudePath: string;        // Claude folder path (e.g., ~/.claude/projects/-home-user-dev-vibe-log)
-  actualPath: string;        // Actual project path (e.g., /home/user/dev/vibe-log)
+  name: string;              // Display name (e.g., "devark")
+  claudePath: string;        // Claude folder path (e.g., ~/.claude/projects/-home-user-dev-devark)
+  actualPath: string;        // Actual project path (e.g., /home/user/dev/devark)
   sessions: number;          // Number of session files
   lastActivity: Date | null; // Last modification time
   isActive: boolean;         // Active within last 30 days

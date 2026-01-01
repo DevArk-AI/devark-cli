@@ -34,7 +34,7 @@ export async function withTimeout<T>(
  */
 export async function logHookError(context: string, error: any): Promise<void> {
   try {
-    const logDir = path.join(homedir(), '.vibe-log');
+    const logDir = path.join(homedir(), '.devark');
     const logPath = path.join(logDir, 'hooks.log');
     
     // Ensure directory exists
@@ -77,7 +77,7 @@ export async function silentErrorWrapper<T>(
  * Get the path to the hooks log file
  */
 export function getHooksLogPath(): string {
-  return path.join(homedir(), '.vibe-log', 'hooks.log');
+  return path.join(homedir(), '.devark', 'hooks.log');
 }
 
 /**

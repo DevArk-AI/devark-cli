@@ -2,7 +2,7 @@ import { PromptContext, OrchestratedPrompt } from '../../types/prompts';
 
 /**
  * Build an orchestrated prompt that guides Claude through multi-phase analysis
- * using the installed vibe-log sub-agents
+ * using the installed devark sub-agents
  */
 export function buildOrchestratedPrompt(context: PromptContext): OrchestratedPrompt {
   const { timeframe, days, projectPaths, projectNames } = context;
@@ -16,7 +16,7 @@ export function buildOrchestratedPrompt(context: PromptContext): OrchestratedPro
   const timeframeDesc = days === 1 ? 'the last 24 hours' : `the last ${days} days`;
 
   // Separate system prompt for behavioral instructions
-  const systemPrompt = `You are a vibe-log ORCHESTRATOR coordinating batch analysis.
+  const systemPrompt = `You are a devark ORCHESTRATOR coordinating batch analysis.
 
 CRITICAL RULES:
 - DO NOT analyze session files yourself - delegate ALL analysis to sub-agents
@@ -52,7 +52,7 @@ COMMUNICATION:
 - Keep updates concise`;
 
   // Main prompt focused on the task
-  const prompt = `Analyze my Claude Code sessions from ${timeframeDesc} using vibe-log sub-agents.
+  const prompt = `Analyze my Claude Code sessions from ${timeframeDesc} using devark sub-agents.
 
 Projects to analyze:
 ${projectList}
@@ -60,7 +60,7 @@ ${projectList}
 Execute this streamlined workflow using per-session analysis:
 
 ## Phase 1 - Discovery (3 seconds)
-Read .vibe-log-temp/manifest.json to understand:
+Read .devark-temp/manifest.json to understand:
 - Total sessions available
 - Session files and their sizes
 - Projects involved
@@ -78,12 +78,12 @@ BATCHING STRATEGY (MAX 9 AGENTS TOTAL):
 - If >45 sessions: 9 agents, split evenly (5-10 sessions each)
 
 For each batch of sessions, launch:
-Task(subagent_type="vibe-log-session-analyzer", 
+Task(subagent_type="devark-session-analyzer", 
      description="Analyze batch of [X] sessions",
      prompt="You are analyzing a BATCH of Claude Code session files.
 
 FILES TO ANALYZE: 
-[List the specific .vibe-log-temp/filename for each session in this batch]
+[List the specific .devark-temp/filename for each session in this batch]
 [Include isLarge flag for each file]
 
 INSTRUCTIONS:
@@ -163,7 +163,7 @@ IMPORTANT:
 ## Phase 3 - Report Generation (10 seconds)
 After collecting ALL session analysis results, launch the report generator:
 
-Task(subagent_type="vibe-log-report-generator",
+Task(subagent_type="devark-report-generator",
      description="Generate JSON report data from session analyses",
      prompt="Generate comprehensive report data from the session analysis results.
 
@@ -238,7 +238,7 @@ KEY POINTS:
 - The system automatically converts JSON to HTML and saves it`;
 
   // Build a shorter, more user-friendly command for display
-  const displayCommand = `claude "Analyze my Claude Code sessions from ${timeframeDesc} using vibe-log sub-agents..."`;
+  const displayCommand = `claude "Analyze my Claude Code sessions from ${timeframeDesc} using devark sub-agents..."`;
   
   return {
     prompt,
@@ -256,7 +256,7 @@ export function buildSimplePrompt(context: PromptContext): string {
   
   const projectList = projectNames.join(', ');
   
-  return `@vibe-log-report-generator analyze my coding sessions from the last ${timeframe} for projects: ${projectList}. Focus on productivity insights and key accomplishments.`;
+  return `@devark-report-generator analyze my coding sessions from the last ${timeframe} for projects: ${projectList}. Focus on productivity insights and key accomplishments.`;
 }
 
 /**

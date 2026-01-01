@@ -2,7 +2,7 @@ import fs from 'fs/promises';
 import path from 'path';
 import os from 'os';
 import { SessionData, Message, ReaderOptions } from './types';
-import { VibelogError } from '../../utils/errors';
+import { DevArkError } from '../../utils/errors';
 import { filterImageContent } from './image-filter';
 import { extractLanguagesFromSession } from '../language-extractor';
 
@@ -73,7 +73,7 @@ export async function readClaudeSessions(
   try {
     await fs.access(claudePath);
   } catch (error) {
-    throw new VibelogError(
+    throw new DevArkError(
       'Claude Code data not found. Make sure Claude Code is installed and you have used it at least once.',
       'CLAUDE_NOT_FOUND'
     );

@@ -131,7 +131,7 @@ export function getBackupDetails(): { command?: string; date?: string } | null {
 }
 
 /**
- * Check for existing non-vibe-log status line
+ * Check for existing non-devark status line
  */
 export async function detectExistingStatusLine(): Promise<{
   command?: string;

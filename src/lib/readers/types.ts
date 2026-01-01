@@ -37,7 +37,7 @@ export interface SessionData extends SessionMetadata {
   gitBranch?: string;  // Git branch from JSONL
   // Source file information for re-reading if needed
   sourceFile?: {
-    claudeProjectPath: string;  // e.g., ~/.claude/projects/-home-user-vibe-log
+    claudeProjectPath: string;  // e.g., ~/.claude/projects/-home-user-devark
     sessionFile: string;         // e.g., session-123.jsonl
   };
 }

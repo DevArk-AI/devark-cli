@@ -1,7 +1,7 @@
 import chalk from 'chalk';
 import { countCursorMessages } from '../lib/readers/cursor';
 import { createSpinner } from '../lib/ui';
-import { VibelogError } from '../utils/errors';
+import { DevArkError } from '../utils/errors';
 import { logger } from '../utils/logger';
 import {
   getPushUpChallengeConfig,
@@ -96,7 +96,7 @@ export async function cursorStats(): Promise<void> {
   } catch (error) {
     spinner.fail('Failed to fetch Cursor stats');
 
-    if (error instanceof VibelogError) {
+    if (error instanceof DevArkError) {
       if (error.code === 'CURSOR_NOT_FOUND') {
         console.log(chalk.yellow('\n💡 Cursor IDE not detected on this system.'));
         console.log(chalk.gray('   Install Cursor to track your AI conversations.'));
@@ -107,7 +107,7 @@ export async function cursorStats(): Promise<void> {
     }
 
     logger.error('Failed to fetch Cursor stats', error);
-    throw new VibelogError(
+    throw new DevArkError(
       'Failed to fetch Cursor statistics. Please try again.',
       'CURSOR_STATS_FAILED'
     );

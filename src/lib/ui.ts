@@ -3,41 +3,69 @@ import ora from 'ora';
 import { StreakInfo, UploadResult } from './api-client';
 import { PointsDisplayUI } from './ui/points-display';
 
+// DevArk ASCII Logo
+const DEVARK_ASCII_LOGO = `
+                                              **--
+                                            ****----
+                                          ******------
+                                        ********--------
+                                      **********----------
+                                   *************-------------
+                                 ***************---------------
+                               *****************-----------------
+                             *****************    -----------------
+                           ****************          ----------------
+                        *****************      *-      -----------------
+                      *****************      ***---      -----------------
+                    *****************     ******------     -----------------
+                  ****************      ********--------      ----------------
+               *****************      **********----------      -----------------
+             *****************      ************------------      -----------------
+           *****************     ***************---------------     -----------------
+          ***************      *****************-----------------      ---------------
+            ***********      *****************    -----------------      -----------
+              *******     ******************        ------------------     -------
+               ***      *****************      *-      -----------------      ---
+                      *****************      ***---      -----------------
+                    *****************      *****-----      -----------------
+                 *****************      ********--------      -----------------
+                 ***************      **********----------      ---------------
+                  ************     *************-------------     ------------
+                    *******      ***************---------------      -------
+                      ***     ******************------------------     ---
+                            *******************  -------------------
+                         *******************        -------------------
+                       *******************            -------------------
+                       ****************                  ----------------
+                         ***********                        -----------
+                           ******                              ------
+                            ***                                  ---
+`;
+
 export async function showLogo(version?: string): Promise<void> {
   // Helper to display version line
   const displayVersion = (version: string) => {
     const isSimulated = process.env.SIMULATE_OLD_VERSION === version;
     const versionText = isSimulated ? `v${version} (simulated)` : `v${version}`;
-    console.log(chalk.gray(`                         ${versionText}`));
+    console.log(chalk.gray(`                                        ${versionText}`));
   };
 
-  try {
-    // Dynamically import oh-my-logo (ESM module) in our CommonJS build
-    const { renderFilled } = await import('oh-my-logo');
-    
-    // Generate the VIBE-LOG logo using oh-my-logo with matrix palette
-    // renderFilled directly outputs to console with ink-big-text
-    await renderFilled('VIBE-LOG', {
-      palette: 'matrix'
-    });
-    
-    // Display version if provided
-    if (version) {
-      displayVersion(version);
-    }
-    
-    console.log(); // Add a blank line after the logo
-  } catch (error) {
-    // Fallback to simple text logo if oh-my-logo fails or isn't available
-    console.log(chalk.green(`
-                         VIBE-LOG
-    `));
-    
-    // Display version in fallback mode too
-    if (version) {
-      displayVersion(version);
-    }
+  // Display the DevArk ASCII logo with brand colors
+  const lines = DEVARK_ASCII_LOGO.split('\n');
+  for (const line of lines) {
+    // Color the asterisks blue (#3528E0) and dashes black
+    const coloredLine = line
+      .replace(/\*/g, chalk.hex('#3528E0')('*'))
+      .replace(/-/g, chalk.black('-'));
+    console.log(coloredLine);
   }
+
+  // Display version if provided
+  if (version) {
+    displayVersion(version);
+  }
+
+  console.log(); // Add a blank line after the logo
 }
 
 export function showStreakUpdate(streak: StreakInfo): void {
@@ -129,7 +157,7 @@ export function showSessionSummary(sessions: any[]): void {
 }
 
 export function showWelcome(): void {
-  console.log(chalk.yellow('\n👋 Welcome to vibe-log!'));
+  console.log(chalk.yellow('\n👋 Welcome to devark!'));
   console.log(chalk.gray('Track your building journey and maintain your streak.\n'));
 }
 

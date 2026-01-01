@@ -150,23 +150,23 @@ export async function getMergedSettingsForProject(projectPath: string): Promise<
 }
 
 /**
- * Check if a command is a vibe-log hook
+ * Check if a command is a devark hook
  */
-function isVibeLogCommand(command: string | undefined): boolean {
+function isDevArkCommand(command: string | undefined): boolean {
   if (!command) return false;
-  return command.includes('vibe-log') || command.includes('vibe-log');
+  return command.includes('devark') || command.includes('devark');
 }
 
 /**
- * Check if settings have vibe-log hooks
+ * Check if settings have devark hooks
  */
-export function hasVibeLogHooks(settings: ClaudeSettings | null): boolean {
+export function hasDevArkHooks(settings: ClaudeSettings | null): boolean {
   if (!settings?.hooks) return false;
   
   // Check SessionStart hooks
   if (settings.hooks.SessionStart) {
     for (const config of settings.hooks.SessionStart) {
-      if (config.hooks.some(h => isVibeLogCommand(h.command))) {
+      if (config.hooks.some(h => isDevArkCommand(h.command))) {
         return true;
       }
     }
@@ -175,7 +175,7 @@ export function hasVibeLogHooks(settings: ClaudeSettings | null): boolean {
   // Check PreCompact hooks
   if (settings.hooks.PreCompact) {
     for (const config of settings.hooks.PreCompact) {
-      if (config.hooks.some(h => isVibeLogCommand(h.command))) {
+      if (config.hooks.some(h => isDevArkCommand(h.command))) {
         return true;
       }
     }
@@ -190,16 +190,16 @@ export function hasVibeLogHooks(settings: ClaudeSettings | null): boolean {
 export async function getHookMode(): Promise<HookMode> {
   const global = await readGlobalSettings();
   
-  // Check if global settings have vibe-log hooks
-  if (hasVibeLogHooks(global)) {
+  // Check if global settings have devark hooks
+  if (hasDevArkHooks(global)) {
     return 'all';
   }
   
-  // Check if any project has local vibe-log hooks
+  // Check if any project has local devark hooks
   const projects = await discoverProjects();
   for (const project of projects) {
     const localSettings = await readProjectLocalSettings(project.actualPath);
-    if (hasVibeLogHooks(localSettings)) {
+    if (hasDevArkHooks(localSettings)) {
       return 'selected';
     }
   }
@@ -208,7 +208,7 @@ export async function getHookMode(): Promise<HookMode> {
 }
 
 /**
- * Get list of projects that have vibe-log hooks in their local settings
+ * Get list of projects that have devark hooks in their local settings
  */
 export async function getTrackedProjects(): Promise<string[]> {
   const projects = await discoverProjects();
@@ -216,8 +216,8 @@ export async function getTrackedProjects(): Promise<string[]> {
   
   for (const project of projects) {
     const localSettings = await readProjectLocalSettings(project.actualPath);
-    if (hasVibeLogHooks(localSettings)) {
-      // Return the Claude folder name (e.g., "-home-user-projects-vibe-log")
+    if (hasDevArkHooks(localSettings)) {
+      // Return the Claude folder name (e.g., "-home-user-projects-devark")
       trackedProjects.push(project.claudePath.split('/').pop() || project.claudePath);
     }
   }
@@ -242,9 +242,9 @@ export async function getAllProjectsHookStatus(): Promise<ProjectWithHookStatus[
     
     const hasGlobalHooks = mode === 'all' || 
                           (mode === 'selected' && trackedProjects.includes(project.claudePath));
-    const hasProjectHooks = hasVibeLogHooks(projectSettings);
-    const hasLocalHooks = hasVibeLogHooks(localSettings);
-    const hasEffectiveHooks = hasVibeLogHooks(merged);
+    const hasProjectHooks = hasDevArkHooks(projectSettings);
+    const hasLocalHooks = hasDevArkHooks(localSettings);
+    const hasEffectiveHooks = hasDevArkHooks(merged);
     
     projectsWithStatus.push({
       ...project,
@@ -280,9 +280,9 @@ export async function getProjectHookStatus(projectPath: string): Promise<{
   
   return {
     hasGlobalHooks,
-    hasProjectHooks: hasVibeLogHooks(project),
-    hasLocalHooks: hasVibeLogHooks(local),
-    hasEffectiveHooks: hasVibeLogHooks(merged)
+    hasProjectHooks: hasDevArkHooks(project),
+    hasLocalHooks: hasDevArkHooks(local),
+    hasEffectiveHooks: hasDevArkHooks(merged)
   };
 }
 

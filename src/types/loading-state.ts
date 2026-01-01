@@ -57,8 +57,8 @@ export function getLoadingMessage(personality?: PersonalityType, customName?: st
   switch (personality) {
     case 'gordon':
       return "🔥 Gordon's inspecting your mise en place...";
-    case 'vibe-log':
-      return "💜 Vibe-log is compiling your prompt...";
+    case 'devark':
+      return "💜 DevArk is compiling your prompt...";
     case 'custom':
       if (customName) {
         return `✨ ${customName} is analyzing your prompt...`;

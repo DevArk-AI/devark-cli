@@ -31,7 +31,7 @@ describe('Project Display Module', () => {
 
   describe('parseProjectName()', () => {
     it('should extract project name from path', () => {
-      expect(parseProjectName('/home/user/dev/vibe-log')).toBe('vibe-log');
+      expect(parseProjectName('/home/user/dev/devark')).toBe('devark');
       expect(parseProjectName('/home/user/projects/my-app')).toBe('my-app');
       expect(parseProjectName('C:\\Users\\project\\test-app')).toBe('test-app');
     });
@@ -258,11 +258,11 @@ describe('Project Display Module', () => {
   describe('createProjectTable()', () => {
     const mockProjects = [
       {
-        name: 'vibe-log',
+        name: 'devark',
         sessions: 45,
         lastActivity: new Date('2024-01-15T11:30:00Z'),
         isActive: true,
-        path: '/home/user/vibe-log',
+        path: '/home/user/devark',
       },
       {
         name: 'test-project',
@@ -299,7 +299,7 @@ describe('Project Display Module', () => {
       const table = createProjectTable(mockProjects);
       
       // Check project names
-      expect(table).toContain('vibe-log');
+      expect(table).toContain('devark');
       expect(table).toContain('test-project');
       
       // Check session counts

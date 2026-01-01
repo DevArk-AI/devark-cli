@@ -1,8 +1,8 @@
-# Claude Code - vibe-log CLI Development Notes
+# Claude Code - devark CLI Development Notes
 
 ## Project Architecture Overview
 
-vibelog-cli is a TypeScript-based CLI application designed to track and analyze developer productivity sessions from Claude Code. It's distributed as an NPX package for cross-platform compatibility.
+devark-cli is a TypeScript-based CLI application designed to track and analyze developer productivity sessions from Claude Code. It's distributed as an NPX package for cross-platform compatibility.
 
 ### Key Technologies
 - **TypeScript 5.3+** - Type-safe development
@@ -20,7 +20,7 @@ vibelog-cli is a TypeScript-based CLI application designed to track and analyze 
 ## Core Directory Structure
 
 ```
-vibelog-cli/
+devark-cli/
 ├── bin/              # NPX entry point
 ├── dist/             # Compiled JavaScript output
 ├── src/
@@ -42,7 +42,7 @@ vibelog-cli/
 Each command is a standalone module that handles specific CLI operations:
 
 - **`init.ts`** - First-time setup and authentication flow
-- **`send.ts`** - Upload session data to Vibelog API (supports silent mode for hooks)
+- **`send.ts`** - Upload session data to DevArk API (supports silent mode for hooks)
   - **IMPORTANT**: Always use `sendWithTimeout({ selectedSessions })` when uploading pre-selected sessions
   - Never call `apiClient.uploadSessions()` directly - the send command handles all session processing
   - The `selectedSessions` parameter expects `SelectedSessionInfo[]` from session-selector
@@ -122,7 +122,7 @@ Each command is a standalone module that handles specific CLI operations:
   - Progress tracking
 
 - **`sub-agents/templates.ts`** - Sub-agent configurations:
-  - Defines 8 specialized vibe-log sub-agents
+  - Defines 8 specialized devark sub-agents
   - Each agent has specific analysis capabilities
   - Coordinated for comprehensive reporting
 
@@ -131,7 +131,7 @@ Each command is a standalone module that handles specific CLI operations:
 **Hook Naming Convention**: All hooks use PascalCase format (e.g., `PreCompact`, `SessionStart`, `SessionEnd`, `Stop`).
 Legacy camelCase formats (`preCompact`, `stop`) are no longer supported.
 
-**Note**: The `Stop` hook (PascalCase) is reserved for the Push-Up Challenge feature and should not be used by vibe-log hooks.
+**Note**: The `Stop` hook (PascalCase) is reserved for the Push-Up Challenge feature and should not be used by devark hooks.
 
 ##### Core Hook Management (`/src/lib/hooks/`)
 - **`hooks-controller.ts`** - Selective hook management:
@@ -144,7 +144,7 @@ Legacy camelCase formats (`preCompact`, `stop`) are no longer supported.
   - Track hook execution counts and success rates
   - Calculate average execution times
   - Per-project statistics tracking
-  - Store metrics in `~/.vibe-log/hooks-stats.json`
+  - Store metrics in `~/.devark/hooks-stats.json`
 
 - **`hooks-tester.ts`** - Hook testing framework:
   - Test individual hooks in isolation
@@ -155,7 +155,7 @@ Legacy camelCase formats (`preCompact`, `stop`) are no longer supported.
 ##### Hook Utilities
 - **`hook-utils.ts`** - Hook execution utilities:
   - Timeout management for hook operations
-  - Error logging to `~/.vibe-log/hooks.log`
+  - Error logging to `~/.devark/hooks.log`
   - Graceful failure handling
 
 - **`hook-lock.ts`** - Concurrency control:
@@ -171,7 +171,7 @@ Legacy camelCase formats (`preCompact`, `stop`) are no longer supported.
 
 - **`hooks-manager.ts`** - Hook status and cleanup utilities:
   - Hook status checking (getHookStatus, areHooksInstalled)
-  - Uninstall functionality (uninstallVibeLogHooks)
+  - Uninstall functionality (uninstallDevArkHooks)
   - Settings.json reading and validation
   - Note: Installation now handled by hooks-controller.ts
 
@@ -251,7 +251,7 @@ Legacy camelCase formats (`preCompact`, `stop`) are no longer supported.
 - **PreCompact Hook** - Captures full sessions before context compression
 - Silent mode for unobtrusive operation
 - Lock mechanism prevents race conditions
-- Comprehensive error logging to `~/.vibe-log/hooks.log`
+- Comprehensive error logging to `~/.devark/hooks.log`
 - Graceful failure without disrupting workflow
 - Test mode for validation without data processing
 
@@ -271,10 +271,10 @@ Legacy camelCase formats (`preCompact`, `stop`) are no longer supported.
 ### CLI Commands
 ```bash
 # Main interactive menu
-npx vibe-log-cli
+npx devark-cli
 
 # Send command with test mode
-npx vibe-log-cl send --test       # Test mode for hook validation
+npx devark-cl send --test       # Test mode for hook validation
 ```
 
 ### Build Process
@@ -296,8 +296,8 @@ npm run lint      # ESLint checking
 ### Important Notes
 1. **No backward compatibility required** - Product hasn't launched yet
 2. **Cross-platform priority** - Must work on macOS and Windows
-3. **NPX distribution** - Package must be executable via `npx vibe-log`
-4. **Manual testing** - Don't run `node vibe-log.js` directly; use proper CLI commands
+3. **NPX distribution** - Package must be executable via `npx devark`
+4. **Manual testing** - Don't run `node devark.js` directly; use proper CLI commands
 5. **Type safety** - Always run `npm run build` to catch type errors
 
 ## Release Process
@@ -318,7 +318,7 @@ See skill: `/cli-release-process` for the complete release workflow.
 
 ---
 
-# Claude Code - vibe-log CLI Development Notes
+# Claude Code - devark CLI Development Notes
 
 ## Project Tracking Architecture
 

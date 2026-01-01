@@ -30,7 +30,7 @@ if (!isSilent) {
   // Support simulation for testing
   const simulatedVersion = process.env.SIMULATE_OLD_VERSION;
   const displayPkg = simulatedVersion 
-    ? { ...pkg, name: 'vibe-log-cli', version: simulatedVersion }
+    ? { ...pkg, name: 'devark-cli', version: simulatedVersion }
     : pkg;
 
   // Use update-notifier to check for package updates (async)
@@ -73,8 +73,8 @@ export const currentVersion = process.env.SIMULATE_OLD_VERSION || pkg.version;
 const program = new Command();
 
 program
-  .name('vibe-log')
-  .description('Track your building journey with vibe-log')
+  .name('devark')
+  .description('Track your building journey with devark')
   .version(currentVersion)
   .option('-v, --verbose', 'Enable verbose logging')
   .helpOption(false) // Disable default help
@@ -100,7 +100,7 @@ program
 // Hidden command for hooks - not shown in help
 program
   .command('send', { hidden: true })
-  .description('Send session data from current project to vibe-log')
+  .description('Send session data from current project to devark')
   .option('-d, --dry', 'Show what would be sent without uploading')
   .option('-a, --all', 'Send sessions from all projects (default: current project only)')
   .option('--silent', 'Run in silent mode (for hook execution)')
@@ -134,7 +134,7 @@ program
 // Hidden command for advanced users
 program
   .command('config', { hidden: true })
-  .description('Manage vibe-log configuration')
+  .description('Manage devark configuration')
   .option('-l, --list', 'List all configuration values')
   .option('-s, --set <key=value>', 'Set a configuration value')
   .option('-g, --get <key>', 'Get a configuration value')
@@ -203,23 +203,23 @@ program
 // Custom help function
 function showHelp(): void {
   console.log('');
-  console.log('Usage: npx vibe-log-cli');
+  console.log('Usage: npx devark-cli');
   console.log('');
-  console.log('Track your building journey with vibe-log');
+  console.log('Track your building journey with devark');
   console.log('');
   console.log('Main usage:');
-  console.log('  npx vibe-log-cli              Interactive menu (recommended)');
+  console.log('  npx devark-cli              Interactive menu (recommended)');
   console.log('');
   console.log('Quick actions:');
-  console.log('  npx vibe-log-cli auth               Sign in to enable cloud sync & web dashboard');
-  console.log('  npx vibe-log-cli install-auto-sync  Configure automatic session sync');
-  console.log('  npx vibe-log-cli send               Manually sync sessions to cloud');
-  console.log('  npx vibe-log-cli privacy            Preview what data gets sent (privacy first!)');
+  console.log('  npx devark-cli auth               Sign in to enable cloud sync & web dashboard');
+  console.log('  npx devark-cli install-auto-sync  Configure automatic session sync');
+  console.log('  npx devark-cli send               Manually sync sessions to cloud');
+  console.log('  npx devark-cli privacy            Preview what data gets sent (privacy first!)');
   console.log('');
   console.log('For hooks (automatic sync):');
-  console.log('  npx vibe-log-cli send --silent    Used by Claude Code hooks');
+  console.log('  npx devark-cli send --silent    Used by Claude Code hooks');
   console.log('');
-  console.log('Learn more at: https://vibe-log.dev');
+  console.log('Learn more at: https://devark.dev');
   console.log('');
   process.exit(0);
 }
@@ -265,7 +265,7 @@ program.action(async () => {
   } catch (menuError) {
     // Only if menu itself fails, show simple fallback
     console.error(colors.error('\nFailed to display interactive menu'));
-    console.log(colors.subdued('Run "npx vibe-log-cli" to get started'));
+    console.log(colors.subdued('Run "npx devark-cli" to get started'));
     
     if (menuError instanceof Error) {
       logger.debug('Menu display error:', menuError);

@@ -13,7 +13,7 @@ export interface StandupTip {
  * Tips are carefully curated to be:
  * - Actionable and practical
  * - Relevant to developer productivity
- * - Educational about vibe-log features
+ * - Educational about devark features
  * - Concise (fit on one line)
  */
 export function getStandupTips(): StandupTip[] {
@@ -41,17 +41,17 @@ export function getStandupTips(): StandupTip[] {
       category: 'productivity'
     },
 
-    // Vibe-log Feature Tips
+    // DevArk Feature Tips
     {
       text: '💡 Use hooks for automatic session capture without manual uploads',
       category: 'feature'
     },
     {
-      text: '📈 View your productivity patterns at app.vibe-log.dev/dashboard',
+      text: '📈 View your productivity patterns at app.devark.dev/dashboard',
       category: 'feature'
     },
     {
-      text: '📧 Setup Vibe-Log cloud account to get Weekly recaps and Daily standup emails',
+      text: '📧 Setup DevArk cloud account to get Weekly recaps and Daily standup emails',
       category: 'feature'
     },
     {

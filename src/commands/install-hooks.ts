@@ -1,12 +1,12 @@
 import chalk from 'chalk';
 import { requireAuth } from '../lib/auth/token';
-import { VibelogError } from '../utils/errors';
+import { DevArkError } from '../utils/errors';
 import { logger } from '../utils/logger';
 import { showSuccess, showInfo } from '../lib/ui';
 import { getCliPath } from '../lib/config';
 import {
   getHookStatus,
-  uninstallVibeLogHooks
+  uninstallDevArkHooks
 } from '../lib/hooks-manager';
 import { installSelectedHooks } from '../lib/hooks/hooks-controller';
 import { getGlobalSettingsPath } from '../lib/claude-core';
@@ -17,7 +17,7 @@ interface InstallHooksOptions {
 }
 
 /**
- * Install Vibe-Log hooks into Claude Code settings
+ * Install DevArk hooks into Claude Code settings
  */
 export async function installHooks(options: InstallHooksOptions = {}): Promise<void> {
   // Require authentication first
@@ -28,10 +28,10 @@ export async function installHooks(options: InstallHooksOptions = {}): Promise<v
   // Show important information about global hooks
   if (!options.silent && !options.uninstall) {
     console.log('');
-    console.log(chalk.cyan('ℹ️  About Vibe-Log Hooks:'));
+    console.log(chalk.cyan('ℹ️  About DevArk Hooks:'));
     console.log(chalk.gray('  • Hooks will be installed globally for ALL Claude Code projects'));
     console.log(chalk.gray('  • Only tracked projects will send data (respecting your privacy)'));
-    console.log(chalk.gray('  • Use "vibe-log projects" to manage which projects are tracked'));
+    console.log(chalk.gray('  • Use "devark projects" to manage which projects are tracked'));
     console.log('');
     console.log(chalk.dim('Target file: ' + settingsPath));
     console.log('');
@@ -40,12 +40,12 @@ export async function installHooks(options: InstallHooksOptions = {}): Promise<v
   try {
     if (options.uninstall) {
       // Uninstall hooks
-      await uninstallVibeLogHooks();
+      await uninstallDevArkHooks();
       
       showSuccess('Global hooks uninstalled successfully!');
       console.log('');
       console.log(chalk.gray('Your sessions will no longer be automatically synced.'));
-      console.log(chalk.gray('To reinstall: vibe-log install-hooks'));
+      console.log(chalk.gray('To reinstall: devark install-hooks'));
       return;
     }
     
@@ -96,26 +96,26 @@ export async function installHooks(options: InstallHooksOptions = {}): Promise<v
     console.log(chalk.green('✨ Your coding sessions will now be automatically synced!'));
     console.log('');
     console.log(chalk.gray('Commands:'));
-    console.log(chalk.gray('  • vibe-log projects        - Manage tracked projects'));
-    console.log(chalk.gray('  • vibe-log verify-hooks    - Check if hooks are working'));
-    console.log(chalk.gray('  • vibe-log install-hooks --uninstall - Remove hooks'));
+    console.log(chalk.gray('  • devark projects        - Manage tracked projects'));
+    console.log(chalk.gray('  • devark verify-hooks    - Check if hooks are working'));
+    console.log(chalk.gray('  • devark install-hooks --uninstall - Remove hooks'));
     console.log('');
     console.log(chalk.gray('Note: To change CLI path, run:'));
-    console.log(chalk.gray('  vibe-log config set cliPath "/path/to/vibe-log.js"'));
+    console.log(chalk.gray('  devark config set cliPath "/path/to/devark.js"'));
     
   } catch (error) {
     logger.error('Failed to install hooks', error);
 
     if (error instanceof Error) {
       if (error.message.includes('EACCES')) {
-        throw new VibelogError(
+        throw new DevArkError(
           'Permission denied. Make sure you have write access to the .claude directory.',
           'PERMISSION_DENIED'
         );
       }
     }
 
-    throw new VibelogError(
+    throw new DevArkError(
       'Failed to install hooks. Please try again.',
       'INSTALL_FAILED'
     );

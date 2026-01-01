@@ -133,8 +133,8 @@ export async function executeClaude(
       // Windows: Use PowerShell to pipe the file content to Claude
       // This avoids command line length limits and batch file issues
 
-      // Write prompt to a temporary file in .vibe-log folder for consistency
-      const tempDir = path.join(os.homedir(), '.vibe-log', 'temp-prompts');
+      // Write prompt to a temporary file in .devark folder for consistency
+      const tempDir = path.join(os.homedir(), '.devark', 'temp-prompts');
       await fs.mkdir(tempDir, { recursive: true });
 
       // Clean up old prompt files (older than 1 hour)

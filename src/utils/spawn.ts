@@ -8,16 +8,16 @@ import { logger } from './logger';
  * Get the upload log file path
  */
 export function getUploadLogPath(): string {
-  const vibelogDir = path.join(os.homedir(), '.vibe-log');
-  return path.join(vibelogDir, 'upload.log');
+  const devarkDir = path.join(os.homedir(), '.devark');
+  return path.join(devarkDir, 'upload.log');
 }
 
 /**
- * Ensure the .vibe-log directory exists
+ * Ensure the .devark directory exists
  */
-async function ensureVibelogDir(): Promise<void> {
-  const vibelogDir = path.join(os.homedir(), '.vibe-log');
-  await fs.mkdir(vibelogDir, { recursive: true });
+async function ensureDevArkDir(): Promise<void> {
+  const devarkDir = path.join(os.homedir(), '.devark');
+  await fs.mkdir(devarkDir, { recursive: true });
 }
 
 /**
@@ -32,7 +32,7 @@ export async function spawnDetached(
     env?: NodeJS.ProcessEnv;
   }
 ): Promise<void> {
-  await ensureVibelogDir();
+  await ensureDevArkDir();
   
   const logFile = options?.logFile || getUploadLogPath();
   
@@ -43,7 +43,7 @@ export async function spawnDetached(
   const spawnOptions: SpawnOptions = {
     detached: true,
     stdio: ['ignore', 'ignore', 'ignore'],
-    env: { ...process.env, ...options?.env, VIBE_LOG_OUTPUT: logFile }
+    env: { ...process.env, ...options?.env, DEVARK_OUTPUT: logFile }
   };
   
   // On Windows, we need to use shell mode for proper detachment
@@ -65,7 +65,7 @@ export async function spawnDetached(
  * This prevents duplicate uploads
  */
 export async function isUploadRunning(): Promise<boolean> {
-  const lockFile = path.join(os.homedir(), '.vibe-log', 'upload.lock');
+  const lockFile = path.join(os.homedir(), '.devark', 'upload.lock');
   
   try {
     const stats = await fs.stat(lockFile);
@@ -88,8 +88,8 @@ export async function isUploadRunning(): Promise<boolean> {
  * Create a lock file for upload process
  */
 export async function createUploadLock(): Promise<void> {
-  await ensureVibelogDir();
-  const lockFile = path.join(os.homedir(), '.vibe-log', 'upload.lock');
+  await ensureDevArkDir();
+  const lockFile = path.join(os.homedir(), '.devark', 'upload.lock');
   await fs.writeFile(lockFile, process.pid.toString());
 }
 
@@ -97,6 +97,6 @@ export async function createUploadLock(): Promise<void> {
  * Remove the upload lock file
  */
 export async function removeUploadLock(): Promise<void> {
-  const lockFile = path.join(os.homedir(), '.vibe-log', 'upload.lock');
+  const lockFile = path.join(os.homedir(), '.devark', 'upload.lock');
   await fs.unlink(lockFile).catch(() => {});
 }

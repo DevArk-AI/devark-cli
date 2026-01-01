@@ -1,4 +1,4 @@
-import { VibelogError } from '../../utils/errors.js';
+import { DevArkError } from '../../utils/errors.js';
 
 export type NetworkErrorType = 
   | 'DNS_RESOLUTION_FAILED'
@@ -100,7 +100,7 @@ export function getNetworkErrorMessage(error: any): string {
   
   switch (errorType) {
     case 'DNS_RESOLUTION_FAILED':
-      return 'Cannot reach vibe-log servers. Please check your internet connection';
+      return 'Cannot reach devark servers. Please check your internet connection';
       
     case 'CONNECTION_REFUSED':
       return 'Connection refused. The server might be down or your firewall is blocking the connection';
@@ -147,12 +147,12 @@ export function getNetworkErrorCode(error: any): string {
 }
 
 /**
- * Creates a VibelogError from a network error
+ * Creates a DevArkError from a network error
  */
-export function createNetworkError(error: any): VibelogError {
+export function createNetworkError(error: any): DevArkError {
   const message = getNetworkErrorMessage(error);
   const code = getNetworkErrorCode(error);
-  return new VibelogError(message, code);
+  return new DevArkError(message, code);
 }
 
 /**

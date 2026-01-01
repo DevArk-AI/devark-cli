@@ -11,8 +11,8 @@ import {
 import { syncPushUpStats } from './push-up-sync';
 import { logger } from '../utils/logger';
 
-// Use the same vibe-log directory for consistency
-const VIBE_LOG_DIR = path.join(homedir(), '.vibe-log');
+// Use the same devark directory for consistency
+const DEVARK_DIR = path.join(homedir(), '.devark');
 
 /**
  * Prompt user to acknowledge push-ups
@@ -24,10 +24,10 @@ export async function promptPushUpAction(pushUpCount: number, phrase: string): P
   logger.debug(`Push-up prompt triggered: ${pushUpCount} push-ups for "${phrase}"`);
 
   // Write to special file that can be read by hooks/statusline
-  const promptFile = path.join(VIBE_LOG_DIR, 'push-up-prompt.json');
+  const promptFile = path.join(DEVARK_DIR, 'push-up-prompt.json');
 
   try {
-    await fs.ensureDir(VIBE_LOG_DIR);
+    await fs.ensureDir(DEVARK_DIR);
     await fs.writeJSON(promptFile, {
       timestamp: Date.now(),
       pushUpCount,
@@ -101,7 +101,7 @@ export async function handlePushUpResponse(
   }
 
   // Update prompt file status
-  const promptFile = path.join(VIBE_LOG_DIR, 'push-up-prompt.json');
+  const promptFile = path.join(DEVARK_DIR, 'push-up-prompt.json');
 
   try {
     if (await fs.pathExists(promptFile)) {
@@ -143,7 +143,7 @@ export async function showBatchSummary(
   });
 
   console.log(chalk.gray('─'.repeat(50)));
-  console.log(chalk.dim('Use "vibe-log pushup review" to handle these push-ups'));
+  console.log(chalk.dim('Use "devark pushup review" to handle these push-ups'));
   console.log(chalk.bold.yellow('━'.repeat(50)) + '\n');
 }
 
@@ -157,7 +157,7 @@ export async function getPromptStatus(): Promise<{
   phrase?: string;
   timestamp?: number;
 } | null> {
-  const promptFile = path.join(VIBE_LOG_DIR, 'push-up-prompt.json');
+  const promptFile = path.join(DEVARK_DIR, 'push-up-prompt.json');
 
   try {
     if (await fs.pathExists(promptFile)) {

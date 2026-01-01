@@ -1,6 +1,6 @@
 import { browserAuth, validateAndStoreToken } from '../lib/auth/browser';
 import { showSuccess } from '../lib/ui';
-import { VibelogError } from '../utils/errors';
+import { DevArkError } from '../utils/errors';
 import { logger } from '../utils/logger';
 import { validateAuthToken } from '../lib/input-validator';
 import { isNetworkError, createNetworkError } from '../lib/errors/network-errors';
@@ -15,7 +15,7 @@ interface AuthOptions {
 export async function auth(options: AuthOptions): Promise<void> {
   // Only show re-auth message if not in wizard mode
   if (!options.wizardMode) {
-    console.log('\n🔐 Re-authenticating with vibe-log...\n');
+    console.log('\n🔐 Re-authenticating with devark...\n');
   }
   
   try {
@@ -37,7 +37,7 @@ export async function auth(options: AuthOptions): Promise<void> {
       console.log('\n✨ Cloud mode is now active!');
     }
   } catch (error) {
-    if (error instanceof VibelogError) {
+    if (error instanceof DevArkError) {
       // For connection errors, the browserAuth function already displayed detailed messages
       // Just re-throw to let the menu handle it
       if (error.code === 'CONNECTION_REFUSED' || 
@@ -46,7 +46,7 @@ export async function auth(options: AuthOptions): Promise<void> {
           error.code === 'NETWORK_ERROR') {
         throw error;
       }
-      // For other VibelogErrors, throw as-is
+      // For other DevArkErrors, throw as-is
       throw error;
     }
     
@@ -60,7 +60,7 @@ export async function auth(options: AuthOptions): Promise<void> {
       throw createNetworkError(error);
     }
     
-    throw new VibelogError(
+    throw new DevArkError(
       'Re-authentication failed. Please try again.',
       'AUTH_FAILED'
     );

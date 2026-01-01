@@ -7,7 +7,7 @@ import { showPrivacyPreview } from './privacy-preview';
 import { MessageSanitizer } from '../message-sanitizer';
 import { getDashboardUrl } from '../config';
 import { displayError } from '../../utils/errors';
-import { VibelogError } from '../../utils/errors';
+import { DevArkError } from '../../utils/errors';
 import { isNetworkError } from '../errors/network-errors';
 import path from 'path';
 import fs from 'fs/promises';
@@ -18,7 +18,7 @@ import chalk from 'chalk';
  * Helper function to show connection error help messages
  */
 function showConnectionErrorHelp(error: unknown): void {
-  if (error instanceof VibelogError) {
+  if (error instanceof DevArkError) {
     if (error.code === 'CONNECTION_REFUSED' || 
         error.code === 'NETWORK_ERROR' ||
         error.code === 'SERVER_NOT_FOUND' ||
@@ -27,7 +27,7 @@ function showConnectionErrorHelp(error: unknown): void {
     }
   } else if (error instanceof Error && isNetworkError(error)) {
     console.log(chalk.red('\n❌ Cannot connect to the server'));
-    console.log(chalk.yellow('Please ensure the vibe-log server is accessible.'));
+    console.log(chalk.yellow('Please ensure the devark server is accessible.'));
   }
 }
 
@@ -207,7 +207,7 @@ export async function guidedCloudSetup(): Promise<void> {
   await showLogo(version);
   console.log(colors.success('\n🎉 Cloud Setup Complete!\n'));
   
-  console.log(colors.primary('Your vibe-log is now active!'));
+  console.log(colors.primary('Your devark is now active!'));
   console.log('');
   console.log(colors.success('  ✓ Sessions uploaded and being analyzed'));
   console.log(colors.success('  ✓ Dashboard ready with your productivity insights'));

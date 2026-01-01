@@ -20,7 +20,7 @@ export class BackgroundSendOrchestrator {
 
     // Check for version updates and use @latest if needed
     // Skip if we're already running from @latest spawn to prevent infinite loops
-    if (!process.env.VIBE_LOG_SPAWNED_LATEST) {
+    if (!process.env.DEVARK_SPAWNED_LATEST) {
       try {
         const currentVersion = process.env.SIMULATE_OLD_VERSION || require('../../../package.json').version;
         const versionCheck = await checkForUpdate(currentVersion);
@@ -49,7 +49,7 @@ export class BackgroundSendOrchestrator {
             silent: true,
             env: {
               ...process.env,
-              VIBE_LOG_SPAWNED_LATEST: '1' // Prevent infinite loops
+              DEVARK_SPAWNED_LATEST: '1' // Prevent infinite loops
             }
           });
 
@@ -65,7 +65,7 @@ export class BackgroundSendOrchestrator {
     // Fallback: Use current version (original logic)
     // Get the CLI executable path
     const cliPath = process.argv[0]; // node executable
-    const scriptPath = process.argv[1]; // vibe-log script
+    const scriptPath = process.argv[1]; // devark script
 
     // Build args for the background process (without --background flag)
     const args = [scriptPath, 'send', '--silent', `--hook-trigger=${options.hookTrigger}`];

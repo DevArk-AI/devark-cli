@@ -158,13 +158,13 @@ export async function installSelectiveProjectHooks(projectConfigs: ProjectHookCo
 }
 
 /**
- * Remove all vibe-log hooks
+ * Remove all devark hooks
  */
 export async function uninstallAllHooks(): Promise<{ removedCount: number }> {
   logger.debug('Uninstalling all hooks');
   
   // Remove auto-sync hooks
-  await claudeSettingsManager.removeAllVibeLogSettings();
+  await claudeSettingsManager.removeAllDevArkSettings();
   
   // We don't know the exact count, but return a reasonable estimate
   return { removedCount: 2 }; // SessionStart + PreCompact
@@ -191,7 +191,7 @@ export async function toggleHook(hookType: 'sessionstart' | 'precompact', enable
   
   // If both hooks would be disabled, remove all
   if (!installSessionStart && !installPreCompact) {
-    await claudeSettingsManager.removeAllVibeLogSettings();
+    await claudeSettingsManager.removeAllDevArkSettings();
     logger.debug('All hooks removed');
   } else {
     // Reinstall with updated configuration

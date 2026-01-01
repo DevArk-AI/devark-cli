@@ -161,7 +161,7 @@ export async function showHooksManagementMenu(guidedMode: boolean = false): Prom
 async function displayEducationalHeader(mode: HookMode, status: HooksStatus, stats: any): Promise<void> {
   console.log(colors.accent('\n🔧 Auto-sync Configuration\n'));
   
-  console.log(colors.subdued('Claude Code hooks allow Vibe-Log to automatically sync your Claude Code sessions.\n'));
+  console.log(colors.subdued('Claude Code hooks allow DevArk to automatically sync your Claude Code sessions.\n'));
   
   console.log(colors.info('We use the following hooks:'));
   console.log('  📍 ' + colors.accent('SessionStart') + colors.subdued(' - Ensures nothing is lost between sessions'));
@@ -169,7 +169,7 @@ async function displayEducationalHeader(mode: HookMode, status: HooksStatus, sta
   console.log('  🔚 ' + colors.accent('SessionEnd') + colors.subdued(' - Captures final state when ending a session'));
   console.log(colors.success('  ✓ Together they provide complete coverage without duplicates\n'));
   
-  const docsUrl = "https://github.com/vibe-log/vibe-log-cli/tree/main?tab=readme-ov-file#auto-sync";
+  const docsUrl = "https://github.com/devark/devark-cli/tree/main?tab=readme-ov-file#auto-sync";
   const linkStart = `\u001b]8;;${docsUrl}\u001b\\`;
   const linkEnd = `\u001b]8;;\u001b\\`;
   console.log(colors.subdued(`Want to learn more about how hooks and auto-sync work → ${linkStart}check our docs${linkEnd}\n`));
@@ -515,7 +515,7 @@ async function disableAllTracking(status: HooksStatus, stats: any): Promise<void
   console.clear();
   console.log(colors.warning('\n⚠️ Disable Auto-sync\n'));
   
-  console.log('This will remove all vibe-log hooks from Claude Code.');
+  console.log('This will remove all devark hooks from Claude Code.');
   console.log('You\'ll need to manually send sessions using main menu.\n');
   
   // Show what will be removed
@@ -756,7 +756,7 @@ async function offerInitialSync(options: {
   
   if (!syncNow) {
     console.log('');
-    showInfo('You can sync existing sessions anytime using "vibe-log send"');
+    showInfo('You can sync existing sessions anytime using "devark send"');
     return;
   }
   

@@ -1,6 +1,6 @@
 import axios, { AxiosInstance, AxiosError } from 'axios';
 import { getToken, getApiUrl, getStatusLinePersonality } from './config';
-import { VibelogError } from '../utils/errors';
+import { DevArkError } from '../utils/errors';
 import { validateUrl } from './input-validator';
 import { logger } from '../utils/logger';
 import { isNetworkError, createNetworkError } from './errors/network-errors';
@@ -61,7 +61,7 @@ export interface UploadResult {
 
 export interface CLIConfiguration {
   statusline: {
-    personality: 'gordon' | 'vibe-log' | 'custom';
+    personality: 'gordon' | 'devark' | 'custom';
     customPersonality?: {
       name: string;
       description: string;
@@ -124,7 +124,7 @@ class SecureApiClient {
       timeout: 30000,
       headers: {
         'Content-Type': 'application/json',
-        'User-Agent': 'vibe-log-CLI/0.6.0',
+        'User-Agent': 'devark-CLI/0.6.0',
         'X-Client-Version': '1.0.0',
       },
       // Prevent automatic redirects to avoid SSRF
@@ -193,7 +193,7 @@ class SecureApiClient {
         
         // Also log to console for 400 errors to see server validation messages
         if (error.response?.status === 400) {
-          if (process.env.VIBELOG_DEBUG === 'true') {
+          if (process.env.DEVARK_DEBUG === 'true') {
             console.log('[DEBUG] 400 Error Response:', JSON.stringify(error.response?.data, null, 2));
           }
           
@@ -205,7 +205,7 @@ class SecureApiClient {
           if (validationMessage) {
             // Check for duration validation error
             if (validationMessage.includes('duration') && validationMessage.includes('240')) {
-              throw new VibelogError(
+              throw new DevArkError(
                 'Sessions must be at least 4 minutes long to be uploaded. Short sessions were rejected by the server.',
                 'VALIDATION_ERROR'
               );
@@ -215,7 +215,7 @@ class SecureApiClient {
             if (validationMessage.includes('ZodError') || validationMessage.includes('Too small')) {
               // Try to extract the meaningful part
               if (validationMessage.includes('duration')) {
-                throw new VibelogError(
+                throw new DevArkError(
                   'Sessions must be at least 4 minutes long. Please select longer sessions to upload.',
                   'VALIDATION_ERROR'
                 );
@@ -223,7 +223,7 @@ class SecureApiClient {
             }
             
             // Generic validation error
-            throw new VibelogError(
+            throw new DevArkError(
               `Validation error: ${validationMessage}`,
               'VALIDATION_ERROR'
             );
@@ -234,30 +234,30 @@ class SecureApiClient {
         const safeError = this.sanitizeError(error);
         
         if (error.response?.status === 401) {
-          throw new VibelogError(
+          throw new DevArkError(
             'Your session has expired. Please authenticate again',
             'AUTH_EXPIRED'
           );
         } else if (error.response?.status === 403) {
-          throw new VibelogError(
+          throw new DevArkError(
             'Access denied. Please check your permissions',
             'ACCESS_DENIED'
           );
         } else if (error.response?.status === 429) {
           const retryAfter = error.response.headers['retry-after'];
-          throw new VibelogError(
+          throw new DevArkError(
             `Too many requests. Please wait ${retryAfter || '60'} seconds before trying again`,
             'RATE_LIMITED'
           );
         } else if (error.response?.status === 500) {
-          throw new VibelogError(
-            'Server error. The vibe-log service is having issues. Please try again later',
+          throw new DevArkError(
+            'Server error. The devark service is having issues. Please try again later',
             'SERVER_ERROR'
           );
         } else if (isNetworkError(error)) {
           throw createNetworkError(error);
         } else if (error.response?.status === 404) {
-          throw new VibelogError(
+          throw new DevArkError(
             'API endpoint not found. You might need to update your CLI',
             'ENDPOINT_NOT_FOUND'
           );
@@ -281,7 +281,7 @@ class SecureApiClient {
     this.requestCount++;
     
     if (this.requestCount > this.MAX_REQUESTS_PER_MINUTE) {
-      throw new VibelogError(
+      throw new DevArkError(
         'Client rate limit exceeded. Please wait before making more requests.',
         'CLIENT_RATE_LIMITED'
       );
@@ -294,7 +294,7 @@ class SecureApiClient {
       return validateUrl(url);
     } catch (error) {
       console.error('Invalid API URL, using default');
-      return 'https://app.vibe-log.dev';
+      return 'https://app.devark.dev';
     }
   }
 
@@ -411,7 +411,7 @@ class SecureApiClient {
     
     // Calculate total size
     const totalSize = Buffer.byteLength(JSON.stringify(sanitizedSessions)) / 1024;
-    if (process.env.VIBELOG_DEBUG === 'true') {
+    if (process.env.DEVARK_DEBUG === 'true') {
       console.log('[DEBUG] Uploading in', chunks.length, 'chunks', `(Total: ${totalSize.toFixed(2)} KB)`);
     }
     
@@ -437,7 +437,7 @@ class SecureApiClient {
       // Calculate payload size in kilobytes
       const payloadSize = Buffer.byteLength(JSON.stringify(payload)) / 1024;
       
-      if (process.env.VIBELOG_DEBUG === 'true') {
+      if (process.env.DEVARK_DEBUG === 'true') {
         console.log('[DEBUG] Uploading batch', i + 1, 'of', chunks.length, 'with', chunk.length, 'sessions', `(${payloadSize.toFixed(2)} KB)`);
         console.log('[DEBUG] Total progress:', uploadedCount, '+', chunk.length, '=', uploadedCount + chunk.length, 'of', sanitizedSessions.length);
         
@@ -483,7 +483,7 @@ class SecureApiClient {
           // Update progress after successful chunk upload
           uploadedCount += chunk.length;
           uploadedSizeKB += payloadSize;
-          if (process.env.VIBELOG_DEBUG === 'true') {
+          if (process.env.DEVARK_DEBUG === 'true') {
             console.log('[DEBUG] Progress reported:', uploadedCount, '/', sanitizedSessions.length, `(${uploadedSizeKB.toFixed(2)} KB)`);
           }
           if (onProgress) {

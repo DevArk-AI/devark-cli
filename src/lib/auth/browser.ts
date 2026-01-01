@@ -6,7 +6,7 @@ import https from 'https';
 import http from 'http';
 import { apiClient } from '../api-client';
 import { storeToken, clearToken, getApiUrl } from '../config';
-import { VibelogError } from '../../utils/errors';
+import { DevArkError } from '../../utils/errors';
 import { isNetworkError, getNetworkErrorType, getNetworkErrorMessage, createNetworkError } from '../errors/network-errors';
 
 // Secure random sleep to prevent timing attacks
@@ -53,7 +53,7 @@ export async function browserAuth(wizardMode?: boolean): Promise<string> {
           console.error(chalk.gray('   1. Is the server running? (For local development: npm run dev)'));
           console.error(chalk.gray('   2. Is the API URL correct? Current: ' + getApiUrl()));
           console.error(chalk.gray('   3. Is your firewall blocking the connection?'));
-          console.error(chalk.gray('\n💡 Tip: If running locally, make sure the vibe-log server is started'));
+          console.error(chalk.gray('\n💡 Tip: If running locally, make sure the devark server is started'));
         } else if (errorType === 'DNS_RESOLUTION_FAILED') {
           console.error(chalk.gray('\n💡 Check your internet connection or API URL configuration'));
         } else if (errorType === 'TIMEOUT') {
@@ -114,9 +114,9 @@ export async function browserAuth(wizardMode?: boolean): Promise<string> {
       // Only show completion messages if not in wizard mode
       if (!wizardMode) {
         console.log('');
-        console.log(chalk.green('✅ Successfully authenticated with Vibe-Log!'));
-        console.log(chalk.cyan('🚀 You can now use the Vibe-Log interactive menu:'));
-        console.log(chalk.gray('   Run `npx vibe-log-cli` to access all features'));
+        console.log(chalk.green('✅ Successfully authenticated with DevArk!'));
+        console.log(chalk.cyan('🚀 You can now use the DevArk interactive menu:'));
+        console.log(chalk.gray('   Run `npx devark-cli` to access all features'));
         console.log('');
       }
       
@@ -160,7 +160,7 @@ async function waitForAuthWithSSE(sessionId: string, spinner: Ora, wizardMode?: 
     // Setup timeout (5 minutes)
     const timeoutTimer = setTimeout(() => {
       req.destroy();
-      reject(new VibelogError(
+      reject(new DevArkError(
         'Authentication timed out. Please try again.',
         'AUTH_TIMEOUT'
       ));
@@ -183,7 +183,7 @@ async function waitForAuthWithSSE(sessionId: string, spinner: Ora, wizardMode?: 
       if (res.statusCode !== 200) {
         req.destroy();
         clearTimeout(timeoutTimer);
-        reject(new VibelogError(
+        reject(new DevArkError(
           `Server returned status ${res.statusCode}`,
           'SERVER_ERROR'
         ));
@@ -232,7 +232,7 @@ async function waitForAuthWithSSE(sessionId: string, spinner: Ora, wizardMode?: 
                   if (parsed.token) {
                     resolve(parsed.token);
                   } else {
-                    reject(new VibelogError(
+                    reject(new DevArkError(
                       'Authentication completed but no token received',
                       'NO_TOKEN'
                     ));
@@ -242,7 +242,7 @@ async function waitForAuthWithSSE(sessionId: string, spinner: Ora, wizardMode?: 
                 case 'error':
                   req.destroy();
                   clearTimeout(timeoutTimer);
-                  reject(new VibelogError(
+                  reject(new DevArkError(
                     parsed.message || 'Authentication failed',
                     parsed.code || 'AUTH_ERROR'
                   ));
@@ -251,7 +251,7 @@ async function waitForAuthWithSSE(sessionId: string, spinner: Ora, wizardMode?: 
                 case 'expired':
                   req.destroy();
                   clearTimeout(timeoutTimer);
-                  reject(new VibelogError(
+                  reject(new DevArkError(
                     'Authentication session expired. Please try again.',
                     'SESSION_EXPIRED'
                   ));
@@ -260,7 +260,7 @@ async function waitForAuthWithSSE(sessionId: string, spinner: Ora, wizardMode?: 
                 case 'timeout':
                   req.destroy();
                   clearTimeout(timeoutTimer);
-                  reject(new VibelogError(
+                  reject(new DevArkError(
                     'Authentication timed out. Please try again.',
                     'AUTH_TIMEOUT'
                   ));
@@ -275,7 +275,7 @@ async function waitForAuthWithSSE(sessionId: string, spinner: Ora, wizardMode?: 
       
       res.on('end', () => {
         clearTimeout(timeoutTimer);
-        reject(new VibelogError(
+        reject(new DevArkError(
           'Connection to authentication server closed unexpectedly',
           'CONNECTION_CLOSED'
         ));
@@ -283,7 +283,7 @@ async function waitForAuthWithSSE(sessionId: string, spinner: Ora, wizardMode?: 
       
       res.on('error', (error) => {
         clearTimeout(timeoutTimer);
-        reject(new VibelogError(
+        reject(new DevArkError(
           `Connection error: ${error.message}`,
           'CONNECTION_ERROR'
         ));
@@ -295,7 +295,7 @@ async function waitForAuthWithSSE(sessionId: string, spinner: Ora, wizardMode?: 
       if (!wizardMode) {
         console.log(chalk.red(`   Debug: Request error: ${error.message}`));
       }
-      reject(new VibelogError(
+      reject(new DevArkError(
         `Failed to connect to authentication server: ${error.message}`,
         'CONNECTION_FAILED'
       ));
@@ -334,7 +334,7 @@ function isValidTokenFormat(token: string): boolean {
 export async function validateAndStoreToken(token: string): Promise<void> {
   // Validate token format before any operations
   if (!isValidTokenFormat(token)) {
-    throw new VibelogError('Invalid token format', 'INVALID_TOKEN');
+    throw new DevArkError('Invalid token format', 'INVALID_TOKEN');
   }
   
   // Temporarily store token to validate it
@@ -347,7 +347,7 @@ export async function validateAndStoreToken(token: string): Promise<void> {
     if (!valid) {
       // Clear invalid token
       await clearToken();
-      throw new VibelogError('Invalid token', 'INVALID_TOKEN');
+      throw new DevArkError('Invalid token', 'INVALID_TOKEN');
     }
     
     // Log success without exposing user data
@@ -372,7 +372,7 @@ export function checkAuthRateLimit(identifier: string): void {
   
   // Check rate limit (max 5 attempts per 15 minutes)
   if (recentAttempts.length >= 5) {
-    throw new VibelogError(
+    throw new DevArkError(
       'Too many authentication attempts. Please try again later.',
       'RATE_LIMITED'
     );

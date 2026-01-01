@@ -38,10 +38,10 @@ export function createPushUpCommand(): Command {
     .description('Push-up challenge gamification for reducing AI over-validation')
     .addHelpText('after', `
 Examples:
-  $ vibe-log pushup enable       # Enable challenge with optional statusline
-  $ vibe-log pushup stats        # View current stats
-  $ vibe-log pushup summary      # Settle your push-up debt
-  $ vibe-log pushup statusline   # Manage statusline display
+  $ devark pushup enable       # Enable challenge with optional statusline
+  $ devark pushup stats        # View current stats
+  $ devark pushup summary      # Settle your push-up debt
+  $ devark pushup statusline   # Manage statusline display
     `);
 
   // Enable sub-command
@@ -105,12 +105,12 @@ Examples:
 
         console.log(chalk.gray(`   Rate: ${pushUpsPerTrigger} push-up(s) per validation`));
         console.log();
-        console.log(chalk.cyan('💡 Debt will accumulate silently. Check with `vibe-log pushup stats`'));
+        console.log(chalk.cyan('💡 Debt will accumulate silently. Check with `devark pushup stats`'));
 
         if (installStatusline) {
           console.log(chalk.cyan('💡 Your progress is now visible in Claude Code statusline!'));
         } else {
-          console.log(chalk.gray('   Run `vibe-log pushup statusline install` to add statusline later'));
+          console.log(chalk.gray('   Run `devark pushup statusline install` to add statusline later'));
         }
       } catch (error) {
         logger.error('Failed to enable push-up challenge', error);

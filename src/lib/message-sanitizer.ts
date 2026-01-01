@@ -41,7 +41,7 @@ class EntityNamer {
 
 export class MessageSanitizer {
   private entityNamer = new EntityNamer();
-  private debugMode = process.env.VIBELOG_DEBUG === 'true';
+  private debugMode = process.env.DEVARK_DEBUG === 'true';
   private debugCredentials: Array<{ text: string; pattern: string }> = [];
   
   sanitizeMessages(messages: Message[]): SanitizedMessage[] {

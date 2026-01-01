@@ -26,7 +26,7 @@ function displayPackageUpdateNotification(packageUpdateInfo: { current: string; 
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   const boxen = require('boxen');
   console.log(boxen(
-    `Update available ${packageUpdateInfo.current} → ${packageUpdateInfo.latest}\nRun \`npx vibe-log-cli@latest\` to update`,
+    `Update available ${packageUpdateInfo.current} → ${packageUpdateInfo.latest}\nRun \`npx devark-cli@latest\` to update`,
     {
       padding: 1,
       margin: 0,
@@ -417,7 +417,7 @@ async function handleMenuAction(
           // Sub-agents are missing, prompt to install
           console.clear();
           console.log(colors.warning('\n⚠️  Sub-agents Required'));
-          console.log(colors.muted('Local report generation requires vibe-log sub-agents to be installed.'));
+          console.log(colors.muted('Local report generation requires devark sub-agents to be installed.'));
           console.log(colors.muted(`Currently missing: ${subAgentStatus.missing.length} of ${subAgentStatus.total} sub-agents`));
           console.log();
           

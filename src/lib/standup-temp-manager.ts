@@ -5,7 +5,7 @@
  * IMPORTANT: Cross-platform compatible
  * - Uses path.join() for all path operations
  * - Uses os.homedir() for user home directory
- * - Stores in ~/.vibe-log/temp-standup for consistency
+ * - Stores in ~/.devark/temp-standup for consistency
  */
 
 import { SessionData } from './readers/types';
@@ -17,7 +17,7 @@ import { getDayName, groupSessionsByProject } from './standup-utils';
 
 export class StandupTempManager {
   private tempDir: string | null = null;
-  private readonly baseDir = path.join(os.homedir(), '.vibe-log', 'temp-standup');
+  private readonly baseDir = path.join(os.homedir(), '.devark', 'temp-standup');
 
   /**
    * Create temp directory and prepare session files
@@ -29,7 +29,7 @@ export class StandupTempManager {
     // Ensure base directory exists
     await fs.mkdir(this.baseDir, { recursive: true });
 
-    // Create timestamped subdirectory within .vibe-log/temp-standup
+    // Create timestamped subdirectory within .devark/temp-standup
     const timestamp = Date.now();
     this.tempDir = path.join(this.baseDir, `session-${timestamp}`);
     await fs.mkdir(this.tempDir, { recursive: true });
@@ -154,9 +154,9 @@ export class StandupTempManager {
 
       for (const file of files) {
         // Look for URL-encoded temp directory names
-        // Format: C--Users-username--vibe-log-temp-standup-session-*
+        // Format: C--Users-username--devark-temp-standup-session-*
         // This matches our temp directory pattern but URL-encoded
-        if (file.includes('--vibe-log-temp-standup-session-')) {
+        if (file.includes('--devark-temp-standup-session-')) {
           const projectPath = path.join(claudeProjectsDir, file);
           try {
             await fs.rm(projectPath, { recursive: true, force: true });

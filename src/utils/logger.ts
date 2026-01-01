@@ -14,7 +14,7 @@ class Logger {
 
   constructor() {
     this.level = this.getLogLevel();
-    this.outputFile = process.env.VIBE_LOG_OUTPUT;
+    this.outputFile = process.env.DEVARK_OUTPUT;
   }
 
   setLevel(level: string | LogLevel): void {
@@ -42,7 +42,7 @@ class Logger {
 
   private getLogLevel(): LogLevel {
     const envLevel = process.env.LOG_LEVEL?.toUpperCase();
-    if (process.env.DEBUG || process.env.VIBELOG_DEBUG) {
+    if (process.env.DEBUG || process.env.DEVARK_DEBUG) {
       return LogLevel.DEBUG;
     }
     

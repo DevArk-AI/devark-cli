@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to the vibe-log-cli project will be documented in this file.
+All notable changes to the devark-cli project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
@@ -16,8 +16,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - **CRITICAL**: Fixed hooks overwrite bug that deleted users' custom Claude Code hooks during install/uninstall operations
-  - Installing vibe-log hooks now appends to existing hooks array instead of replacing them
-  - Uninstalling vibe-log hooks now filters out only vibe-log commands instead of deleting entire hook type
+  - Installing devark hooks now appends to existing hooks array instead of replacing them
+  - Uninstalling devark hooks now filters out only devark commands instead of deleting entire hook type
   - Added duplicate prevention to avoid multiple installations
 
 ### Improved
@@ -35,7 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Supports both ASCII apostrophe (') and smart apostrophe (') characters
   - Modern Cursor format support with bubbleId-based message storage
   - Silent operation to avoid disrupting Cursor IDE workflow
-- **Cursor IDE Session Sync**: New `cursor-upload` command for uploading Cursor conversations to vibe-log
+- **Cursor IDE Session Sync**: New `cursor-upload` command for uploading Cursor conversations to devark
   - Date range selection options: 7 days, 30 days, or all conversations
   - Dry-run mode (`--dry-run`) to preview sessions before upload
   - Silent mode (`--silent`) for automation and scripting
@@ -50,7 +50,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added `better-sqlite3` dependency for Cursor database access
 
 ### Changed
-- **Hook Auto-Update Mechanism**: All hooks now use `npx vibe-log-cli@latest` instead of `npx vibe-log-cli`
+- **Hook Auto-Update Mechanism**: All hooks now use `npx devark-cli@latest` instead of `npx devark-cli`
   - Ensures users automatically get latest bug fixes and improvements
   - Applies to both Claude Code hooks and Cursor hooks
 
@@ -112,7 +112,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Cross-Platform Compatibility**: Replaced hardcoded /tmp paths with cross-platform temporary directory paths
   - Now properly uses OS-specific temp directories (Windows TEMP, Unix /tmp)
   - Eliminates path-related errors on Windows systems
-- **Entry Point Configuration**: Added bin/vibe-log.js entry point and updated statusline order
+- **Entry Point Configuration**: Added bin/devark.js entry point and updated statusline order
 
 
 ## [0.7.3] - 2025-10-27
@@ -245,7 +245,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Report Generation Output**: Tool failures are now hidden during report generation
   - "Tool failed" messages no longer shown for expected errors (file not found, etc.)
   - Cleaner, less intimidating output during analysis
-  - Error messages still visible in debug mode (VIBELOG_DEBUG=1)
+  - Error messages still visible in debug mode (DEVARK_DEBUG=1)
   - Reduces user anxiety during the 4-5 minute generation process
 - **Auto-sync menu**: Simplified educational text for better clarity
   - Added shortcut command `install-auto-sync` for quick access
@@ -255,7 +255,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.5.3] - 2025-08-31
 
 ### Fixed
-- **Hook Installation**: Now correctly appends vibe-log hook to existing UserPromptSubmit hooks instead of overwriting
+- **Hook Installation**: Now correctly appends devark hook to existing UserPromptSubmit hooks instead of overwriting
 - **Claude Sessions**: Isolated all automated Claude sessions to dedicated temp directories to prevent project clutter
 - **Session File Access**: Fixed local report generation by copying session files to temp directory accessible by Claude
 - **Project Filtering**: Temp projects are now properly hidden from all project lists and menus
@@ -308,7 +308,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Improved
 - **Gordon Personality**: Now sharp and business-focused with less food metaphors, creates urgency
-- **Vibe-Log Personality**: Supportive but pushy senior dev that helps ship with concrete deadlines
+- **DevArk Personality**: Supportive but pushy senior dev that helps ship with concrete deadlines
 - **Prompt Analysis**: More specific and action-oriented with MVP focus and "ship TODAY" mentality
 - **README Documentation**: Updated to reflect strategic advisor capabilities
 
@@ -329,7 +329,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Analysis Quality**: Status line now provides specific, actionable suggestions based on actual prompt content
 - **Loading State**: Extended staleness timeout from 15s to 5 minutes for better async handling
 - **Debug Logging**: Enhanced SDK response logging for easier troubleshooting
-- **Status Line Display**: Now shows personality name (Gordon/Vibe-log/Custom) before suggestions for clarity
+- **Status Line Display**: Now shows personality name (Gordon/DevArk/Custom) before suggestions for clarity
 
 ### Technical Details
 - Background process spawns with `detached: true` and `child.unref()` for non-blocking execution
@@ -339,7 +339,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.4.2] - 2025-08-29
 
 ### Changed
-- **Renamed Sub-Agent**: `vibe-log-track-analyzer` is now `vibe-log-session-analyzer` for better clarity
+- **Renamed Sub-Agent**: `devark-track-analyzer` is now `devark-session-analyzer` for better clarity
 - **Breaking Change**: Users need to reinstall sub-agents after this update
 
 ### Fixed

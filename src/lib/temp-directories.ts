@@ -15,7 +15,7 @@ export const TEMP_DIRECTORIES = {
  * Get the full path to a temp directory
  */
 export function getTempDirectoryPath(type: keyof typeof TEMP_DIRECTORIES): string {
-  return path.join(os.homedir(), '.vibe-log', TEMP_DIRECTORIES[type]);
+  return path.join(os.homedir(), '.devark', TEMP_DIRECTORIES[type]);
 }
 
 /**
@@ -32,7 +32,7 @@ export function isTempDirectory(projectName: string): boolean {
 
 /**
  * Check if a Claude project folder name contains a temp directory
- * Claude folder names are like: -Users-danny--vibe-log-temp-prompt-analysis
+ * Claude folder names are like: -Users-danny--devark-temp-prompt-analysis
  */
 export function isClaudeTempProject(claudeFolderName: string): boolean {
   // Check if any temp directory name appears in the Claude folder name

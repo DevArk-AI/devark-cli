@@ -1,9 +1,9 @@
 {
-  "name": "vibe-log-cli",
-  "version": "0.8.2",
-  "description": "Track your building journey with Vibelog",
+  "name": "devark-cli",
+  "version": "0.1.0",
+  "description": "DevArk - Developer Productivity CLI",
   "bin": {
-    "vibe-log": "./bin/vibe-log.js"
+    "devark": "./bin/devark.js"
   },
   "main": "dist/index.js",
   "scripts": {
@@ -34,21 +34,21 @@
   },
   "keywords": [
     "cli",
-    "vibelog",
+    "devark",
     "productivity",
     "developer-tools",
     "code-tracking"
   ],
-  "author": "Vibelog",
+  "author": "DevArk",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vibe-log/vibe-log-cli.git"
+    "url": "git+https://github.com/DevArk-AI/devark-cli.git"
   },
   "bugs": {
-    "url": "https://github.com/vibe-log/vibe-log-cli/issues"
+    "url": "https://github.com/DevArk-AI/devark-cli/issues"
   },
-  "homepage": "https://github.com/vibe-log/vibe-log-cli#readme",
+  "homepage": "https://github.com/DevArk-AI/devark-cli#readme",
   "files": [
     "dist",
     "bin"

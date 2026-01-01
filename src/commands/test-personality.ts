@@ -9,7 +9,7 @@
  * - Personalities influence HOW Claude writes, not REPLACE what Claude writes
  * - Each suggestion is unique and contextual while maintaining personality
  * - Gordon naturally uses kitchen metaphors without scripted phrases
- * - Vibe-Log naturally uses dev metaphors without repetition
+ * - DevArk naturally uses dev metaphors without repetition
  */
 
 import { Command } from 'commander';
@@ -34,7 +34,7 @@ import {
 export function createTestPersonalityCommand(): Command {
   const command = new Command('test-personality')
     .description('Test and debug the personality system (hidden command)')
-    .option('-p, --personality <type>', 'Test specific personality (gordon, vibe-log, custom)')
+    .option('-p, --personality <type>', 'Test specific personality (gordon, devark, custom)')
     .option('-c, --create-custom', 'Create a test custom personality')
     .option('-a, --analyze', 'Analyze test prompts with current personality')
     .option('-v, --verbose', 'Show detailed debug output')
@@ -80,9 +80,9 @@ export function createTestPersonalityCommand(): Command {
       
       // Test specific personality
       if (options.personality) {
-        const validPersonalities = ['gordon', 'vibe-log', 'custom'];
+        const validPersonalities = ['gordon', 'devark', 'custom'];
         if (!validPersonalities.includes(options.personality)) {
-          console.log(colors.error('Invalid personality. Choose: gordon, vibe-log, or custom'));
+          console.log(colors.error('Invalid personality. Choose: gordon, devark, or custom'));
           process.exit(1);
         }
         

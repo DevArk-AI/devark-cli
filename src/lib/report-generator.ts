@@ -36,7 +36,7 @@ export interface ReportResult {
  */
 function getUniqueReportFilename(basePath: string): string {
   const dateStr = new Date().toISOString().split('T')[0];
-  const baseFilename = `vibe-log-report-${dateStr}`;
+  const baseFilename = `devark-report-${dateStr}`;
   
   // Check if base filename exists
   let filename = `${baseFilename}.html`;

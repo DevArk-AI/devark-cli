@@ -74,15 +74,15 @@ tmp/
 temp/
 *.tmp
 *.temp
-.vibe-log-sessions-temp.json
-.vibe-log-temp/
+.devark-sessions-temp.json
+.devark-temp/
 
 # Local data
-.vibelog/
+.devark/
 .claude/
 
 # Generated report files
-vibe-log-report-*.html
+devark-report-*.html
 
 # Business sensitive files
 MONETIZATION_STRATEGIES.md

@@ -71,7 +71,7 @@ function formatDisabledMessage(format: OutputFormat): string {
       return JSON.stringify({ enabled: false, message: 'Push-up challenge not enabled' });
 
     case 'detailed':
-      return 'Status: Challenge Disabled | Enable with: vibe-log pushup enable';
+      return 'Status: Challenge Disabled | Enable with: devark pushup enable';
 
     case 'emoji':
       return '💤 Challenge not enabled';
@@ -81,7 +81,7 @@ function formatDisabledMessage(format: OutputFormat): string {
 
     case 'compact':
     default:
-      return '💪 Push-Up Challenge: Not enabled (Run `vibe-log pushup enable` to start!)';
+      return '💪 Push-Up Challenge: Not enabled (Run `devark pushup enable` to start!)';
   }
 }
 

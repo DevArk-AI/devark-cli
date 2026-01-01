@@ -50,7 +50,7 @@ function getStatsPath(): string {
   if (!homedir) {
     throw new Error('Unable to determine home directory for hooks statistics');
   }
-  return path.join(homedir, '.vibe-log', 'hooks-stats.json');
+  return path.join(homedir, '.devark', 'hooks-stats.json');
 }
 
 /**

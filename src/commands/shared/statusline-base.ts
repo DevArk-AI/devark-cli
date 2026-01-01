@@ -19,7 +19,7 @@ export type OutputFormat = 'compact' | 'detailed' | 'emoji' | 'minimal' | 'json'
 export function debugLog(message: string, logFileName: string = 'statusline-debug.log'): void {
   try {
     const homeDir = os.homedir();
-    const debugFile = path.join(homeDir, '.vibe-log', logFileName);
+    const debugFile = path.join(homeDir, '.devark', logFileName);
     const timestamp = new Date().toISOString();
     appendFileSync(debugFile, `[${timestamp}] ${message}\n`);
   } catch (err) {

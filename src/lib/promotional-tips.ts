@@ -30,7 +30,7 @@ export function generatePromotionalTip(
   if (isAuthenticated) {
     // Cloud mode: Show clickable hyperlink to analytics dashboard
     // Terminal hyperlink format: OSC 8 escape sequence
-    const analyticsUrl = 'https://app.vibe-log.dev/dashboard/analytics?tab=improve&time=week';
+    const analyticsUrl = 'https://app.devark.dev/dashboard/analytics?tab=improve&time=week';
     
     // Using ANSI escape codes for color and hyperlink
     const yellow = '\u001b[93m';
@@ -45,6 +45,6 @@ export function generatePromotionalTip(
     return `\n📊 View your prompt improvement across sessions ${hyperlink}`;
   } else {
     // Local mode: Suggest using the CLI for local reports
-    return '\n💡 run: `npx vibe-log-cli` → Generate Local Report to see your productivity over time';
+    return '\n💡 run: `npx devark-cli` → Generate Local Report to see your productivity over time';
   }
 }

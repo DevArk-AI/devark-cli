@@ -78,12 +78,12 @@ const HOOK_MATCHERS = {
 } as const;
 
 /**
- * Check if a command is a vibe-log hook command
- * Matches both 'vibe-log' and '@vibe-log' patterns
+ * Check if a command is a devark hook command
+ * Matches both 'devark' and '@devark' patterns
  */
-export function isVibeLogCommand(command: string | undefined): boolean {
+export function isDevArkCommand(command: string | undefined): boolean {
   if (!command) return false;
-  return command.includes('vibe-log') || command.includes('@vibe-log');
+  return command.includes('devark') || command.includes('@devark');
 }
 
 /**
@@ -121,8 +121,8 @@ function getHookStatusInfo(hookConfig: HookConfigWithMatcher[] | undefined): Hoo
     };
   }
   
-  // Check if it's a vibe-log hook
-  if (!isVibeLogCommand(hook.command)) {
+  // Check if it's a devark hook
+  if (!isDevArkCommand(hook.command)) {
     return {
       installed: false,
       enabled: false,
@@ -261,13 +261,13 @@ function appendHookConfiguration(
     settings.hooks[hookType] = [];
   }
 
-  // Check if vibe-log hook already exists (prevent duplicates)
+  // Check if devark hook already exists (prevent duplicates)
   const existingHooks = settings.hooks[hookType];
   if (existingHooks) {
     for (const config of existingHooks) {
       for (const hook of config.hooks || []) {
-        if (isVibeLogCommand(hook.command) && hook.command.includes(`--hook-trigger=${triggerType}`)) {
-          logger.debug(`${hookType} vibe-log hook already exists, skipping`);
+        if (isDevArkCommand(hook.command) && hook.command.includes(`--hook-trigger=${triggerType}`)) {
+          logger.debug(`${hookType} devark hook already exists, skipping`);
           return;
         }
       }
@@ -294,9 +294,9 @@ function appendHookConfiguration(
 }
 
 /**
- * Remove only vibe-log hooks from a specific hook type, preserving other hooks
+ * Remove only devark hooks from a specific hook type, preserving other hooks
  */
-function removeVibeLogHook(
+function removeDevArkHook(
   settings: ClaudeSettings,
   hookType: 'SessionStart' | 'PreCompact' | 'SessionEnd'
 ): number {
@@ -312,11 +312,11 @@ function removeVibeLogHook(
   // Count total hooks before filtering
   const totalBefore = existingHooks.reduce((sum: number, config: HookConfigWithMatcher) => sum + config.hooks.length, 0);
 
-  // Filter out vibe-log commands while preserving other hooks
+  // Filter out devark commands while preserving other hooks
   const filteredConfigs = existingHooks
     .map((config: HookConfigWithMatcher) => ({
       ...config,
-      hooks: config.hooks.filter((hook: HookConfig) => !isVibeLogCommand(hook.command))
+      hooks: config.hooks.filter((hook: HookConfig) => !isDevArkCommand(hook.command))
     }))
     .filter((config: HookConfigWithMatcher) => config.hooks.length > 0);
 
@@ -364,8 +364,8 @@ async function installHooksToSettings(
       appendHookConfiguration(settings, hook.type, cliPath, mode);
       logger.debug(`${hook.type} hook configured`);
     } else {
-      // Remove only vibe-log hooks, preserve others
-      removeVibeLogHook(settings, hook.type);
+      // Remove only devark hooks, preserve others
+      removeDevArkHook(settings, hook.type);
       logger.debug(`${hook.type} hook removed`);
     }
   }
@@ -402,7 +402,7 @@ export async function installSelectedHooks(selection: HookSelection): Promise<vo
 }
 
 /**
- * Uninstall all vibe-log hooks from both global and project-local settings
+ * Uninstall all devark hooks from both global and project-local settings
  */
 export async function uninstallAllHooks(): Promise<{ removedCount: number }> {
   let removedCount = 0;
@@ -412,14 +412,14 @@ export async function uninstallAllHooks(): Promise<{ removedCount: number }> {
   if (globalSettings && globalSettings.hooks) {
     let globalRemoved = 0;
 
-    // Remove only vibe-log hooks from SessionStart, preserving other hooks
-    globalRemoved += removeVibeLogHook(globalSettings, 'SessionStart');
+    // Remove only devark hooks from SessionStart, preserving other hooks
+    globalRemoved += removeDevArkHook(globalSettings, 'SessionStart');
 
-    // Remove only vibe-log hooks from PreCompact, preserving other hooks
-    globalRemoved += removeVibeLogHook(globalSettings, 'PreCompact');
+    // Remove only devark hooks from PreCompact, preserving other hooks
+    globalRemoved += removeDevArkHook(globalSettings, 'PreCompact');
 
-    // Remove only vibe-log hooks from SessionEnd, preserving other hooks
-    globalRemoved += removeVibeLogHook(globalSettings, 'SessionEnd');
+    // Remove only devark hooks from SessionEnd, preserving other hooks
+    globalRemoved += removeDevArkHook(globalSettings, 'SessionEnd');
     
     if (globalRemoved > 0) {
       // Remove empty hooks object
@@ -445,18 +445,18 @@ export async function uninstallAllHooks(): Promise<{ removedCount: number }> {
       if (localSettings && localSettings.hooks) {
         let projectRemoved = 0;
         
-        // Check and remove vibe-log hooks
-        if (localSettings.hooks.SessionStart && isVibeLogHook(localSettings.hooks.SessionStart)) {
+        // Check and remove devark hooks
+        if (localSettings.hooks.SessionStart && isDevArkHook(localSettings.hooks.SessionStart)) {
           delete localSettings.hooks.SessionStart;
           projectRemoved++;
         }
 
-        if (localSettings.hooks.PreCompact && isVibeLogHook(localSettings.hooks.PreCompact)) {
+        if (localSettings.hooks.PreCompact && isDevArkHook(localSettings.hooks.PreCompact)) {
           delete localSettings.hooks.PreCompact;
           projectRemoved++;
         }
 
-        if (localSettings.hooks.SessionEnd && isVibeLogHook(localSettings.hooks.SessionEnd)) {
+        if (localSettings.hooks.SessionEnd && isDevArkHook(localSettings.hooks.SessionEnd)) {
           delete localSettings.hooks.SessionEnd;
           projectRemoved++;
         }
@@ -479,7 +479,7 @@ export async function uninstallAllHooks(): Promise<{ removedCount: number }> {
   }
   
   if (removedCount === 0) {
-    throw new Error('No vibe-log hooks found to uninstall');
+    throw new Error('No devark hooks found to uninstall');
   }
   
   logger.info(`Total removed: ${removedCount} hook(s)`);
@@ -491,11 +491,11 @@ export async function uninstallAllHooks(): Promise<{ removedCount: number }> {
 }
 
 /**
- * Helper to check if a hook configuration contains vibe-log commands
+ * Helper to check if a hook configuration contains devark commands
  */
-function isVibeLogHook(hookConfigs: HookConfigWithMatcher[]): boolean {
+function isDevArkHook(hookConfigs: HookConfigWithMatcher[]): boolean {
   return hookConfigs.some(config => 
-    config.hooks.some(hook => isVibeLogCommand(hook.command))
+    config.hooks.some(hook => isDevArkCommand(hook.command))
   );
 }
 
@@ -715,7 +715,7 @@ export async function installSelectiveProjectHooks(projectConfigs: ProjectHookCo
 }
 
 /**
- * Remove vibe-log hooks from specific projects' local settings
+ * Remove devark hooks from specific projects' local settings
  */
 export async function removeProjectHooks(projects: Array<{ path: string; name: string; actualPath?: string }>): Promise<void> {
   let removedCount = 0;
@@ -736,18 +736,18 @@ export async function removeProjectHooks(projects: Array<{ path: string; name: s
       if (localSettings && localSettings.hooks) {
         let removed = false;
         
-        // Remove vibe-log hooks only
-        if (localSettings.hooks.SessionStart && isVibeLogHook(localSettings.hooks.SessionStart)) {
+        // Remove devark hooks only
+        if (localSettings.hooks.SessionStart && isDevArkHook(localSettings.hooks.SessionStart)) {
           delete localSettings.hooks.SessionStart;
           removed = true;
         }
 
-        if (localSettings.hooks.PreCompact && isVibeLogHook(localSettings.hooks.PreCompact)) {
+        if (localSettings.hooks.PreCompact && isDevArkHook(localSettings.hooks.PreCompact)) {
           delete localSettings.hooks.PreCompact;
           removed = true;
         }
 
-        if (localSettings.hooks.SessionEnd && isVibeLogHook(localSettings.hooks.SessionEnd)) {
+        if (localSettings.hooks.SessionEnd && isDevArkHook(localSettings.hooks.SessionEnd)) {
           delete localSettings.hooks.SessionEnd;
           removed = true;
         }

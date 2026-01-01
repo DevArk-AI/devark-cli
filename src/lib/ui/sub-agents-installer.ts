@@ -28,23 +28,23 @@ function showSubAgentExplanation(): void {
   console.log();
   
   // Section divider
-  console.log(colors.accent(box.horizontal.repeat(2) + ' How vibe-log Uses Sub-Agents ' + box.horizontal.repeat(29)));
+  console.log(colors.accent(box.horizontal.repeat(2) + ' How devark Uses Sub-Agents ' + box.horizontal.repeat(29)));
   console.log();
   
-  console.log(colors.highlight('vibe-log uses 2 sub-agents to quickly'));
+  console.log(colors.highlight('devark uses 2 sub-agents to quickly'));
   console.log(colors.highlight('generate concise productivity reports from your coding sessions:'));
   console.log();
   
   // Phase 1 - Analysis
   console.log(colors.primary(format.bold('Phase 1 - In Parallel Session Analysis:')));
-  console.log(`  ${icons.bullet} ${colors.accent(format.bold('@vibe-log-session-analyzer'))}`);
+  console.log(`  ${icons.bullet} ${colors.accent(format.bold('@devark-session-analyzer'))}`);
   console.log(`    ${colors.dim(icons.arrow)} Analyzes your Claude Code sessions`);
   console.log(`    ${colors.dim(icons.arrow)} Extracts productivity patterns and metrics`);
   console.log();
   
   // Phase 2 - Report Generation
   console.log(colors.primary(format.bold('Phase 2 - Report Generation:')));
-  console.log(`  ${icons.bullet} ${colors.accent(format.bold('@vibe-log-report-generator'))}`);
+  console.log(`  ${icons.bullet} ${colors.accent(format.bold('@devark-report-generator'))}`);
   console.log(`    ${colors.dim(icons.arrow)} Creates concise HTML report`);
   console.log();
   
@@ -240,7 +240,7 @@ async function handleRemoveAll(): Promise<void> {
   const { confirm } = await inquirer.prompt([{
     type: 'confirm',
     name: 'confirm',
-    message: colors.warning('Are you sure you want to remove ALL 2 vibe-log sub-agents?'),
+    message: colors.warning('Are you sure you want to remove ALL 2 devark sub-agents?'),
     default: false
   }]);
   
@@ -270,7 +270,7 @@ async function promptForLocalReport(): Promise<boolean> {
   const { generateReport } = await inquirer.prompt([{
     type: 'confirm',
     name: 'generateReport',
-    message: 'Would you like to generate a local vibe-log report now?',
+    message: 'Would you like to generate a local devark report now?',
     default: true
   }]);
   

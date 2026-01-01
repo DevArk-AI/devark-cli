@@ -1,7 +1,7 @@
 /**
  * Unified Claude Settings Manager
  * 
- * Single source of truth for ALL vibe-log modifications to Claude settings.
+ * Single source of truth for ALL devark modifications to Claude settings.
  * Manages hooks and UI configurations as feature units to ensure consistency
  * and prevent conflicts or duplicates.
  */
@@ -55,33 +55,33 @@ export interface AutoSyncConfig {
 }
 
 /**
- * Centralized manager for all vibe-log Claude settings modifications
+ * Centralized manager for all devark Claude settings modifications
  */
 export class ClaudeSettingsManager {
   
   /**
    * Core detection logic - CRITICAL for preventing duplicates
-   * This must detect ALL vibe-log related commands regardless of CLI path format
+   * This must detect ALL devark related commands regardless of CLI path format
    * Currently not used but kept for future reference
    */
   /*
-  private isVibeLogCommand(command: string | undefined): boolean {
+  private isDevArkCommand(command: string | undefined): boolean {
     if (!command) return false;
     
     // Robust detection that works with any CLI path format
-    // These patterns identify vibe-log commands regardless of how they're invoked
-    const vibelogIndicators = [
+    // These patterns identify devark commands regardless of how they're invoked
+    const devarkIndicators = [
       'analyze-prompt',        // Status line analysis hook
       'statusline',           // Status line display command
       'send --silent',        // Auto-sync hooks
       'send --background',    // Auto-sync hooks
       '--hook-trigger',       // Auto-sync hook marker
-      'vibe-log',            // Generic vibe-log commands
-      'vibelog-cli',         // NPX package name
-      '@vibe-log'            // Possible future package scope
+      'devark',            // Generic devark commands
+      'devark-cli',         // NPX package name
+      '@devark'            // Possible future package scope
     ];
     
-    return vibelogIndicators.some(indicator => command.includes(indicator));
+    return devarkIndicators.some(indicator => command.includes(indicator));
   }
   */
   
@@ -176,7 +176,7 @@ export class ClaudeSettingsManager {
     const cliPath = config?.cliPath || getCliPath();
     const settings = await readGlobalSettings() || { hooks: {} };
     
-    // 1. Check for existing non-vibe-log status line and backup if found
+    // 1. Check for existing non-devark status line and backup if found
     const existingStatusLine = this.detectExistingStatusLine(settings);
     if (existingStatusLine) {
       logger.debug('Backing up existing status line:', existingStatusLine);
@@ -184,7 +184,7 @@ export class ClaudeSettingsManager {
         originalCommand: existingStatusLine.command,
         originalType: existingStatusLine.type,
         originalPadding: existingStatusLine.padding,
-        backupReason: 'Replaced by vibe-log status line'
+        backupReason: 'Replaced by devark status line'
       });
     }
     
@@ -241,7 +241,7 @@ export class ClaudeSettingsManager {
     const cliPath = config?.cliPath || getCliPath();
     const settings = await readGlobalSettings() || { hooks: {} };
 
-    // 1. Check for existing non-vibe-log status line and backup if found
+    // 1. Check for existing non-devark status line and backup if found
     const existingStatusLine = this.detectExistingStatusLine(settings);
     if (existingStatusLine) {
       logger.debug('Backing up existing status line:', existingStatusLine);
@@ -249,7 +249,7 @@ export class ClaudeSettingsManager {
         originalCommand: existingStatusLine.command,
         originalType: existingStatusLine.type,
         originalPadding: existingStatusLine.padding,
-        backupReason: 'Replaced by vibe-log challenge status line'
+        backupReason: 'Replaced by devark challenge status line'
       });
     }
 
@@ -362,12 +362,12 @@ export class ClaudeSettingsManager {
    * Helper to remove status line components from settings object
    */
   private removeStatusLineComponents(settings: ClaudeSettings): void {
-    // Remove UserPromptSubmit hooks that are vibe-log analyze-prompt
+    // Remove UserPromptSubmit hooks that are devark analyze-prompt
     if (settings.hooks?.UserPromptSubmit) {
       settings.hooks.UserPromptSubmit = settings.hooks.UserPromptSubmit.filter((config: any) => {
         if (!config.hooks) return true; // Keep configs without hooks array
 
-        // Filter out vibe-log analyze-prompt hooks
+        // Filter out devark analyze-prompt hooks
         config.hooks = config.hooks.filter((hook: any) =>
           !this.isAnalyzePromptCommand(hook.command)
         );
@@ -440,7 +440,7 @@ export class ClaudeSettingsManager {
     if (config.installSessionStart) {
       if (!settings.hooks.SessionStart) settings.hooks.SessionStart = [];
 
-      // Remove existing vibe-log SessionStart hooks
+      // Remove existing devark SessionStart hooks
       this.removeAutoSyncHook(settings, 'SessionStart');
 
       // Re-initialize if removed (removeAutoSyncHook deletes empty arrays)
@@ -462,7 +462,7 @@ export class ClaudeSettingsManager {
     if (config.installPreCompact) {
       if (!settings.hooks.PreCompact) settings.hooks.PreCompact = [];
 
-      // Remove existing vibe-log PreCompact hooks
+      // Remove existing devark PreCompact hooks
       this.removeAutoSyncHook(settings, 'PreCompact');
 
       // Re-initialize if removed (removeAutoSyncHook deletes empty arrays)
@@ -512,7 +512,7 @@ export class ClaudeSettingsManager {
     const hooks = settings.hooks?.[type];
     if (!hooks) return;
     
-    // Filter out vibe-log auto-sync hooks
+    // Filter out devark auto-sync hooks
     settings.hooks![type] = hooks.filter(config => {
       if (!config.hooks) return true;
       
@@ -530,10 +530,10 @@ export class ClaudeSettingsManager {
   }
   
   /**
-   * Remove ALL vibe-log hooks and configurations
+   * Remove ALL devark hooks and configurations
    */
-  async removeAllVibeLogSettings(): Promise<void> {
-    logger.debug('Removing all vibe-log settings');
+  async removeAllDevArkSettings(): Promise<void> {
+    logger.debug('Removing all devark settings');
     
     const settings = await readGlobalSettings();
     if (!settings) return;
@@ -546,11 +546,11 @@ export class ClaudeSettingsManager {
     this.removeAutoSyncHook(settings, 'PreCompact');
     
     await writeGlobalSettings(settings);
-    logger.debug('All vibe-log settings removed successfully');
+    logger.debug('All devark settings removed successfully');
   }
   
   /**
-   * Get comprehensive status of all vibe-log features
+   * Get comprehensive status of all devark features
    */
   async getFeatureStatus(): Promise<FeatureStatus> {
     const settings = await readGlobalSettings();
@@ -609,7 +609,7 @@ export class ClaudeSettingsManager {
   }
   
   /**
-   * Detect existing non-vibe-log status line configuration
+   * Detect existing non-devark status line configuration
    * Returns the existing configuration if found, null otherwise
    */
   detectExistingStatusLine(settings: ClaudeSettings | null): {
@@ -620,7 +620,7 @@ export class ClaudeSettingsManager {
     // Check if there's a statusLine configured
     if (!settings?.statusLine) return null;
     
-    // Check if it's NOT a vibe-log status line
+    // Check if it's NOT a devark status line
     if (this.isStatuslineCommand(settings.statusLine.command)) {
       return null; // It's our own status line, not a third-party one
     }
@@ -711,11 +711,11 @@ export class ClaudeSettingsManager {
   }
   
   /**
-   * Update CLI path for all vibe-log commands
+   * Update CLI path for all devark commands
    * Useful when switching between development and production
    */
   async updateCliPath(newCliPath: string): Promise<void> {
-    logger.debug(`Updating CLI path for all vibe-log commands: ${newCliPath}`);
+    logger.debug(`Updating CLI path for all devark commands: ${newCliPath}`);
     
     const settings = await readGlobalSettings();
     if (!settings) return;

@@ -25,7 +25,7 @@ vi.mock('fs', () => ({
 }));
 
 vi.mock('../../config', () => ({
-  getCliPath: vi.fn(() => '/usr/local/bin/vibe-log')
+  getCliPath: vi.fn(() => '/usr/local/bin/devark')
 }));
 
 vi.mock('../../claude-core', () => ({
@@ -85,7 +85,7 @@ describe('hooks-controller - Hook Preservation Tests', () => {
       expect(writtenSettings.hooks.SessionEnd).toBeUndefined();
     });
 
-    it('should PRESERVE existing non-vibe-log hooks when installing', async () => {
+    it('should PRESERVE existing non-devark hooks when installing', async () => {
       const existingSettings = {
         hooks: {
           SessionStart: [{
@@ -124,22 +124,22 @@ describe('hooks-controller - Hook Preservation Tests', () => {
       // SessionStart should have BOTH hooks
       expect(writtenSettings.hooks.SessionStart[0].hooks).toHaveLength(2);
       expect(writtenSettings.hooks.SessionStart[0].hooks[0].command).toBe('echo "existing session start hook"');
-      expect(writtenSettings.hooks.SessionStart[0].hooks[1].command).toContain('vibe-log');
+      expect(writtenSettings.hooks.SessionStart[0].hooks[1].command).toContain('devark');
 
       // PreCompact should have BOTH hooks
       expect(writtenSettings.hooks.PreCompact[0].hooks).toHaveLength(2);
       expect(writtenSettings.hooks.PreCompact[0].hooks[0].command).toBe('echo "existing precompact hook"');
-      expect(writtenSettings.hooks.PreCompact[0].hooks[1].command).toContain('vibe-log');
+      expect(writtenSettings.hooks.PreCompact[0].hooks[1].command).toContain('devark');
     });
 
-    it('should NOT create duplicates when vibe-log hooks already exist', async () => {
+    it('should NOT create duplicates when devark hooks already exist', async () => {
       const existingSettings = {
         hooks: {
           SessionStart: [{
             matcher: 'startup|clear',
             hooks: [
               { type: 'command' as const, command: 'echo "other"' },
-              { type: 'command' as const, command: '/usr/local/bin/vibe-log send --hook-trigger=sessionstart' }
+              { type: 'command' as const, command: '/usr/local/bin/devark send --hook-trigger=sessionstart' }
             ]
           }]
         }
@@ -179,7 +179,7 @@ describe('hooks-controller - Hook Preservation Tests', () => {
             matcher: 'auto',
             hooks: [
               { type: 'command' as const, command: 'echo "keep this"' },
-              { type: 'command' as const, command: '/usr/local/bin/vibe-log send --hook-trigger=precompact' }
+              { type: 'command' as const, command: '/usr/local/bin/devark send --hook-trigger=precompact' }
             ]
           }]
         }
@@ -192,7 +192,7 @@ describe('hooks-controller - Hook Preservation Tests', () => {
 
       const selection: HookSelection = {
         sessionStartHook: true,  // Enable this
-        preCompactHook: false,   // Disable this (should remove vibe-log only)
+        preCompactHook: false,   // Disable this (should remove devark only)
         sessionEndHook: false
       };
 
@@ -204,7 +204,7 @@ describe('hooks-controller - Hook Preservation Tests', () => {
       // SessionStart should have both hooks
       expect(writtenSettings.hooks.SessionStart[0].hooks).toHaveLength(2);
 
-      // PreCompact should have only the non-vibe-log hook
+      // PreCompact should have only the non-devark hook
       expect(writtenSettings.hooks.PreCompact[0].hooks).toHaveLength(1);
       expect(writtenSettings.hooks.PreCompact[0].hooks[0].command).toBe('echo "keep this"');
     });
@@ -239,12 +239,12 @@ describe('hooks-controller - Hook Preservation Tests', () => {
       const writeCall = (fs.writeFile as any).mock.calls[0];
       const writtenSettings = JSON.parse(writeCall[1]);
 
-      // Should have ALL 4 hooks (3 existing + 1 new vibe-log)
+      // Should have ALL 4 hooks (3 existing + 1 new devark)
       expect(writtenSettings.hooks.PreCompact[0].hooks).toHaveLength(4);
       expect(writtenSettings.hooks.PreCompact[0].hooks[0].command).toBe('echo "hook 1"');
       expect(writtenSettings.hooks.PreCompact[0].hooks[1].command).toBe('echo "hook 2"');
       expect(writtenSettings.hooks.PreCompact[0].hooks[2].command).toBe('echo "hook 3"');
-      expect(writtenSettings.hooks.PreCompact[0].hooks[3].command).toContain('vibe-log');
+      expect(writtenSettings.hooks.PreCompact[0].hooks[3].command).toContain('devark');
     });
   });
 
@@ -294,25 +294,25 @@ describe('hooks-controller - Hook Preservation Tests', () => {
       // SessionStart should have both hooks
       expect(writtenSettings.hooks.SessionStart[0].hooks).toHaveLength(2);
       expect(writtenSettings.hooks.SessionStart[0].hooks[0].command).toBe('echo "existing"');
-      expect(writtenSettings.hooks.SessionStart[0].hooks[1].command).toContain('vibe-log');
+      expect(writtenSettings.hooks.SessionStart[0].hooks[1].command).toContain('devark');
     });
   });
 
   describe('uninstallAllHooks', () => {
-    it('should ONLY remove vibe-log hooks, preserving other hooks', async () => {
+    it('should ONLY remove devark hooks, preserving other hooks', async () => {
       const existingSettings = {
         hooks: {
           SessionStart: [{
             matcher: 'startup|clear',
             hooks: [
               { type: 'command' as const, command: 'echo "keep this"' },
-              { type: 'command' as const, command: '/usr/local/bin/vibe-log send --hook-trigger=sessionstart' }
+              { type: 'command' as const, command: '/usr/local/bin/devark send --hook-trigger=sessionstart' }
             ]
           }],
           PreCompact: [{
             matcher: 'auto',
             hooks: [
-              { type: 'command' as const, command: '/usr/local/bin/vibe-log send --hook-trigger=precompact' },
+              { type: 'command' as const, command: '/usr/local/bin/devark send --hook-trigger=precompact' },
               { type: 'command' as const, command: 'echo "keep this too"' }
             ]
           }]
@@ -330,22 +330,22 @@ describe('hooks-controller - Hook Preservation Tests', () => {
       expect(claudeSettingsReader.writeGlobalSettings).toHaveBeenCalled();
       const writeCall = (claudeSettingsReader.writeGlobalSettings as any).mock.calls[0][0];
 
-      // SessionStart should have only the non-vibe-log hook
+      // SessionStart should have only the non-devark hook
       expect(writeCall.hooks.SessionStart[0].hooks).toHaveLength(1);
       expect(writeCall.hooks.SessionStart[0].hooks[0].command).toBe('echo "keep this"');
 
-      // PreCompact should have only the non-vibe-log hook
+      // PreCompact should have only the non-devark hook
       expect(writeCall.hooks.PreCompact[0].hooks).toHaveLength(1);
       expect(writeCall.hooks.PreCompact[0].hooks[0].command).toBe('echo "keep this too"');
     });
 
-    it('should remove hook type entirely if only vibe-log hooks exist', async () => {
+    it('should remove hook type entirely if only devark hooks exist', async () => {
       const existingSettings = {
         hooks: {
           SessionStart: [{
             matcher: 'startup|clear',
             hooks: [
-              { type: 'command' as const, command: '/usr/local/bin/vibe-log send --hook-trigger=sessionstart' }
+              { type: 'command' as const, command: '/usr/local/bin/devark send --hook-trigger=sessionstart' }
             ]
           }],
           PreCompact: [{
@@ -367,20 +367,20 @@ describe('hooks-controller - Hook Preservation Tests', () => {
       // SessionStart should be removed entirely
       expect(writeCall.hooks.SessionStart).toBeUndefined();
 
-      // PreCompact should still exist with non-vibe-log hook
+      // PreCompact should still exist with non-devark hook
       expect(writeCall.hooks.PreCompact).toBeDefined();
       expect(writeCall.hooks.PreCompact[0].hooks[0].command).toBe('echo "keep this"');
     });
 
-    it('should handle multiple vibe-log hooks in same config', async () => {
+    it('should handle multiple devark hooks in same config', async () => {
       const existingSettings = {
         hooks: {
           PreCompact: [{
             matcher: 'auto',
             hooks: [
               { type: 'command' as const, command: 'echo "keep"' },
-              { type: 'command' as const, command: '/usr/local/bin/vibe-log send --hook-trigger=precompact' },
-              { type: 'command' as const, command: '@vibe-log/cli send' },
+              { type: 'command' as const, command: '/usr/local/bin/devark send --hook-trigger=precompact' },
+              { type: 'command' as const, command: '@devark/cli send' },
               { type: 'command' as const, command: 'echo "keep too"' }
             ]
           }]
@@ -394,13 +394,13 @@ describe('hooks-controller - Hook Preservation Tests', () => {
 
       const writeCall = (claudeSettingsReader.writeGlobalSettings as any).mock.calls[0][0];
 
-      // Should have 2 non-vibe-log hooks left
+      // Should have 2 non-devark hooks left
       expect(writeCall.hooks.PreCompact[0].hooks).toHaveLength(2);
       expect(writeCall.hooks.PreCompact[0].hooks[0].command).toBe('echo "keep"');
       expect(writeCall.hooks.PreCompact[0].hooks[1].command).toBe('echo "keep too"');
     });
 
-    it('should throw error if no vibe-log hooks found', async () => {
+    it('should throw error if no devark hooks found', async () => {
       const existingSettings = {
         hooks: {
           PreCompact: [{
@@ -414,7 +414,7 @@ describe('hooks-controller - Hook Preservation Tests', () => {
 
       (claudeSettingsReader.readGlobalSettings as any).mockResolvedValue(existingSettings);
 
-      await expect(uninstallAllHooks()).rejects.toThrow('No vibe-log hooks found');
+      await expect(uninstallAllHooks()).rejects.toThrow('No devark hooks found');
     });
   });
 
@@ -517,16 +517,16 @@ describe('hooks-controller - Hook Preservation Tests', () => {
   });
 
   describe('removeProjectHooks', () => {
-    it('should remove vibe-log hooks from a single project', async () => {
+    it('should remove devark hooks from a single project', async () => {
       const settingsWithHooks = {
         hooks: {
           SessionStart: [{
             matcher: 'startup|clear',
-            hooks: [{ type: 'command' as const, command: '/usr/local/bin/vibe-log send --hook-trigger=sessionstart' }]
+            hooks: [{ type: 'command' as const, command: '/usr/local/bin/devark send --hook-trigger=sessionstart' }]
           }],
           PreCompact: [{
             matcher: 'auto',
-            hooks: [{ type: 'command' as const, command: '/usr/local/bin/vibe-log send --hook-trigger=precompact' }]
+            hooks: [{ type: 'command' as const, command: '/usr/local/bin/devark send --hook-trigger=precompact' }]
           }]
         }
       };
@@ -545,7 +545,7 @@ describe('hooks-controller - Hook Preservation Tests', () => {
       const writeCall = (fs.writeFile as any).mock.calls[0];
       const writtenSettings = JSON.parse(writeCall[1]);
 
-      // All vibe-log hooks should be removed
+      // All devark hooks should be removed
       expect(writtenSettings.hooks).toBeUndefined();
     });
 
@@ -554,7 +554,7 @@ describe('hooks-controller - Hook Preservation Tests', () => {
         hooks: {
           SessionStart: [{
             matcher: 'startup|clear',
-            hooks: [{ type: 'command' as const, command: '/usr/local/bin/vibe-log send --hook-trigger=sessionstart' }]
+            hooks: [{ type: 'command' as const, command: '/usr/local/bin/devark send --hook-trigger=sessionstart' }]
           }]
         }
       };
@@ -579,7 +579,7 @@ describe('hooks-controller - Hook Preservation Tests', () => {
         hooks: {
           SessionStart: [{
             matcher: 'startup|clear',
-            hooks: [{ type: 'command' as const, command: '/usr/local/bin/vibe-log send --hook-trigger=sessionstart' }]
+            hooks: [{ type: 'command' as const, command: '/usr/local/bin/devark send --hook-trigger=sessionstart' }]
           }]
         }
       };
@@ -630,24 +630,24 @@ describe('hooks-controller - Hook Preservation Tests', () => {
     });
 
     it('should delete empty hooks object after removing all hooks', async () => {
-      const settingsWithOnlyVibeLogHooks = {
+      const settingsWithOnlyDevArkHooks = {
         hooks: {
           SessionStart: [{
             matcher: 'startup|clear',
-            hooks: [{ type: 'command' as const, command: '/usr/local/bin/vibe-log send --hook-trigger=sessionstart' }]
+            hooks: [{ type: 'command' as const, command: '/usr/local/bin/devark send --hook-trigger=sessionstart' }]
           }],
           PreCompact: [{
             matcher: 'auto',
-            hooks: [{ type: 'command' as const, command: '@vibe-log/cli send --hook-trigger=precompact' }]
+            hooks: [{ type: 'command' as const, command: '@devark/cli send --hook-trigger=precompact' }]
           }],
           SessionEnd: [{
             matcher: 'clear|logout',
-            hooks: [{ type: 'command' as const, command: 'vibe-log send --hook-trigger=sessionend' }]
+            hooks: [{ type: 'command' as const, command: 'devark send --hook-trigger=sessionend' }]
           }]
         }
       };
 
-      (fs.readFile as any).mockResolvedValue(JSON.stringify(settingsWithOnlyVibeLogHooks));
+      (fs.readFile as any).mockResolvedValue(JSON.stringify(settingsWithOnlyDevArkHooks));
       (fs.writeFile as any).mockResolvedValue(undefined);
 
       const projects = [
@@ -672,7 +672,7 @@ describe('hooks-controller - Hook Preservation Tests', () => {
             matcher: 'startup|clear',
             hooks: [{
               type: 'command' as const,
-              command: '/usr/local/bin/vibe-log send --hook-trigger=sessionstart',
+              command: '/usr/local/bin/devark send --hook-trigger=sessionstart',
               timeout: 30000
             }]
           }]
@@ -698,7 +698,7 @@ describe('hooks-controller - Hook Preservation Tests', () => {
             matcher: 'auto',
             hooks: [{
               type: 'command' as const,
-              command: '/usr/local/bin/vibe-log send --hook-trigger=precompact',
+              command: '/usr/local/bin/devark send --hook-trigger=precompact',
               timeout: 30000
             }]
           }]
@@ -721,7 +721,7 @@ describe('hooks-controller - Hook Preservation Tests', () => {
             matcher: 'clear|logout',
             hooks: [{
               type: 'command' as const,
-              command: '/usr/local/bin/vibe-log send --hook-trigger=sessionend',
+              command: '/usr/local/bin/devark send --hook-trigger=sessionend',
               timeout: 30000
             }]
           }]
@@ -751,7 +751,7 @@ describe('hooks-controller - Hook Preservation Tests', () => {
             matcher: 'auto',
             hooks: [{
               type: 'command' as const,
-              command: '/usr/local/bin/vibe-log send --hook-trigger=precompact'
+              command: '/usr/local/bin/devark send --hook-trigger=precompact'
             }]
           }]
         }
@@ -771,7 +771,7 @@ describe('hooks-controller - Hook Preservation Tests', () => {
         preCompactHook: { installed: true, enabled: true, version: '1.0.0' },
         sessionEndHook: { installed: true, enabled: true, version: '1.0.0' },
         settingsPath: '/mock/settings.json',
-        cliPath: '/usr/local/bin/vibe-log'
+        cliPath: '/usr/local/bin/devark'
       };
 
       // Mock getHooksStatus by mocking the underlying readSettings
@@ -779,15 +779,15 @@ describe('hooks-controller - Hook Preservation Tests', () => {
         hooks: {
           SessionStart: [{
             matcher: 'startup|clear',
-            hooks: [{ type: 'command' as const, command: 'vibe-log send --hook-version=1.0.0' }]
+            hooks: [{ type: 'command' as const, command: 'devark send --hook-version=1.0.0' }]
           }],
           PreCompact: [{
             matcher: 'auto',
-            hooks: [{ type: 'command' as const, command: 'vibe-log send --hook-version=1.0.0' }]
+            hooks: [{ type: 'command' as const, command: 'devark send --hook-version=1.0.0' }]
           }],
           SessionEnd: [{
             matcher: 'clear|logout',
-            hooks: [{ type: 'command' as const, command: 'vibe-log send --hook-version=1.0.0' }]
+            hooks: [{ type: 'command' as const, command: 'devark send --hook-version=1.0.0' }]
           }]
         }
       });
@@ -804,15 +804,15 @@ describe('hooks-controller - Hook Preservation Tests', () => {
         hooks: {
           SessionStart: [{
             matcher: 'startup|clear',
-            hooks: [{ type: 'command' as const, command: 'vibe-log send --hook-version=0.5.0' }]
+            hooks: [{ type: 'command' as const, command: 'devark send --hook-version=0.5.0' }]
           }],
           PreCompact: [{
             matcher: 'auto',
-            hooks: [{ type: 'command' as const, command: 'vibe-log send --hook-version=0.5.0' }]
+            hooks: [{ type: 'command' as const, command: 'devark send --hook-version=0.5.0' }]
           }],
           SessionEnd: [{
             matcher: 'clear|logout',
-            hooks: [{ type: 'command' as const, command: 'vibe-log send --hook-version=0.5.0' }]
+            hooks: [{ type: 'command' as const, command: 'devark send --hook-version=0.5.0' }]
           }]
         }
       });
@@ -829,15 +829,15 @@ describe('hooks-controller - Hook Preservation Tests', () => {
         hooks: {
           SessionStart: [{
             matcher: 'startup|clear',
-            hooks: [{ type: 'command' as const, command: 'vibe-log send --hook-version=0.8.0' }]
+            hooks: [{ type: 'command' as const, command: 'devark send --hook-version=0.8.0' }]
           }],
           PreCompact: [{
             matcher: 'auto',
-            hooks: [{ type: 'command' as const, command: 'vibe-log send --hook-version=0.6.0' }]
+            hooks: [{ type: 'command' as const, command: 'devark send --hook-version=0.6.0' }]
           }],
           SessionEnd: [{
             matcher: 'clear|logout',
-            hooks: [{ type: 'command' as const, command: 'vibe-log send --hook-version=0.9.0' }]
+            hooks: [{ type: 'command' as const, command: 'devark send --hook-version=0.9.0' }]
           }]
         }
       });

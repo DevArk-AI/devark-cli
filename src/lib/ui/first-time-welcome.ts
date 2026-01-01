@@ -186,9 +186,9 @@ export async function showFirstTimeWelcome(): Promise<WelcomeChoice> {
 export function showSetupMessage(mode: 'local' | 'cloud'): void {
   console.log();
   if (mode === 'local') {
-    console.log(colors.info('Installing vibe-log local mode...'));
+    console.log(colors.info('Installing devark local mode...'));
   } else {
-    console.log(colors.info('Setting up vibe-log cloud mode...'));
+    console.log(colors.info('Setting up devark cloud mode...'));
   }
   console.log();
 }

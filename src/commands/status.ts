@@ -2,7 +2,7 @@ import chalk from 'chalk';
 import { requireAuth } from '../lib/auth/token';
 import { apiClient } from '../lib/api-client';
 import { createSpinner, formatDuration, formatDate } from '../lib/ui';
-import { VibelogError } from '../utils/errors';
+import { DevArkError } from '../utils/errors';
 import { logger } from '../utils/logger';
 import { countCursorMessages } from '../lib/readers/cursor';
 
@@ -23,7 +23,7 @@ export async function status(): Promise<void> {
     spinner.succeed('Stats loaded!');
     
     // Display streak information
-    console.log(chalk.cyan('\n📊 Your vibe-log Stats'));
+    console.log(chalk.cyan('\n📊 Your devark Stats'));
     console.log(chalk.gray('═══════════════════════════════\n'));
     
     // Current streak
@@ -116,12 +116,12 @@ export async function status(): Promise<void> {
   } catch (error) {
     spinner.fail('Failed to fetch stats');
     
-    if (error instanceof VibelogError) {
+    if (error instanceof DevArkError) {
       throw error;
     }
     
     logger.error('Failed to fetch status', error);
-    throw new VibelogError(
+    throw new DevArkError(
       'Failed to fetch your stats. Please try again.',
       'STATUS_FAILED'
     );
