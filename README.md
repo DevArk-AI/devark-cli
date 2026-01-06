@@ -1,7 +1,23 @@
 
 <div align="center">
 
- <img width="280" height="257" alt="og-image" src="https://github.com/user-attachments/assets/ff8a996f-6292-44eb-b6f4-a07737db7d6d" />
+![devark-icon-white](https://github.com/user-attachments/assets/5cfa24f2-b2d5-4839-a6ba-5f3d0996f430)<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- DevArk Icon (White variant for dark backgrounds) -->
+
+  <!-- Top chevron - Blue left, White right -->
+  <path d="M32 6 L8 26 L12 30 L32 14 Z" fill="#3528E0"/>
+  <path d="M32 6 L56 26 L52 30 L32 14 Z" fill="#FFFFFF"/>
+
+  <!-- Middle chevron - Blue left, White right -->
+  <path d="M32 18 L12 34 L16 38 L32 26 Z" fill="#3528E0"/>
+  <path d="M32 18 L52 34 L48 38 L32 26 Z" fill="#FFFFFF"/>
+
+  <!-- Bottom chevron - Blue left, White right -->
+  <path d="M32 30 L16 42 L20 46 L32 38 Z" fill="#3528E0"/>
+  <path d="M32 30 L48 42 L44 46 L32 38 Z" fill="#FFFFFF"/>
+</svg>
+
+
 
 
 <p></p>
@@ -22,7 +38,7 @@
 <a href="https://github.com/devark/devark-cli?tab=readme-ov-file#-privacy--security"><img src="https://img.shields.io/badge/build-transparent-blue" alt="Transparent Build"></a>
 
 <a href="CONTRIBUTING.md"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs Welcome"></a>
-<a href="https://x.com/Vibe_Log/"><img alt="X  Follow" src="https://img.shields.io/twitter/follow/Vibe_Log"></a>
+
 <a href="https://github.com/devark/devark-cli"><img src="https://img.shields.io/badge/⭐_Star-this_repo-22C55E?labelColor=000000" alt="Star this repo"></a>  
  
 </p>
