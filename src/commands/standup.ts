@@ -66,10 +66,11 @@ export async function standup(options?: { skipAuth?: boolean }): Promise<void> {
     const yesterday = getYesterdayWorkingDay();
 
     // CRITICAL: Filter out today's sessions - only show PAST work
+    // Use local date string to avoid timezone issues
     const today = new Date();
-    const todayStr = today.toISOString().split('T')[0];
+    const todayStr = getLocalDateString(today);
     const pastSessions = claudeSessions.filter(s =>
-      s.timestamp.toISOString().split('T')[0] !== todayStr
+      getLocalDateString(s.timestamp) !== todayStr
     );
 
     // If no past sessions, show "nothing" message
@@ -81,9 +82,9 @@ export async function standup(options?: { skipAuth?: boolean }): Promise<void> {
     }
 
     // Find actual date with sessions (might not be yesterday)
-    const yesterdayStr = yesterday.toISOString().split('T')[0];
+    const yesterdayStr = getLocalDateString(yesterday);
     const yesterdaySessions = pastSessions.filter(s =>
-      s.timestamp.toISOString().split('T')[0] === yesterdayStr
+      getLocalDateString(s.timestamp) === yesterdayStr
     );
 
     let actualTargetDate = yesterday;
@@ -120,9 +121,9 @@ export async function standup(options?: { skipAuth?: boolean }): Promise<void> {
     console.log(chalk.cyan('🤖 Analyzing your work with Claude Code...'));
 
     // Show accurate count for actual target date
-    const actualDateStr = actualTargetDate.toISOString().split('T')[0];
+    const actualDateStr = getLocalDateString(actualTargetDate);
     const actualSessions = pastSessions.filter(s =>
-      s.timestamp.toISOString().split('T')[0] === actualDateStr
+      getLocalDateString(s.timestamp) === actualDateStr
     );
 
     const actualSessionsByProject = groupSessionsByProject(actualSessions);
@@ -283,17 +284,17 @@ export async function standup(options?: { skipAuth?: boolean }): Promise<void> {
 
 async function fallbackAnalysis(sessions: SessionData[], targetDate: Date): Promise<StandupData> {
   // Enhanced fallback analysis when Claude isn't available
-  const yesterday = targetDate.toISOString().split('T')[0];
-  const today = new Date().toISOString().split('T')[0];
+  const yesterdayStr = getLocalDateString(targetDate);
+  const todayStr = getLocalDateString(new Date());
 
   // CRITICAL: Filter out today's sessions to avoid showing current work
   const pastSessions = sessions.filter(s => {
-    const sessionDate = s.timestamp.toISOString().split('T')[0];
-    return sessionDate !== today;  // Exclude today's sessions
+    const sessionDate = getLocalDateString(s.timestamp);
+    return sessionDate !== todayStr;  // Exclude today's sessions
   });
 
   const yesterdaySessions = pastSessions.filter(s =>
-    s.timestamp.toISOString().split('T')[0] === yesterday
+    getLocalDateString(s.timestamp) === yesterdayStr
   );
 
   // If no work yesterday, find the most recent PAST work (not today)
@@ -305,9 +306,9 @@ async function fallbackAnalysis(sessions: SessionData[], targetDate: Date): Prom
     const sortedSessions = pastSessions.sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
     if (sortedSessions.length > 0) {
       actualDate = sortedSessions[0].timestamp;
-      const recentDay = actualDate.toISOString().split('T')[0];
+      const recentDay = getLocalDateString(actualDate);
       recentSessions = pastSessions.filter(s =>
-        s.timestamp.toISOString().split('T')[0] === recentDay
+        getLocalDateString(s.timestamp) === recentDay
       );
     }
   }
@@ -470,6 +471,33 @@ function displayStandupSummary(data: StandupData): void {
 }
 
 /**
+ * Get local date string (YYYY-MM-DD) from a Date object
+ * Uses local timezone to avoid UTC conversion issues
+ */
+function getLocalDateString(date: Date): string {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+/**
+ * Normalize project name for comparison (lowercase, trim)
+ */
+function normalizeProjectName(name: string): string {
+  return name.toLowerCase().trim();
+}
+
+/**
+ * Check if two project names match (case-insensitive, with substring matching)
+ */
+function projectNamesMatch(name1: string, name2: string): boolean {
+  const n1 = normalizeProjectName(name1);
+  const n2 = normalizeProjectName(name2);
+  return n1 === n2 || n1.includes(n2) || n2.includes(n1);
+}
+
+/**
  * Enrich standup data with locally calculated durations
  * This ensures consistent time reporting across runs
  */
@@ -478,10 +506,10 @@ function enrichWithLocalDurations(
   sessions: SessionData[],
   targetDate: Date
 ): StandupData {
-  // Filter sessions for the target date
-  const targetDateStr = targetDate.toISOString().split('T')[0];
+  // Filter sessions for the target date using LOCAL timezone
+  const targetDateStr = getLocalDateString(targetDate);
   const targetSessions = sessions.filter(s =>
-    s.timestamp.toISOString().split('T')[0] === targetDateStr
+    getLocalDateString(s.timestamp) === targetDateStr
   );
 
   // Group sessions by project and handle parallel sessions
@@ -534,11 +562,11 @@ function enrichWithLocalDurations(
       // First try exact match
       let totalSeconds = projectDurations.get(project.name);
 
-      // If no exact match, try to find a similar project name
+      // If no exact match, try to find a similar project name (case-insensitive)
       if (totalSeconds === undefined) {
-        // Check if Claude's project name is a substring of any local project name
+        // Check if Claude's project name matches any local project name
         for (const [localProjectName, duration] of projectDurations.entries()) {
-          if (localProjectName.includes(project.name) || project.name.includes(localProjectName)) {
+          if (projectNamesMatch(localProjectName, project.name)) {
             totalSeconds = duration;
             logger.debug(`Matched Claude project "${project.name}" to local project "${localProjectName}"`);
             break;
@@ -563,12 +591,10 @@ function enrichWithLocalDurations(
   );
 
   for (const [localProjectName, duration] of projectDurations.entries()) {
-    // Check if this project is missing from Claude's response
+    // Check if this project is missing from Claude's response (case-insensitive)
     let found = false;
     for (const claudeProject of claudeProjectNames) {
-      if (localProjectName === claudeProject ||
-          localProjectName.includes(claudeProject) ||
-          claudeProject.includes(localProjectName)) {
+      if (projectNamesMatch(localProjectName, claudeProject)) {
         found = true;
         break;
       }

@@ -452,13 +452,6 @@ describe('SendOrchestrator', () => {
   });
 
   describe('execute - full workflow', () => {
-    beforeEach(() => {
-      // Mock syncPushUpStats to avoid errors
-      vi.mock('../../../../src/lib/push-up-sync', () => ({
-        syncPushUpStats: vi.fn().mockResolvedValue(undefined)
-      }));
-    });
-
     it('should handle no sessions found (silent mode)', async () => {
       mockReadClaudeSessions.mockResolvedValue([]);
 

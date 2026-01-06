@@ -53,10 +53,10 @@ export async function showLogo(version?: string): Promise<void> {
   // Display the DevArk ASCII logo with brand colors
   const lines = DEVARK_ASCII_LOGO.split('\n');
   for (const line of lines) {
-    // Color the asterisks blue (#3528E0) and dashes black
+    // Color the asterisks blue (#3528E0) and dashes white (for visibility on dark terminals)
     const coloredLine = line
       .replace(/\*/g, chalk.hex('#3528E0')('*'))
-      .replace(/-/g, chalk.black('-'));
+      .replace(/-/g, chalk.white('-'));
     console.log(coloredLine);
   }
 

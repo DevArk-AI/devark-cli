@@ -45,7 +45,7 @@ export class InteractiveMenu {
 
     // Slogan as single line, left-aligned
     console.log();
-    console.log(chalk.green.bold('Focus. Discover. Grow. Ship Daily.'));
+    console.log(chalk.white.bold('Focus. Discover. Grow. Ship Daily.'));
     console.log();
     console.log(colors.muted('Setup options:'));
     console.log();
