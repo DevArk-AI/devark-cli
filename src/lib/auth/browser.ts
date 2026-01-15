@@ -81,8 +81,10 @@ export async function browserAuth(wizardMode?: boolean): Promise<string> {
       console.log(chalk.cyan('🔐 Complete the authentication in your browser, then press ENTER here to continue...'));
     }
     
-    // Open browser to auth page
-    await open(authUrl);
+    // Open browser to auth page with source tracking
+    const authUrlWithSource = new URL(authUrl);
+    authUrlWithSource.searchParams.set('source', 'cli');
+    await open(authUrlWithSource.toString());
     
     // Use SSE to wait for authentication completion
     if (!wizardMode) {

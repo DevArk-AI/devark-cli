@@ -191,9 +191,11 @@ export function getApiUrl(): string {
       return url;
     }
     
-    // Only allow *.devark.dev domains in production
-    if (!parsed.hostname.endsWith('devark.dev')) {
-      throw new Error(`Invalid API host: ${parsed.hostname}. Only *.devark.dev domains allowed.`);
+    // Only allow *.devark.dev and *.devark.ai domains
+    const allowedDomains = ['devark.dev', 'devark.ai'];
+    const isAllowed = allowedDomains.some(domain => parsed.hostname.endsWith(domain));
+    if (!isAllowed) {
+      throw new Error(`Invalid API host: ${parsed.hostname}. Only *.devark.dev and *.devark.ai domains allowed.`);
     }
     
     return url;
