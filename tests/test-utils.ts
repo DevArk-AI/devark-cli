@@ -6,7 +6,7 @@ import os from 'os';
 // Mock environment setup
 export function setupTestEnv() {
   process.env.NODE_ENV = 'test';
-  process.env.VIBELOG_API_URL = 'https://test.vibe-log.dev';
+  process.env.DEVARK_API_URL = 'https://test.devark.ai';
   
   // Mock home directory for tests
   vi.spyOn(os, 'homedir').mockReturnValue('/test/home');
@@ -16,9 +16,9 @@ export function setupTestEnv() {
 export function cleanupTestEnv() {
   vi.clearAllMocks();
   vi.resetAllMocks();
-  delete process.env.VIBELOG_API_URL;
-  delete process.env.VIBELOG_TOKEN;
-  delete process.env.VIBELOG_DEBUG;
+  delete process.env.DEVARK_API_URL;
+  delete process.env.DEVARK_TOKEN;
+  delete process.env.DEVARK_DEBUG;
 }
 
 // Mock axios instance

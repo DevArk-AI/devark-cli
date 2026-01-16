@@ -141,7 +141,7 @@ export function handleError(error: unknown): void {
     }
   }
   
-  console.log(chalk.gray('\n💬 Need help? Visit: https://devark.dev/help'));
+  console.log(chalk.gray('\n💬 Need help? Visit: https://devark.ai/help'));
   
   process.exit(1);
 }

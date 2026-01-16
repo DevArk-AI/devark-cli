@@ -52,7 +52,7 @@ describe('Claude Project Parser', () => {
   
   describe('extractProjectName()', () => {
     it('should extract last segment of path', () => {
-      expect(extractProjectName('/Users/testuser/dev/vibe-log')).toBe('vibe-log');
+      expect(extractProjectName('/Users/testuser/dev/my-project')).toBe('my-project');
       expect(extractProjectName('/Users/testuser/my-project')).toBe('my-project');
       expect(extractProjectName('/home/user/workspace/app')).toBe('app');
     });
@@ -77,22 +77,22 @@ describe('Claude Project Parser', () => {
     
     it('should create project from valid session data', () => {
       const sessionData = {
-        cwd: '/Users/testuser/vibe-log',
+        cwd: '/Users/testuser/my-project',
         sessionId: 's1',
         timestamp: '2024-01-15T10:00:00Z'
       };
       
       const project = createProjectFromSessionData(
-        '/test/home/.claude/projects/-Users-testuser-vibe-log',
-        '-Users-testuser-vibe-log',
+        '/test/home/.claude/projects/-Users-testuser-my-project',
+        '-Users-testuser-my-project',
         sessionData,
         sessionFiles
       );
       
       expect(project).not.toBeNull();
-      expect(project?.name).toBe('vibe-log');
-      expect(project?.actualPath).toBe('/Users/testuser/vibe-log');
-      expect(project?.claudePath).toBe('/test/home/.claude/projects/-Users-testuser-vibe-log');
+      expect(project?.name).toBe('my-project');
+      expect(project?.actualPath).toBe('/Users/testuser/my-project');
+      expect(project?.claudePath).toBe('/test/home/.claude/projects/-Users-testuser-my-project');
       expect(project?.sessions).toBe(2);
       expect(project?.size).toBe(3072);
       expect(project?.isActive).toBe(true);
@@ -154,9 +154,9 @@ describe('Claude Project Parser', () => {
   describe('matchProjectToPath()', () => {
     const projects: ClaudeProject[] = [
       {
-        name: 'vibe-log',
-        claudePath: '/test/.claude/projects/-Users-testuser-vibe-log',
-        actualPath: '/Users/testuser/vibe-log',
+        name: 'my-project',
+        claudePath: '/test/.claude/projects/-Users-testuser-my-project',
+        actualPath: '/Users/testuser/my-project',
         sessions: 2,
         lastActivity: new Date('2024-01-15T10:00:00Z'),
         isActive: true,
@@ -174,15 +174,15 @@ describe('Claude Project Parser', () => {
     ];
     
     it('should match exact project path', () => {
-      const match = matchProjectToPath(projects, '/Users/testuser/vibe-log');
+      const match = matchProjectToPath(projects, '/Users/testuser/my-project');
       expect(match).not.toBeNull();
-      expect(match?.name).toBe('vibe-log');
+      expect(match?.name).toBe('my-project');
     });
     
     it('should match subdirectory of project', () => {
-      const match = matchProjectToPath(projects, '/Users/testuser/vibe-log/src/lib');
+      const match = matchProjectToPath(projects, '/Users/testuser/my-project/src/lib');
       expect(match).not.toBeNull();
-      expect(match?.name).toBe('vibe-log');
+      expect(match?.name).toBe('my-project');
     });
     
     it('should return null for non-matching path', () => {
@@ -191,7 +191,7 @@ describe('Claude Project Parser', () => {
     });
     
     it('should handle empty project list', () => {
-      const match = matchProjectToPath([], '/Users/testuser/vibe-log');
+      const match = matchProjectToPath([], '/Users/testuser/my-project');
       expect(match).toBeNull();
     });
   });

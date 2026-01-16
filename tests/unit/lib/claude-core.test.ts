@@ -51,14 +51,14 @@ describe('Claude Core Module', () => {
       
       // Mock project directories
       vi.mocked(mockFileSystem.getProjectDirectories).mockResolvedValue([
-        '/test/home/.claude/projects/-Users-testuser-vibe-log',
+        '/test/home/.claude/projects/-Users-testuser-my-project',
         '/test/home/.claude/projects/-Users-testuser-another-project'
       ]);
       
       // Mock session files for first project
-      const vibeLogSessions: SessionFileInfo[] = [
-        { path: '/test/home/.claude/projects/-Users-testuser-vibe-log/session1.jsonl', size: 1024, mtime: recentDate },
-        { path: '/test/home/.claude/projects/-Users-testuser-vibe-log/session2.jsonl', size: 1024, mtime: olderDate }
+      const projectSessions: SessionFileInfo[] = [
+        { path: '/test/home/.claude/projects/-Users-testuser-my-project/session1.jsonl', size: 1024, mtime: recentDate },
+        { path: '/test/home/.claude/projects/-Users-testuser-my-project/session2.jsonl', size: 1024, mtime: olderDate }
       ];
       
       // Mock session files for second project
@@ -67,26 +67,26 @@ describe('Claude Core Module', () => {
       ];
       
       vi.mocked(mockFileSystem.getSessionFiles)
-        .mockResolvedValueOnce(vibeLogSessions)
+        .mockResolvedValueOnce(projectSessions)
         .mockResolvedValueOnce(anotherProjectSessions);
       
       // Mock session file contents
-      const vibeLogSession = `{"sessionId":"session-1","cwd":"/Users/testuser/vibe-log","timestamp":"2024-01-15T10:00:00Z"}
+      const projectSession = `{"sessionId":"session-1","cwd":"/Users/testuser/my-project","timestamp":"2024-01-15T10:00:00Z"}
 {"message":{"role":"user","content":"test"},"timestamp":"2024-01-15T10:01:00Z"}`;
       
       const anotherProjectSession = `{"sessionId":"session-2","cwd":"/Users/testuser/another-project","timestamp":"2024-01-14T10:00:00Z"}
 {"message":{"role":"user","content":"test"},"timestamp":"2024-01-14T10:01:00Z"}`;
       
       vi.mocked(mockFileSystem.readSessionFile)
-        .mockResolvedValueOnce(vibeLogSession)
+        .mockResolvedValueOnce(projectSession)
         .mockResolvedValueOnce(anotherProjectSession);
       
       const projects = await discoverProjects();
       
       expect(projects).toHaveLength(2);
       expect(projects[0]).toMatchObject({
-        name: 'vibe-log',
-        actualPath: '/Users/testuser/vibe-log',
+        name: 'my-project',
+        actualPath: '/Users/testuser/my-project',
         sessions: 2,
         isActive: true
       });
@@ -192,15 +192,15 @@ describe('Claude Core Module', () => {
       recentDate.setDate(recentDate.getDate() - 5);
       
       // Mock current working directory
-      vi.spyOn(process, 'cwd').mockReturnValue('/Users/testuser/vibe-log');
+      vi.spyOn(process, 'cwd').mockReturnValue('/Users/testuser/my-project');
       
       vi.mocked(mockFileSystem.getProjectDirectories).mockResolvedValue([
-        '/test/home/.claude/projects/-Users-testuser-vibe-log',
+        '/test/home/.claude/projects/-Users-testuser-my-project',
         '/test/home/.claude/projects/-Users-testuser-other-project'
       ]);
       
-      const vibeLogSessions: SessionFileInfo[] = [
-        { path: '/test/home/.claude/projects/-Users-testuser-vibe-log/session1.jsonl', size: 1024, mtime: recentDate }
+      const projectSessions: SessionFileInfo[] = [
+        { path: '/test/home/.claude/projects/-Users-testuser-my-project/session1.jsonl', size: 1024, mtime: recentDate }
       ];
       
       const otherSessions: SessionFileInfo[] = [
@@ -208,21 +208,21 @@ describe('Claude Core Module', () => {
       ];
       
       vi.mocked(mockFileSystem.getSessionFiles)
-        .mockResolvedValueOnce(vibeLogSessions)
+        .mockResolvedValueOnce(projectSessions)
         .mockResolvedValueOnce(otherSessions);
       
-      const vibeLogSession = `{"sessionId":"s1","cwd":"/Users/testuser/vibe-log","timestamp":"2024-01-15T10:00:00Z"}`;
+      const projectSession = `{"sessionId":"s1","cwd":"/Users/testuser/my-project","timestamp":"2024-01-15T10:00:00Z"}`;
       const otherSession = `{"sessionId":"s2","cwd":"/Users/testuser/other-project","timestamp":"2024-01-15T10:00:00Z"}`;
       
       vi.mocked(mockFileSystem.readSessionFile)
-        .mockResolvedValueOnce(vibeLogSession)
+        .mockResolvedValueOnce(projectSession)
         .mockResolvedValueOnce(otherSession);
       
       const currentProject = await getCurrentProject();
       
       expect(currentProject).not.toBeNull();
-      expect(currentProject?.name).toBe('vibe-log');
-      expect(currentProject?.actualPath).toBe('/Users/testuser/vibe-log');
+      expect(currentProject?.name).toBe('my-project');
+      expect(currentProject?.actualPath).toBe('/Users/testuser/my-project');
     });
     
     it('should return project when in subdirectory', async () => {
@@ -230,26 +230,26 @@ describe('Claude Core Module', () => {
       recentDate.setDate(recentDate.getDate() - 5);
       
       // Mock current working directory (subdirectory of project)
-      vi.spyOn(process, 'cwd').mockReturnValue('/Users/testuser/vibe-log/src/lib');
+      vi.spyOn(process, 'cwd').mockReturnValue('/Users/testuser/my-project/src/lib');
       
       vi.mocked(mockFileSystem.getProjectDirectories).mockResolvedValue([
-        '/test/home/.claude/projects/-Users-testuser-vibe-log'
+        '/test/home/.claude/projects/-Users-testuser-my-project'
       ]);
       
       const sessions: SessionFileInfo[] = [
-        { path: '/test/home/.claude/projects/-Users-testuser-vibe-log/session1.jsonl', size: 1024, mtime: recentDate }
+        { path: '/test/home/.claude/projects/-Users-testuser-my-project/session1.jsonl', size: 1024, mtime: recentDate }
       ];
       
       vi.mocked(mockFileSystem.getSessionFiles).mockResolvedValue(sessions);
       
-      const session = `{"sessionId":"s1","cwd":"/Users/testuser/vibe-log","timestamp":"2024-01-15T10:00:00Z"}`;
+      const session = `{"sessionId":"s1","cwd":"/Users/testuser/my-project","timestamp":"2024-01-15T10:00:00Z"}`;
       
       vi.mocked(mockFileSystem.readSessionFile).mockResolvedValue(session);
       
       const currentProject = await getCurrentProject();
       
       expect(currentProject).not.toBeNull();
-      expect(currentProject?.actualPath).toBe('/Users/testuser/vibe-log');
+      expect(currentProject?.actualPath).toBe('/Users/testuser/my-project');
     });
     
     it('should return null when not in any project', async () => {
@@ -260,16 +260,16 @@ describe('Claude Core Module', () => {
       vi.spyOn(process, 'cwd').mockReturnValue('/Users/testuser/random-folder');
       
       vi.mocked(mockFileSystem.getProjectDirectories).mockResolvedValue([
-        '/test/home/.claude/projects/-Users-testuser-vibe-log'
+        '/test/home/.claude/projects/-Users-testuser-my-project'
       ]);
       
       const sessions: SessionFileInfo[] = [
-        { path: '/test/home/.claude/projects/-Users-testuser-vibe-log/session1.jsonl', size: 1024, mtime: recentDate }
+        { path: '/test/home/.claude/projects/-Users-testuser-my-project/session1.jsonl', size: 1024, mtime: recentDate }
       ];
       
       vi.mocked(mockFileSystem.getSessionFiles).mockResolvedValue(sessions);
       
-      const session = `{"sessionId":"s1","cwd":"/Users/testuser/vibe-log","timestamp":"2024-01-15T10:00:00Z"}`;
+      const session = `{"sessionId":"s1","cwd":"/Users/testuser/my-project","timestamp":"2024-01-15T10:00:00Z"}`;
       
       vi.mocked(mockFileSystem.readSessionFile).mockResolvedValue(session);
       

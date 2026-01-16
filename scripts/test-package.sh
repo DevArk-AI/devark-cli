@@ -5,7 +5,7 @@
 
 set -e
 
-echo "🔍 Testing vibe-log-cli package..."
+echo "🔍 Testing devark-cli package..."
 echo ""
 
 # Clean up any previous test
@@ -18,7 +18,7 @@ npm pack ../
 
 echo ""
 echo "📂 Extracting package..."
-tar -xzf vibe-log-cli-*.tgz
+tar -xzf devark-cli-*.tgz
 
 echo ""
 echo "✅ Verifying package contents..."
@@ -39,10 +39,10 @@ else
     exit 1
 fi
 
-if [ -f "package/bin/vibe-log.js" ]; then
-    echo "✓ bin/vibe-log.js found"
+if [ -f "package/bin/devark.js" ]; then
+    echo "✓ bin/devark.js found"
 else
-    echo "✗ bin/vibe-log.js missing!"
+    echo "✗ bin/devark.js missing!"
     exit 1
 fi
 
@@ -97,8 +97,8 @@ fi
 echo ""
 echo "📋 Package Summary:"
 echo "─────────────────────────────"
-echo "Size: $(du -sh vibe-log-cli-*.tgz | cut -f1)"
-echo "Files in package: $(tar -tzf vibe-log-cli-*.tgz | wc -l)"
+echo "Size: $(du -sh devark-cli-*.tgz | cut -f1)"
+echo "Files in package: $(tar -tzf devark-cli-*.tgz | wc -l)"
 echo ""
 
 # Show first few lines of the built code
@@ -111,6 +111,6 @@ echo "✅ Package verification complete!"
 echo ""
 echo "To test installation locally:"
 echo "  cd test-package/package && npm link"
-echo "  vibe-log --version"
+echo "  devark --version"
 
 cd ..

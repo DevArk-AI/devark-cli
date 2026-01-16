@@ -14,7 +14,7 @@ vi.mock('../../../src/lib/config', () => ({
   getAllConfig: vi.fn(() => ({})),
   getToken: vi.fn(async () => null),
   getLastSyncSummary: vi.fn(() => null),
-  getDashboardUrl: vi.fn(() => 'https://vibe-log.dev'),
+  getDashboardUrl: vi.fn(() => 'https://devark.ai'),
 }));
 
 vi.mock('../../../src/lib/claude-settings-reader', () => ({
@@ -35,9 +35,8 @@ vi.mock('../../../src/utils/logger', () => ({
 
 vi.mock('../../../src/lib/sub-agents/constants', () => ({
   DEVARK_SUB_AGENTS: [
-    'devark-analysis.md',
-    'devark-daily-standup.md',
     'devark-session-analyzer.md',
+    'devark-report-generator.md',
   ],
 }));
 
@@ -74,7 +73,7 @@ describe('detector', () => {
     mockGetAllConfig.mockReturnValue({});
     mockGetToken.mockResolvedValue(null);
     mockGetLastSyncSummary.mockReturnValue(null);
-    mockGetDashboardUrl.mockReturnValue('https://vibe-log.dev');
+    mockGetDashboardUrl.mockReturnValue('https://devark.ai');
     mockGetHookMode.mockResolvedValue('none');
     mockGetTrackedProjects.mockResolvedValue([]);
     mockGetStatusLineStatus.mockResolvedValue('not-installed');
@@ -122,7 +121,7 @@ describe('detector', () => {
         mockReaddir.mockImplementation(async (path: any) => {
           const pathStr = path.toString();
           if (pathStr.includes('agents')) {
-            return ['vibe-log-analysis.md', 'vibe-log-daily-standup.md'] as any;
+            return ['devark-session-analyzer.md', 'devark-report-generator.md'] as any;
           }
           return [] as any;
         });
@@ -158,7 +157,7 @@ describe('detector', () => {
         mockReaddir.mockImplementation(async (path: any) => {
           const pathStr = path.toString();
           if (pathStr.includes('agents')) {
-            return ['vibe-log-analysis.md', 'vibe-log-daily-standup.md'] as any;
+            return ['devark-session-analyzer.md', 'devark-report-generator.md'] as any;
           }
           return [] as any;
         });
@@ -194,7 +193,7 @@ describe('detector', () => {
         mockReaddir.mockImplementation(async (path: any) => {
           const pathStr = path.toString();
           if (pathStr.includes('agents')) {
-            return ['vibe-log-analysis.md'] as any;
+            return ['devark-session-analyzer.md'] as any;
           }
           return [] as any;
         });
@@ -351,7 +350,7 @@ describe('detector', () => {
         mockReaddir.mockImplementation(async (path: any) => {
           const pathStr = path.toString();
           if (pathStr.includes('agents')) {
-            return ['vibe-log-analysis.md'] as any; // Only 1 of 3 agents
+            return ['devark-session-analyzer.md'] as any; // Only 1 of 2 agents
           }
           return [] as any;
         });
@@ -359,8 +358,8 @@ describe('detector', () => {
         const result = await detectSetupState();
 
         expect(result.agentCount).toBe(1);
-        expect(result.totalAgents).toBe(3);
-        expect(result.errors).toContain('Only 1/3 sub-agents installed');
+        expect(result.totalAgents).toBe(2);
+        expect(result.errors).toContain('Only 1/2 sub-agents installed');
       });
 
       it('should handle errors gracefully and set ERROR state', async () => {

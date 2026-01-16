@@ -63,7 +63,7 @@ describe('Input Validator', () => {
 
     it('should allow valid HTTP(S) URLs', () => {
       const validUrls = [
-        'https://vibe-log.dev',
+        'https://devark.ai',
         'http://localhost:3000',
         'https://api.example.com/endpoint',
       ];

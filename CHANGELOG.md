@@ -321,7 +321,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - **Status Line Analysis Timeout**: Fixed critical issue where prompt analysis would timeout in Claude Code
   - Implemented background processing - hook now exits in 0.3s (was timing out at 5s)
-  - Added HTML comment guard (`<!--VIBE_LOG_GUARD:1-->`) for clean recursion prevention
+  - Added HTML comment guard (`<!--DEVARK_GUARD:1-->`) for clean recursion prevention
   - Removed hardcoded fallback suggestions - SDK now returns real, contextual feedback
   - Fixed SDK prompt format to ensure proper JSON response
 

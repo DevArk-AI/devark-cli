@@ -3,7 +3,7 @@ import fs from 'fs/promises';
 import path from 'path';
 import os from 'os';
 import { readClaudeSessions } from '../../../../src/lib/readers/claude';
-import { VibelogError } from '../../../../src/utils/errors';
+import { DevArkError } from '../../../../src/utils/errors';
 import { setupTestEnv, cleanupTestEnv } from '../../../test-utils';
 import { claudeSessionFixtures, claudeProjectStructure } from '../../../fixtures/claude-sessions';
 
@@ -53,7 +53,7 @@ describe('Claude Reader Module', () => {
     it('should throw error when Claude directory not found', async () => {
       vi.mocked(fs.access).mockRejectedValue({ code: 'ENOENT' });
       
-      await expect(readClaudeSessions()).rejects.toThrow(VibelogError);
+      await expect(readClaudeSessions()).rejects.toThrow(DevArkError);
       await expect(readClaudeSessions()).rejects.toThrow('Claude Code data not found');
     });
 

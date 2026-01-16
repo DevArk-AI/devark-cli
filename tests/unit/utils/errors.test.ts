@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import chalk from 'chalk';
-import { VibelogError, handleError, logDebug } from '../../../src/utils/errors';
+import { DevArkError, handleError, logDebug } from '../../../src/utils/errors';
 import { setupTestEnv, cleanupTestEnv } from '../../test-utils';
 
 // Force chalk to use colors in tests
@@ -32,26 +32,26 @@ describe('Error Handling', () => {
     mockExit.mockRestore();
   });
 
-  describe('VibelogError', () => {
+  describe('DevArkError', () => {
     it('should create error with code', () => {
-      const error = new VibelogError('Test error message', 'TEST_CODE');
+      const error = new DevArkError('Test error message', 'TEST_CODE');
       
       expect(error).toBeInstanceOf(Error);
       expect(error.message).toBe('Test error message');
       expect(error.code).toBe('TEST_CODE');
-      expect(error.name).toBe('VibelogError');
+      expect(error.name).toBe('DevArkError');
     });
 
     it('should be throwable', () => {
       expect(() => {
-        throw new VibelogError('Error', 'CODE');
+        throw new DevArkError('Error', 'CODE');
       }).toThrow('Error');
     });
   });
 
   describe('handleError', () => {
-    it('should handle VibelogError with AUTH_REQUIRED code', () => {
-      const error = new VibelogError('Authentication required', 'AUTH_REQUIRED');
+    it('should handle DevArkError with AUTH_REQUIRED code', () => {
+      const error = new DevArkError('Authentication required', 'AUTH_REQUIRED');
       
       expect(() => handleError(error)).toThrow('Process exited');
       
@@ -59,7 +59,7 @@ describe('Error Handling', () => {
         expect.stringContaining('❌ Error: Authentication required')
       );
       expect(mockConsole.log).toHaveBeenCalledWith(
-        expect.stringContaining('💡 Run: npx vibe-log-cli')
+        expect.stringContaining('💡 Run: npx devark-cli')
       );
     });
 
@@ -70,17 +70,17 @@ describe('Error Handling', () => {
         mockConsole.error.mockClear();
         mockConsole.log.mockClear();
         
-        const error = new VibelogError('Auth error', code);
+        const error = new DevArkError('Auth error', code);
         
         expect(() => handleError(error)).toThrow('Process exited');
         expect(mockConsole.log).toHaveBeenCalledWith(
-          expect.stringContaining('💡 Run: npx vibe-log-cli and authenticate')
+          expect.stringContaining('💡 Run: npx devark-cli and authenticate')
         );
       });
     });
 
     it('should handle network errors', () => {
-      const error = new VibelogError('Network failure', 'NETWORK_ERROR');
+      const error = new DevArkError('Network failure', 'NETWORK_ERROR');
       
       expect(() => handleError(error)).toThrow('Process exited');
       
@@ -90,7 +90,7 @@ describe('Error Handling', () => {
     });
 
     it('should handle rate limit errors', () => {
-      const error = new VibelogError('Too many requests', 'RATE_LIMITED');
+      const error = new DevArkError('Too many requests', 'RATE_LIMITED');
       
       expect(() => handleError(error)).toThrow('Process exited');
       
@@ -100,7 +100,7 @@ describe('Error Handling', () => {
     });
 
     it('should handle Claude not found errors', () => {
-      const error = new VibelogError('Claude not installed', 'CLAUDE_NOT_FOUND');
+      const error = new DevArkError('Claude not installed', 'CLAUDE_NOT_FOUND');
       
       expect(() => handleError(error)).toThrow('Process exited');
       
@@ -149,7 +149,7 @@ describe('Error Handling', () => {
     });
 
     it('should show unknown error details in debug mode', () => {
-      process.env.VIBELOG_DEBUG = 'true';
+      process.env.DEVARK_DEBUG = 'true';
       
       const error = { type: 'custom', details: 'data' };
       
@@ -164,7 +164,7 @@ describe('Error Handling', () => {
       expect(() => handleError(error)).toThrow('Process exited');
       
       expect(mockConsole.log).toHaveBeenCalledWith(
-        expect.stringContaining('💬 Need help? Visit: https://vibe-log.dev/help')
+        expect.stringContaining('💬 Need help? Visit: https://devark.ai/help')
       );
     });
 
@@ -188,8 +188,8 @@ describe('Error Handling', () => {
       );
     });
 
-    it('should log when VIBELOG_DEBUG is set', () => {
-      process.env.VIBELOG_DEBUG = 'true';
+    it('should log when DEVARK_DEBUG is set', () => {
+      process.env.DEVARK_DEBUG = 'true';
       
       logDebug('Debug message');
       
@@ -218,7 +218,7 @@ describe('Error Handling', () => {
 
     it('should not log when debug is disabled', () => {
       delete process.env.DEBUG;
-      delete process.env.VIBELOG_DEBUG;
+      delete process.env.DEVARK_DEBUG;
       
       logDebug('Should not appear');
       
@@ -243,7 +243,7 @@ describe('Error Handling', () => {
         mockConsole.error.mockClear();
         mockConsole.log.mockClear();
         
-        const error = new VibelogError(`Error with ${code}`, code);
+        const error = new DevArkError(`Error with ${code}`, code);
         
         expect(() => handleError(error)).toThrow('Process exited');
         expect(mockConsole.error).toHaveBeenCalled();
@@ -262,7 +262,7 @@ describe('Error Handling', () => {
     });
 
     it('should use yellow color for suggestions', () => {
-      const error = new VibelogError('Auth required', 'AUTH_REQUIRED');
+      const error = new DevArkError('Auth required', 'AUTH_REQUIRED');
       
       expect(() => handleError(error)).toThrow('Process exited');
       

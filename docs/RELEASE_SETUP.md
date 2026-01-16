@@ -1,6 +1,6 @@
 # Release Setup Guide
 
-This guide explains how to release new versions of vibe-log-cli using GitHub Actions.
+This guide explains how to release new versions of devark-cli using GitHub Actions.
 
 ## 🚀 Quick Release Instructions (Using GitHub Actions)
 
@@ -51,13 +51,13 @@ The GitHub Action will automatically:
 ### Step 5: Verify Release
 ```bash
 # Check npm (wait ~1 minute)
-npm view vibe-log-cli version
+npm view devark-cli version
 
 # Check GitHub releases
-open https://github.com/vibe-log/vibe-log-cli/releases
+open https://github.com/devark/devark-cli/releases
 
 # Test installation
-npx vibe-log-cli@latest --version
+npx devark-cli@latest --version
 ```
 
 ---
@@ -65,7 +65,7 @@ npx vibe-log-cli@latest --version
 ## 🔧 Initial Setup (One-Time Only)
 
 ### Prerequisites
-1. **npm Account**: Must have publish access to `vibe-log-cli`
+1. **npm Account**: Must have publish access to `devark-cli`
 2. **GitHub Access**: Must have push access to the repository
 3. **npm Token**: Required for GitHub Actions
 
@@ -117,7 +117,7 @@ gh release create v$(node -p "require('./package.json').version") \
 ### GitHub Actions Not Running
 - Check: Did you push the tag? `git push origin --tags`
 - Check: Is the workflow enabled? Go to Actions tab
-- Check: Any errors in [Actions logs](https://github.com/vibe-log/vibe-log-cli/actions)
+- Check: Any errors in [Actions logs](https://github.com/devark/devark-cli/actions)
 
 ### npm Publish Failed
 - **401 Error**: Token expired - generate new one
@@ -160,6 +160,6 @@ Before releasing, ensure:
 ## 📞 Support
 
 For release issues:
-1. Check [GitHub Actions logs](https://github.com/vibe-log/vibe-log-cli/actions)
+1. Check [GitHub Actions logs](https://github.com/devark/devark-cli/actions)
 2. Open an issue in the repository
 3. Contact maintainers via Discord/Slack

@@ -19,7 +19,7 @@ describe('HookLock', () => {
 
   beforeEach(() => {
     lock = new HookLock();
-    lockPath = path.join(homedir(), '.vibe-log', 'hook.lock');
+    lockPath = path.join(homedir(), '.devark', 'hook.lock');
   });
 
   afterEach(async () => {
@@ -79,7 +79,7 @@ describe('HookLock', () => {
     });
 
     it('should create lock directory if it does not exist', async () => {
-      // Remove the .vibe-log directory if it exists
+      // Remove the .devark directory if it exists
       const lockDir = path.dirname(lockPath);
       try {
         await fs.rm(lockDir, { recursive: true });

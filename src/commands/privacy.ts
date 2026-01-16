@@ -349,5 +349,5 @@ async function showPrivacyInfo(): Promise<void> {
   console.log('  • Company-specific data');
   console.log('');
   
-  console.log(chalk.dim('Learn more: https://devark.dev/privacy'));
+  console.log(chalk.dim('Learn more: https://devark.ai/privacy'));
 }

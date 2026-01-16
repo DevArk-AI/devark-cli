@@ -24,7 +24,7 @@
 <h3>Open-source CLI for analyzing Claude Code sessions locally and generating productivity reports</h3>
 <p></p>
 
-<a href="https://devark.dev"><img src="https://img.shields.io/badge/by-vibe--log.dev-16A34A" alt="by devark.dev"></a>
+<a href="https://devark.ai"><img src="https://img.shields.io/badge/by-devark.ai-16A34A" alt="by devark.ai"></a>
 <a href="https://www.npmjs.com/package/devark-cli"><img src="https://img.shields.io/npm/v/devark-cli.svg" alt="npm version"></a>
 <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a>
 <a href="https://nodejs.org"><img src="https://img.shields.io/node/v/devark-cli.svg" alt="Node.js Version"></a>
@@ -44,7 +44,7 @@
 </p>
 </p>
 
-[Website](https://devark.dev) • [Report Bug](https://github.com/devark/devark-cli/issues) • [Request Feature](https://github.com/devark/devark-cli/issues)
+[Website](https://devark.ai) • [Report Bug](https://github.com/devark/devark-cli/issues) • [Request Feature](https://github.com/devark/devark-cli/issues)
 </div>
 
 
@@ -67,7 +67,7 @@ New: Be prepared in 2-3 minutes for your daily standup meeting!
 
 ### 2. 📊 Claude Code Productivity Report Generation (Local) 
 Generate comprehensive productivity reports using Claude Code's sub-agents to analyze your sessions in parallel. No data leaves your machine.
-See example of locally generated report here: https://devark.dev/example-daily-report
+See example of locally generated report here: https://devark.ai/example-daily-report
  
 
 ### 3. 🧠 Claude Code Co-pilot Statusline 
@@ -365,13 +365,13 @@ Check out our [open issues](https://github.com/devark/devark-cli/issues) for a l
 
 - **GitHub**: Star us on [GitHub](https://github.com/devark/devark-cli)
 - **Issues**: Report bugs and request features in [GitHub Issues](https://github.com/devark/devark-cli/issues)
-- **Website**: Visit [devark.dev](https://devark.dev)
+- **Website**: Visit [devark.ai](https://devark.ai)
 
 ## Support
 
 Need help? Here are some ways to get support:
 - 🐛 Report bugs in [GitHub Issues](https://github.com/devark/devark-cli/issues)
-- 📧 Email us at support@devark.dev
+- 📧 Email us at support@devark.ai
 
 ## License
 

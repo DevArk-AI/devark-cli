@@ -37,7 +37,7 @@ export async function showPrivacyNotice(): Promise<boolean> {
   console.log('');
   console.log(colors.subdued('  Your code and sensitive information stay private.'));
   console.log('');
-  console.log(colors.subdued('  Read our privacy policy: ') + colors.primary('https://devark.dev/privacy'));
+  console.log(colors.subdued('  Read our privacy policy: ') + colors.primary('https://devark.ai/privacy'));
   console.log('');
   console.log(colors.primary(box.bottomLeft + box.horizontal.repeat(58) + box.bottomRight));
   console.log('');
@@ -64,7 +64,7 @@ export async function showPrivacyReminder(): Promise<boolean> {
   console.log(colors.subdued('• Cloud mode uses our infrastructure (0 tokens)'));
   console.log(colors.subdued('• We store anonymized metrics only'));
   console.log(colors.subdued('• Your code remains private'));
-  console.log(colors.subdued('• Privacy policy: https://devark.dev/privacy'));
+  console.log(colors.subdued('• Privacy policy: https://devark.ai/privacy'));
   console.log('');
   
   const { proceed } = await inquirer.prompt([

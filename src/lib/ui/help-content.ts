@@ -32,7 +32,7 @@ export function showHelpContent(): void {
   console.log('    └─ Day 1: 2 pts, Day 2: 4 pts... Day 7+: 128 pts max');
   console.log('  • ' + colors.highlight('📊 Volume Bonus') + ' - 1 point per session uploaded (max 30/day)');
   console.log('  • ' + colors.highlight('🏅 Instant Feedback') + ' - See points earned after CLI uploads');
-  console.log('  • ' + colors.highlight('📈 Compete') + ' - Check leaderboard at app.devark.dev');
+  console.log('  • ' + colors.highlight('📈 Compete') + ' - Check leaderboard at app.devark.ai');
   console.log('  • ' + colors.subdued('Note: Share sessions on the web for extra points'));
   console.log('');
   console.log(colors.accent('⚡ Getting Started:'));
@@ -42,8 +42,8 @@ export function showHelpContent(): void {
   console.log('  4. Review insights to improve your AI coding workflow');
   console.log('');
   console.log(colors.accent('📚 Learn More:'));
-  console.log('  • Documentation: ' + colors.primary('https://devark.dev'));
-  console.log('  • View Dashboard: ' + colors.primary('https://app.devark.dev'));
+  console.log('  • Documentation: ' + colors.primary('https://devark.ai'));
+  console.log('  • View Dashboard: ' + colors.primary('https://app.devark.ai'));
   console.log('  • GitHub: ' + colors.primary('https://github.com/devark'));
   console.log('');
 }

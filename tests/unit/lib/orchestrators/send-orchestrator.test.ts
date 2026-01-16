@@ -613,19 +613,19 @@ describe('SendOrchestrator', () => {
     let originalEnv: string | undefined;
 
     beforeEach(() => {
-      originalEnv = process.env.VIBELOG_DEBUG;
+      originalEnv = process.env.DEVARK_DEBUG;
     });
 
     afterEach(() => {
       if (originalEnv !== undefined) {
-        process.env.VIBELOG_DEBUG = originalEnv;
+        process.env.DEVARK_DEBUG = originalEnv;
       } else {
-        delete process.env.VIBELOG_DEBUG;
+        delete process.env.DEVARK_DEBUG;
       }
     });
 
-    it('should log debug info when VIBELOG_DEBUG=true', async () => {
-      process.env.VIBELOG_DEBUG = 'true';
+    it('should log debug info when DEVARK_DEBUG=true', async () => {
+      process.env.DEVARK_DEBUG = 'true';
 
       const apiSessions = [{
         tool: 'claude_code' as const,
@@ -659,7 +659,7 @@ describe('SendOrchestrator', () => {
     });
 
     it('should log debug error when upload fails in debug mode', async () => {
-      process.env.VIBELOG_DEBUG = 'true';
+      process.env.DEVARK_DEBUG = 'true';
 
       const apiSessions = [{
         tool: 'claude_code' as const,
@@ -696,14 +696,14 @@ describe('SendOrchestrator', () => {
     let originalEnv: string | undefined;
 
     beforeEach(() => {
-      originalEnv = process.env.VIBELOG_DEBUG;
+      originalEnv = process.env.DEVARK_DEBUG;
     });
 
     afterEach(() => {
       if (originalEnv !== undefined) {
-        process.env.VIBELOG_DEBUG = originalEnv;
+        process.env.DEVARK_DEBUG = originalEnv;
       } else {
-        delete process.env.VIBELOG_DEBUG;
+        delete process.env.DEVARK_DEBUG;
       }
     });
 

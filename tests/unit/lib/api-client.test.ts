@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import axios from 'axios';
-import { VibelogError } from '../../../src/utils/errors';
+import { DevArkError } from '../../../src/utils/errors';
 import * as config from '../../../src/lib/config';
 import { setupTestEnv, cleanupTestEnv, testData } from '../../test-utils';
 
@@ -32,7 +32,7 @@ describe('API Client Module', () => {
     vi.mocked(axios.create).mockReturnValue(mockAxiosInstance as any);
     
     // Mock config functions
-    vi.mocked(config.getApiUrl).mockReturnValue('https://test.vibe-log.dev');
+    vi.mocked(config.getApiUrl).mockReturnValue('https://test.devark.ai');
     vi.mocked(config.getToken).mockResolvedValue('testtoken123456789012345678901234567890');
     
     // Import apiClient after mocks are set up
@@ -46,7 +46,7 @@ describe('API Client Module', () => {
 
   describe('Authentication', () => {
     it('should create auth session', async () => {
-      const authUrl = 'https://vibe-log.dev/auth/cli/test-session-123';
+      const authUrl = 'https://devark.ai/auth/cli/test-session-123';
       const token = 'session-token-123456789012345678901234567890';
       
       mockAxiosInstance.post.mockResolvedValue({
@@ -234,7 +234,7 @@ describe('API Client Module', () => {
         code: 'ENOTFOUND',
         isAxiosError: true,
         message: 'Network error',
-        config: { baseURL: 'https://test.vibe-log.dev' },
+        config: { baseURL: 'https://test.devark.ai' },
       };
       
       // Get the response error interceptor
@@ -245,7 +245,7 @@ describe('API Client Module', () => {
           await errorInterceptor(error);
           expect.fail('Should have thrown an error');
         } catch (e: any) {
-          expect(e.message).toContain('Cannot reach vibe-log servers');
+          expect(e.message).toContain('Cannot reach devark servers');
           expect(e.code).toBe('NETWORK_ERROR');
         }
       }
@@ -256,7 +256,7 @@ describe('API Client Module', () => {
         code: 'ECONNREFUSED',
         isAxiosError: true,
         message: 'Connection refused',
-        config: { baseURL: 'https://test.vibe-log.dev' },
+        config: { baseURL: 'https://test.devark.ai' },
       };
       
       // Get the response error interceptor
@@ -291,7 +291,7 @@ describe('API Client Module', () => {
       const result = await requestInterceptor(config);
       
       expect(result.headers.Authorization).toBe('Bearer testtoken123456789012345678901234567890');
-      expect(result.baseURL).toBe('https://test.vibe-log.dev');
+      expect(result.baseURL).toBe('https://test.devark.ai');
     });
 
     it('should not add authorization header when no token', async () => {

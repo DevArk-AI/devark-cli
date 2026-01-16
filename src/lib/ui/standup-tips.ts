@@ -47,7 +47,7 @@ export function getStandupTips(): StandupTip[] {
       category: 'feature'
     },
     {
-      text: '📈 View your productivity patterns at app.devark.dev/dashboard',
+      text: '📈 View your productivity patterns at app.devark.ai/dashboard',
       category: 'feature'
     },
     {

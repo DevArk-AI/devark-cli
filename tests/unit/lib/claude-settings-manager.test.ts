@@ -18,7 +18,7 @@ describe('ClaudeSettingsManager', () => {
     manager = new ClaudeSettingsManager();
 
     // Default mocks
-    mockConfig.getCliPath.mockReturnValue('npx vibe-log-cli');
+    mockConfig.getCliPath.mockReturnValue('npx devark-cli');
     mockSettingsReader.readGlobalSettings.mockResolvedValue(null);
     mockSettingsReader.writeGlobalSettings.mockResolvedValue(undefined);
   });
@@ -42,7 +42,7 @@ describe('ClaudeSettingsManager', () => {
                 hooks: expect.arrayContaining([
                   expect.objectContaining({
                     type: 'command',
-                    command: 'npx vibe-log-cli analyze-prompt --silent --stdin'
+                    command: 'npx devark-cli analyze-prompt --silent --stdin'
                   })
                 ])
               })
@@ -50,7 +50,7 @@ describe('ClaudeSettingsManager', () => {
           },
           statusLine: {
             type: 'command',
-            command: 'npx vibe-log-cli statusline',
+            command: 'npx devark-cli statusline',
             padding: 0
           }
         })
@@ -61,7 +61,7 @@ describe('ClaudeSettingsManager', () => {
       const mockSettings = { hooks: {} };
       mockSettingsReader.readGlobalSettings.mockResolvedValue(mockSettings);
 
-      await manager.installStatusLineFeature({ cliPath: '/custom/path/vibe-log' });
+      await manager.installStatusLineFeature({ cliPath: '/custom/path/devark' });
 
       expect(mockSettingsReader.writeGlobalSettings).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -70,20 +70,20 @@ describe('ClaudeSettingsManager', () => {
               expect.objectContaining({
                 hooks: expect.arrayContaining([
                   expect.objectContaining({
-                    command: '/custom/path/vibe-log analyze-prompt --silent --stdin'
+                    command: '/custom/path/devark analyze-prompt --silent --stdin'
                   })
                 ])
               })
             ])
           },
           statusLine: expect.objectContaining({
-            command: '/custom/path/vibe-log statusline'
+            command: '/custom/path/devark statusline'
           })
         })
       );
     });
 
-    it('should backup existing non-vibe-log status line', async () => {
+    it('should backup existing non-devark status line', async () => {
       const mockSettings = {
         hooks: {},
         statusLine: {
@@ -100,7 +100,7 @@ describe('ClaudeSettingsManager', () => {
         originalCommand: 'echo "custom status"',
         originalType: 'command',
         originalPadding: 1,
-        backupReason: 'Replaced by vibe-log status line'
+        backupReason: 'Replaced by devark status line'
       });
     });
 
@@ -122,7 +122,7 @@ describe('ClaudeSettingsManager', () => {
       expect(savedSettings.hooks?.UserPromptSubmit?.[0]?.hooks).toHaveLength(2);
       expect(savedSettings.hooks?.UserPromptSubmit?.[0]?.hooks).toEqual([
         { type: 'command', command: 'existing-hook' },
-        { type: 'command', command: 'npx vibe-log-cli analyze-prompt --silent --stdin' }
+        { type: 'command', command: 'npx devark-cli analyze-prompt --silent --stdin' }
       ]);
     });
   });
@@ -133,13 +133,13 @@ describe('ClaudeSettingsManager', () => {
         hooks: {
           UserPromptSubmit: [{
             hooks: [
-              { type: 'command' as const, command: 'npx vibe-log-cli analyze-prompt --silent --stdin' }
+              { type: 'command' as const, command: 'npx devark-cli analyze-prompt --silent --stdin' }
             ]
           }]
         },
         statusLine: {
           type: 'command' as const,
-          command: 'npx vibe-log-cli statusline',
+          command: 'npx devark-cli statusline',
           padding: 0
         }
       };
@@ -158,13 +158,13 @@ describe('ClaudeSettingsManager', () => {
         hooks: {
           UserPromptSubmit: [{
             hooks: [
-              { type: 'command' as const, command: 'npx vibe-log-cli analyze-prompt --silent --stdin' }
+              { type: 'command' as const, command: 'npx devark-cli analyze-prompt --silent --stdin' }
             ]
           }]
         },
         statusLine: {
           type: 'command' as const,
-          command: 'npx vibe-log-cli statusline',
+          command: 'npx devark-cli statusline',
           padding: 0
         }
       };
@@ -189,19 +189,19 @@ describe('ClaudeSettingsManager', () => {
       expect(mockConfig.clearStatusLineBackup).toHaveBeenCalled();
     });
 
-    it('should preserve non-vibe-log UserPromptSubmit hooks', async () => {
+    it('should preserve non-devark UserPromptSubmit hooks', async () => {
       const mockSettings = {
         hooks: {
           UserPromptSubmit: [{
             hooks: [
               { type: 'command' as const, command: 'existing-hook' },
-              { type: 'command' as const, command: 'npx vibe-log-cli analyze-prompt --silent --stdin' }
+              { type: 'command' as const, command: 'npx devark-cli analyze-prompt --silent --stdin' }
             ]
           }]
         },
         statusLine: {
           type: 'command' as const,
-          command: 'npx vibe-log-cli statusline',
+          command: 'npx devark-cli statusline',
           padding: 0
         }
       };
@@ -222,13 +222,13 @@ describe('ClaudeSettingsManager', () => {
         hooks: {
           UserPromptSubmit: [{
             hooks: [
-              { type: 'command' as const, command: 'npx vibe-log-cli analyze-prompt --silent --stdin' }
+              { type: 'command' as const, command: 'npx devark-cli analyze-prompt --silent --stdin' }
             ]
           }]
         },
         statusLine: {
           type: 'command' as const,
-          command: 'npx vibe-log-cli statusline',
+          command: 'npx devark-cli statusline',
           padding: 0
         }
       };
@@ -247,7 +247,7 @@ describe('ClaudeSettingsManager', () => {
         hooks: {
           UserPromptSubmit: [{
             hooks: [
-              { type: 'command' as const, command: 'npx vibe-log-cli analyze-prompt --silent --stdin' }
+              { type: 'command' as const, command: 'npx devark-cli analyze-prompt --silent --stdin' }
             ]
           }]
         }
@@ -275,35 +275,35 @@ describe('ClaudeSettingsManager', () => {
     });
   });
 
-  describe('removeAllVibeLogSettings', () => {
-    it('should remove all vibe-log hooks and settings', async () => {
+  describe('removeAllDevArkSettings', () => {
+    it('should remove all devark hooks and settings', async () => {
       const mockSettings = {
         hooks: {
           UserPromptSubmit: [{
             hooks: [
-              { type: 'command' as const, command: 'npx vibe-log-cli analyze-prompt --silent --stdin' }
+              { type: 'command' as const, command: 'npx devark-cli analyze-prompt --silent --stdin' }
             ]
           }],
           SessionStart: [{
             hooks: [
-              { type: 'command' as const, command: 'npx vibe-log-cli send --silent --background --hook-trigger=sessionstart' }
+              { type: 'command' as const, command: 'npx devark-cli send --silent --background --hook-trigger=sessionstart' }
             ]
           }],
           PreCompact: [{
             hooks: [
-              { type: 'command' as const, command: 'npx vibe-log-cli send --silent --background --hook-trigger=precompact' }
+              { type: 'command' as const, command: 'npx devark-cli send --silent --background --hook-trigger=precompact' }
             ]
           }]
         },
         statusLine: {
           type: 'command' as const,
-          command: 'npx vibe-log-cli statusline',
+          command: 'npx devark-cli statusline',
           padding: 0
         }
       };
       mockSettingsReader.readGlobalSettings.mockResolvedValue(mockSettings);
 
-      await manager.removeAllVibeLogSettings();
+      await manager.removeAllDevArkSettings();
 
       const savedSettings = mockSettingsReader.writeGlobalSettings.mock.calls[0][0];
       // Hooks are deleted, not set to empty array
@@ -316,44 +316,44 @@ describe('ClaudeSettingsManager', () => {
     it('should handle empty settings gracefully', async () => {
       mockSettingsReader.readGlobalSettings.mockResolvedValue(null);
 
-      await expect(manager.removeAllVibeLogSettings()).resolves.not.toThrow();
+      await expect(manager.removeAllDevArkSettings()).resolves.not.toThrow();
     });
   });
 
   describe('updateCliPath', () => {
-    it('should update CLI path in all vibe-log commands', async () => {
+    it('should update CLI path in all devark commands', async () => {
       const mockSettings = {
         hooks: {
           UserPromptSubmit: [{
             hooks: [
-              { type: 'command' as const, command: 'npx vibe-log-cli analyze-prompt --silent --stdin' }
+              { type: 'command' as const, command: 'npx devark-cli analyze-prompt --silent --stdin' }
             ]
           }],
           SessionStart: [{
             hooks: [
-              { type: 'command' as const, command: 'npx vibe-log-cli send --silent --background --hook-trigger=sessionstart' }
+              { type: 'command' as const, command: 'npx devark-cli send --silent --background --hook-trigger=sessionstart' }
             ]
           }]
         },
         statusLine: {
           type: 'command' as const,
-          command: 'npx vibe-log-cli statusline',
+          command: 'npx devark-cli statusline',
           padding: 0
         }
       };
       mockSettingsReader.readGlobalSettings.mockResolvedValue(mockSettings);
 
-      await manager.updateCliPath('/new/path/vibe-log');
+      await manager.updateCliPath('/new/path/devark');
 
       const savedSettings = mockSettingsReader.writeGlobalSettings.mock.calls[0][0];
       expect(savedSettings.hooks?.UserPromptSubmit?.[0]?.hooks?.[0]?.command).toBe(
-        '/new/path/vibe-log analyze-prompt --silent --stdin'
+        '/new/path/devark analyze-prompt --silent --stdin'
       );
       // SessionStart command includes additional flags like --hook-version and --claude-project-dir
       expect(savedSettings.hooks?.SessionStart?.[0]?.hooks?.[0]?.command).toContain(
-        '/new/path/vibe-log send --silent --background --hook-trigger=sessionstart'
+        '/new/path/devark send --silent --background --hook-trigger=sessionstart'
       );
-      expect(savedSettings.statusLine?.command).toBe('/new/path/vibe-log statusline');
+      expect(savedSettings.statusLine?.command).toBe('/new/path/devark statusline');
     });
   });
 
@@ -371,7 +371,7 @@ describe('ClaudeSettingsManager', () => {
       const savedSettings = mockSettingsReader.writeGlobalSettings.mock.calls[0][0];
       expect(savedSettings.hooks?.SessionStart).toBeDefined();
       expect(savedSettings.hooks?.SessionStart?.[0]?.hooks?.[0]?.command).toContain(
-        'npx vibe-log-cli send --silent --background --hook-trigger=sessionstart'
+        'npx devark-cli send --silent --background --hook-trigger=sessionstart'
       );
     });
 
@@ -387,7 +387,7 @@ describe('ClaudeSettingsManager', () => {
       const savedSettings = mockSettingsReader.writeGlobalSettings.mock.calls[0][0];
       expect(savedSettings.hooks?.PreCompact).toBeDefined();
       expect(savedSettings.hooks?.PreCompact?.[0]?.hooks?.[0]?.command).toContain(
-        'npx vibe-log-cli send --silent --background --hook-trigger=precompact'
+        'npx devark-cli send --silent --background --hook-trigger=precompact'
       );
     });
 
@@ -413,12 +413,12 @@ describe('ClaudeSettingsManager', () => {
       await manager.installAutoSyncHooks({
         installSessionStart: true,
         mode: 'all',
-        cliPath: '/custom/vibe-log'
+        cliPath: '/custom/devark'
       });
 
       const savedSettings = mockSettingsReader.writeGlobalSettings.mock.calls[0][0];
       expect(savedSettings.hooks?.SessionStart?.[0]?.hooks?.[0]?.command).toContain(
-        '/custom/vibe-log send'
+        '/custom/devark send'
       );
     });
   });

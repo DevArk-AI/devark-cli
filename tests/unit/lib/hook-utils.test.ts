@@ -23,7 +23,7 @@ describe('hook-utils', () => {
   let logPath: string;
 
   beforeEach(() => {
-    logPath = path.join(homedir(), '.vibe-log', 'hooks.log');
+    logPath = path.join(homedir(), '.devark', 'hooks.log');
   });
 
   afterEach(async () => {
@@ -150,7 +150,7 @@ describe('hook-utils', () => {
       expect(content).toMatch(/\[\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/);
     });
 
-    it('should create .vibe-log directory if it does not exist', async () => {
+    it('should create .devark directory if it does not exist', async () => {
       const logDir = path.dirname(logPath);
 
       // Remove directory if it exists
@@ -236,7 +236,7 @@ describe('hook-utils', () => {
     it('should return correct log path', () => {
       const path = getHooksLogPath();
 
-      expect(path).toContain('.vibe-log');
+      expect(path).toContain('.devark');
       expect(path).toContain('hooks.log');
       expect(path).toContain(homedir());
     });

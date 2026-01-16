@@ -118,9 +118,9 @@ export class PlatformEmulator {
     
     return {
       home,
-      vibelog: `${home}${sep}.vibelog`,
-      config: `${home}${sep}.vibelog${sep}config.json`,
-      key: `${home}${sep}.vibelog${sep}.key`,
+      devark: `${home}${sep}.devark`,
+      config: `${home}${sep}.devark${sep}config.json`,
+      key: `${home}${sep}.devark${sep}.key`,
       claude: `${home}${sep}.claude${sep}projects`,
       temp: this.currentConfig.tmpdir,
     };
@@ -265,8 +265,8 @@ export const PlatformScenarios = {
 
   absolutePath: (platform: Platform) => {
     return platform === 'win32'
-      ? 'C:\\Projects\\vibelog'
-      : '/home/user/projects/vibelog';
+      ? 'C:\\Projects\\devark'
+      : '/home/user/projects/devark';
   },
 
   relativePath: (platform: Platform) => {
@@ -276,8 +276,8 @@ export const PlatformScenarios = {
 
   homeExpansion: (platform: Platform) => {
     return platform === 'win32'
-      ? '%USERPROFILE%\\.vibelog'
-      : '~/.vibelog';
+      ? '%USERPROFILE%\\.devark'
+      : '~/.devark';
   },
 
   executableName: (platform: Platform, name: string) => {

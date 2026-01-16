@@ -11,10 +11,10 @@ We release security patches for the following versions:
 
 ## Reporting a Vulnerability
 
-We take security seriously at Vibelog. If you discover a security vulnerability, please follow these steps:
+We take security seriously at DevArk. If you discover a security vulnerability, please follow these steps:
 
 1. **DO NOT** open a public issue
-2. Email security@vibe-log.dev with:
+2. Email security@devark.ai with:
    - Description of the vulnerability
    - Steps to reproduce
    - Potential impact
@@ -85,7 +85,7 @@ npm outdated
 
 ## Security Headers
 
-The Vibelog API enforces these security headers:
+The DevArk API enforces these security headers:
 - `X-Content-Type-Options: nosniff`
 - `X-Frame-Options: DENY`
 - `X-XSS-Protection: 1; mode=block`

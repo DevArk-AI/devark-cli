@@ -159,5 +159,5 @@ export async function verifyHooks(): Promise<void> {
   }
   
   console.log('');
-  console.log(chalk.gray('For more help: https://docs.devark.dev/cli/hooks'));
+  console.log(chalk.gray('For more help: https://docs.devark.ai/cli/hooks'));
 }

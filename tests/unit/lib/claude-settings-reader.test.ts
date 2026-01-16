@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import {
   getHookMode,
   getTrackedProjects,
-  hasVibeLogHooks,
+  hasDevArkHooks,
   readGlobalSettings,
   writeGlobalSettings
 } from '../../../src/lib/claude-settings-reader';
@@ -42,8 +42,8 @@ describe('Claude Settings Reader', () => {
   });
 
   describe('getHookMode', () => {
-    it.skip('should return "all" when global settings have vibe-log hooks', async () => {
-      // Mock global settings with vibe-log hooks
+    it.skip('should return "all" when global settings have devark hooks', async () => {
+      // Mock global settings with devark hooks
       mockFs.readFile.mockImplementation((path, encoding) => {
         if (path === '/home/user/.claude/settings.json') {
           const content = JSON.stringify({
@@ -52,7 +52,7 @@ describe('Claude Settings Reader', () => {
                 matcher: 'startup|clear',
                 hooks: [{
                   type: 'command',
-                  command: 'npx vibe-log-cli send --silent --background --hook-trigger=sessionstart'
+                  command: 'npx devark-cli send --silent --background --hook-trigger=sessionstart'
                 }]
               }]
             }
@@ -71,7 +71,7 @@ describe('Claude Settings Reader', () => {
       expect(mode).toBe('all');
     });
 
-    it.skip('should return "selected" when only project-local settings have vibe-log hooks', async () => {
+    it.skip('should return "selected" when only project-local settings have devark hooks', async () => {
       // Mock no global hooks
       mockFs.readFile.mockImplementation((path, encoding) => {
         if (path === '/home/user/.claude/settings.json') {
@@ -85,7 +85,7 @@ describe('Claude Settings Reader', () => {
                 matcher: 'startup|clear',
                 hooks: [{
                   type: 'command',
-                  command: 'npx vibe-log-cli send --silent --background --hook-trigger=sessionstart'
+                  command: 'npx devark-cli send --silent --background --hook-trigger=sessionstart'
                 }]
               }]
             }
@@ -113,7 +113,7 @@ describe('Claude Settings Reader', () => {
       expect(mode).toBe('selected');
     });
 
-    it('should return "none" when no vibe-log hooks exist', async () => {
+    it('should return "none" when no devark hooks exist', async () => {
       // Mock no hooks anywhere
       mockFs.readFile.mockImplementation(() => {
         const error: any = new Error('File not found');
@@ -147,7 +147,7 @@ describe('Claude Settings Reader', () => {
                 matcher: 'startup|clear',
                 hooks: [{
                   type: 'command',
-                  command: 'npx vibe-log-cli send --silent'
+                  command: 'npx devark-cli send --silent'
                 }]
               }]
             }
@@ -161,7 +161,7 @@ describe('Claude Settings Reader', () => {
                 matcher: 'auto',
                 hooks: [{
                   type: 'command',
-                  command: 'npx vibe-log-cli send --silent'
+                  command: 'npx devark-cli send --silent'
                 }]
               }]
             }
@@ -191,7 +191,7 @@ describe('Claude Settings Reader', () => {
   });
 
   describe('getTrackedProjects', () => {
-    it.skip('should return list of projects with vibe-log hooks in local settings', async () => {
+    it.skip('should return list of projects with devark hooks in local settings', async () => {
       mockFs.readFile.mockImplementation((path, encoding) => {
         if (path === '/home/projects/app1/.claude/settings.local.json') {
           const content = JSON.stringify({
@@ -199,7 +199,7 @@ describe('Claude Settings Reader', () => {
               SessionStart: [{
                 hooks: [{
                   type: 'command',
-                  command: 'npx vibe-log-cli send --silent'
+                  command: 'npx devark-cli send --silent'
                 }]
               }]
             }
@@ -212,7 +212,7 @@ describe('Claude Settings Reader', () => {
               PreCompact: [{
                 hooks: [{
                   type: 'command',
-                  command: 'npx vibe-log-cli send --silent'
+                  command: 'npx devark-cli send --silent'
                 }]
               }]
             }
@@ -220,7 +220,7 @@ describe('Claude Settings Reader', () => {
           return Promise.resolve(encoding ? content : Buffer.from(content)) as any;
         }
         if (path === '/home/projects/app3/.claude/settings.local.json') {
-          // Project without vibe-log hooks
+          // Project without devark hooks
           const content = JSON.stringify({
             hooks: {
               SessionStart: [{
@@ -276,7 +276,7 @@ describe('Claude Settings Reader', () => {
       expect(trackedProjects).not.toContain('-home-projects-app3');
     });
 
-    it('should return empty array when no projects have vibe-log hooks', async () => {
+    it('should return empty array when no projects have devark hooks', async () => {
       const error: any = new Error('File not found');
       error.code = 'ENOENT';
       mockFs.readFile.mockRejectedValue(error);
@@ -298,38 +298,38 @@ describe('Claude Settings Reader', () => {
     });
   });
 
-  describe('hasVibeLogHooks', () => {
-    it('should return true when settings contain vibe-log commands', () => {
+  describe('hasDevArkHooks', () => {
+    it('should return true when settings contain devark commands', () => {
       const settings = {
         hooks: {
           SessionStart: [{
             hooks: [{
               type: 'command' as const,
-              command: 'npx vibe-log-cli send --silent'
+              command: 'npx devark-cli send --silent'
             }]
           }]
         }
       };
 
-      expect(hasVibeLogHooks(settings)).toBe(true);
+      expect(hasDevArkHooks(settings)).toBe(true);
     });
 
-    it('should return true for @vibe-log variant', () => {
+    it('should return true for @devark variant', () => {
       const settings = {
         hooks: {
           PreCompact: [{
             hooks: [{
               type: 'command' as const,
-              command: 'npx @vibe-log send --silent'
+              command: 'npx @devark send --silent'
             }]
           }]
         }
       };
 
-      expect(hasVibeLogHooks(settings)).toBe(true);
+      expect(hasDevArkHooks(settings)).toBe(true);
     });
 
-    it('should return false when hooks contain non-vibe-log commands', () => {
+    it('should return false when hooks contain non-devark commands', () => {
       const settings = {
         hooks: {
           SessionStart: [{
@@ -341,16 +341,16 @@ describe('Claude Settings Reader', () => {
         }
       };
 
-      expect(hasVibeLogHooks(settings)).toBe(false);
+      expect(hasDevArkHooks(settings)).toBe(false);
     });
 
     it('should return false when settings have no hooks', () => {
       const settings = {};
-      expect(hasVibeLogHooks(settings)).toBe(false);
+      expect(hasDevArkHooks(settings)).toBe(false);
     });
 
     it('should return false for null settings', () => {
-      expect(hasVibeLogHooks(null)).toBe(false);
+      expect(hasDevArkHooks(null)).toBe(false);
     });
   });
 
@@ -470,7 +470,7 @@ describe('Claude Settings Reader', () => {
         hooks: {
           PreCompact: [{
             matcher: 'auto',
-            hooks: [{ type: 'command' as const, command: 'npx vibe-log-cli send' }]
+            hooks: [{ type: 'command' as const, command: 'npx devark-cli send' }]
           }]
         }
       };
@@ -632,7 +632,7 @@ describe('Claude Settings Reader', () => {
       const localSettings = {
         hooks: {
           SessionStart: [{
-            hooks: [{ type: 'command' as const, command: 'npx vibe-log-cli send --silent' }]
+            hooks: [{ type: 'command' as const, command: 'npx devark-cli send --silent' }]
           }]
         }
       };

@@ -1,6 +1,6 @@
-# Contributing to Vibelog CLI
+# Contributing to DevArk CLI
 
-First off, thank you for considering contributing to Vibelog CLI! It's people like you that make Vibelog CLI such a great tool for the developer community.
+First off, thank you for considering contributing to DevArk CLI! It's people like you that make DevArk CLI such a great tool for the developer community.
 
 ## Build Transparency and Verification
 
@@ -18,8 +18,8 @@ You can verify any published package:
 
 ```bash
 # Download and extract the package
-npm pack vibe-log-cli@latest
-tar -xzf vibe-log-cli-*.tgz
+npm pack devark-cli@latest
+tar -xzf devark-cli-*.tgz
 
 # Verify the code is not minified
 head -100 package/dist/index.js
@@ -35,14 +35,14 @@ cd package/dist && sha256sum -c checksums.sha256
 
 Our build process is completely transparent:
 
-1. **Source Code**: Available at https://github.com/vibe-log/vibe-log-cli
+1. **Source Code**: Available at https://github.com/devark/devark-cli
 2. **Build Command**: `npm run build` (uses tsup with minification disabled)
 3. **Artifacts**: Non-minified JavaScript + source maps
 4. **Release**: Automated via GitHub Actions with npm provenance
 
 ## Code of Conduct
 
-This project and everyone participating in it is governed by the [Vibelog Code of Conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to conduct@vibe-log.dev.
+This project and everyone participating in it is governed by the [DevArk Code of Conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to conduct@devark.ai.
 
 ## How Can I Contribute?
 
@@ -146,14 +146,14 @@ Unsure where to begin? You can start by looking through these issues:
    # Link the CLI globally
    npm link
 
-   # Now you can use vibe-log command with your changes
-   vibe-log --help
+   # Now you can use devark command with your changes
+   devark --help
    ```
 
 ### Project Structure
 
 ```
-vibelog-cli/
+devark-cli/
 ├── src/
 │   ├── commands/       # CLI command implementations
 │   ├── lib/            # Core library functions
@@ -269,7 +269,7 @@ describe('YourModule', () => {
 
 ### Security Vulnerabilities
 
-If you discover a security vulnerability, DO NOT open an issue. Email security@vibe-log.dev instead. See [SECURITY.md](SECURITY.md) for more details.
+If you discover a security vulnerability, DO NOT open an issue. Email security@devark.ai instead. See [SECURITY.md](SECURITY.md) for more details.
 
 ### Security Checklist
 
@@ -319,8 +319,8 @@ Before submitting a PR, ensure:
 ### Getting Help
 
 - **Discord**: Join our [Discord server](https://discord.gg/qKqs7MZVJ)
-- **Discussions**: Use [GitHub Discussions](https://github.com/vibe-log/vibe-log/discussions)
-- **Stack Overflow**: Tag questions with `vibelog`
+- **Discussions**: Use [GitHub Discussions](https://github.com/devark/devark/discussions)
+- **Stack Overflow**: Tag questions with `devark`
 
 ### Recognition
 
@@ -367,16 +367,16 @@ cat dist/checksums.sha256
 
 After any release:
 
-1. Check npm package: https://www.npmjs.com/package/vibe-log-cli
+1. Check npm package: https://www.npmjs.com/package/devark-cli
 2. Verify provenance badge is shown
-3. Test installation: `npx vibe-log-cli@latest --version`
+3. Test installation: `npx devark-cli@latest --version`
 4. Check GitHub release includes checksums
 
 ## Questions?
 
 Feel free to:
-- Open a [GitHub Discussion](https://github.com/vibe-log/vibe-log/discussions)
+- Open a [GitHub Discussion](https://github.com/devark/devark/discussions)
 - Join our [Discord](https://discord.gg/qKqs7MZVJ)
-- Email us at contribute@vibe-log.dev
+- Email us at contribute@devark.ai
 
-Thank you for contributing to Vibelog CLI!
+Thank you for contributing to DevArk CLI!

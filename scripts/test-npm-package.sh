@@ -29,7 +29,7 @@ if [ $? -ne 0 ]; then
 fi
 
 # Get the package name
-PACKAGE_FILE=$(ls vibe-log-cli-*.tgz | head -n 1)
+PACKAGE_FILE=$(ls devark-cli-*.tgz | head -n 1)
 echo -e "${GREEN}✓ Created package: $PACKAGE_FILE${NC}"
 
 # Step 3: Create a temporary test directory
@@ -56,7 +56,7 @@ echo ""
 
 # Create a test script that uses the package
 cat > test-report.js << 'EOF'
-const { ReportTemplateEngine } = require('vibe-log-cli/dist/index.js');
+const { ReportTemplateEngine } = require('devark-cli/dist/index.js');
 
 async function testTemplateLoading() {
     console.log('Testing template loading...');
@@ -84,7 +84,7 @@ TEST_RESULT=$?
 # Step 6: Test via npx
 echo ""
 echo "🧪 Testing via npx command..."
-npx vibe-log-cli --version
+npx devark-cli --version
 NPX_RESULT=$?
 
 # Cleanup

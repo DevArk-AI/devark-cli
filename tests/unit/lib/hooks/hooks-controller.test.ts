@@ -26,61 +26,61 @@ vi.mock('../../../../src/lib/telemetry', () => ({
 describe('Hooks Controller', () => {
   describe('buildHookCommand', () => {
     it('should build command with --hook-version parameter, not --version', () => {
-      const cliPath = 'node /path/to/vibe-log.js';
+      const cliPath = 'node /path/to/devark.js';
       
       const sessionStartCommand = buildHookCommand(cliPath, 'sessionstart');
       expect(sessionStartCommand).toContain('--hook-version=');
       expect(sessionStartCommand).not.toContain('--version=');
-      expect(sessionStartCommand).toBe('node /path/to/vibe-log.js send --silent --background --hook-trigger=sessionstart --hook-version=1.0.0 --claude-project-dir="$CLAUDE_PROJECT_DIR"');
+      expect(sessionStartCommand).toBe('node /path/to/devark.js send --silent --background --hook-trigger=sessionstart --hook-version=1.0.0 --claude-project-dir="$CLAUDE_PROJECT_DIR"');
       
       const preCompactCommand = buildHookCommand(cliPath, 'precompact');
       expect(preCompactCommand).toContain('--hook-version=');
       expect(preCompactCommand).not.toContain(' --version=');
-      expect(preCompactCommand).toBe('node /path/to/vibe-log.js send --silent --background --hook-trigger=precompact --hook-version=1.0.0 --claude-project-dir="$CLAUDE_PROJECT_DIR"');
+      expect(preCompactCommand).toBe('node /path/to/devark.js send --silent --background --hook-trigger=precompact --hook-version=1.0.0 --claude-project-dir="$CLAUDE_PROJECT_DIR"');
     });
 
     describe('mode-aware command generation', () => {
       it('should include --all flag and exclude --claude-project-dir when mode is "all"', () => {
-        const cliPath = 'npx vibe-log-cli';
+        const cliPath = 'npx devark-cli';
         const command = buildHookCommand(cliPath, 'sessionstart', 'all');
         
         expect(command).toContain('--all');
         expect(command).not.toContain('--claude-project-dir');
-        expect(command).toBe('npx vibe-log-cli send --silent --background --hook-trigger=sessionstart --hook-version=1.0.0 --all');
+        expect(command).toBe('npx devark-cli send --silent --background --hook-trigger=sessionstart --hook-version=1.0.0 --all');
       });
 
       it('should include --claude-project-dir and exclude --all when mode is "selected"', () => {
-        const cliPath = 'npx vibe-log-cli';
+        const cliPath = 'npx devark-cli';
         const command = buildHookCommand(cliPath, 'precompact', 'selected');
         
         expect(command).not.toContain('--all');
         expect(command).toContain('--claude-project-dir="$CLAUDE_PROJECT_DIR"');
-        expect(command).toBe('npx vibe-log-cli send --silent --background --hook-trigger=precompact --hook-version=1.0.0 --claude-project-dir="$CLAUDE_PROJECT_DIR"');
+        expect(command).toBe('npx devark-cli send --silent --background --hook-trigger=precompact --hook-version=1.0.0 --claude-project-dir="$CLAUDE_PROJECT_DIR"');
       });
 
       it('should maintain backward compatibility when mode is undefined', () => {
-        const cliPath = 'npx vibe-log-cli';
+        const cliPath = 'npx devark-cli';
         const command = buildHookCommand(cliPath, 'sessionstart');
         
         // Should default to current behavior (with --claude-project-dir)
         expect(command).not.toContain('--all');
         expect(command).toContain('--claude-project-dir="$CLAUDE_PROJECT_DIR"');
-        expect(command).toBe('npx vibe-log-cli send --silent --background --hook-trigger=sessionstart --hook-version=1.0.0 --claude-project-dir="$CLAUDE_PROJECT_DIR"');
+        expect(command).toBe('npx devark-cli send --silent --background --hook-trigger=sessionstart --hook-version=1.0.0 --claude-project-dir="$CLAUDE_PROJECT_DIR"');
       });
 
       it('should handle both sessionstart and precompact triggers with mode="all"', () => {
-        const cliPath = 'node /path/to/vibe-log.js';
+        const cliPath = 'node /path/to/devark.js';
         
         const sessionStartCommand = buildHookCommand(cliPath, 'sessionstart', 'all');
-        expect(sessionStartCommand).toBe('node /path/to/vibe-log.js send --silent --background --hook-trigger=sessionstart --hook-version=1.0.0 --all');
+        expect(sessionStartCommand).toBe('node /path/to/devark.js send --silent --background --hook-trigger=sessionstart --hook-version=1.0.0 --all');
         
         const preCompactCommand = buildHookCommand(cliPath, 'precompact', 'all');
-        expect(preCompactCommand).toBe('node /path/to/vibe-log.js send --silent --background --hook-trigger=precompact --hook-version=1.0.0 --all');
+        expect(preCompactCommand).toBe('node /path/to/devark.js send --silent --background --hook-trigger=precompact --hook-version=1.0.0 --all');
       });
     });
 
     it('should include all required parameters in correct order', () => {
-      const cliPath = 'npx vibe-log-cli';
+      const cliPath = 'npx devark-cli';
       const command = buildHookCommand(cliPath, 'sessionstart');
       
       // Check all parameters are present
@@ -105,8 +105,8 @@ describe('Hooks Controller', () => {
     it('should extract version from --hook-version parameter', () => {
       const commands = [
         'node /path/to/cli send --silent --background --hook-trigger=sessionstart --hook-version=1.0.0',
-        'npx vibe-log-cli send --silent --background --hook-trigger=precompact --hook-version=2.3.4',
-        'node bin/vibe-log.js send --silent --background --hook-trigger=sessionstart --hook-version=0.0.1'
+        'npx devark-cli send --silent --background --hook-trigger=precompact --hook-version=2.3.4',
+        'node bin/devark.js send --silent --background --hook-trigger=sessionstart --hook-version=0.0.1'
       ];
       
       const regex = /--hook-version=([0-9.]+)/;
@@ -153,10 +153,10 @@ describe('Hooks Controller', () => {
   describe('command compatibility', () => {
     it('should not conflict with main CLI --version flag', () => {
       // The main CLI accepts --version
-      const mainCliVersionCommand = 'node /path/to/vibe-log.js --version';
+      const mainCliVersionCommand = 'node /path/to/devark.js --version';
       
       // The send subcommand accepts --hook-version
-      const sendHookVersionCommand = 'node /path/to/vibe-log.js send --hook-version=1.0.0';
+      const sendHookVersionCommand = 'node /path/to/devark.js send --hook-version=1.0.0';
       
       // These should be distinct and not interfere with each other
       expect(mainCliVersionCommand).toContain('--version');
@@ -167,7 +167,7 @@ describe('Hooks Controller', () => {
     });
 
     it('should generate commands that work with both old and new hooks', () => {
-      const cliPath = 'node /path/to/vibe-log.js';
+      const cliPath = 'node /path/to/devark.js';
       const newCommand = buildHookCommand(cliPath, 'sessionstart');
 
       // New command should use --hook-version
@@ -179,13 +179,13 @@ describe('Hooks Controller', () => {
   });
 
   describe('uninstallAllHooks', () => {
-    it('should remove ONLY vibe-log hooks and preserve user\'s other hooks across all hook types', async () => {
+    it('should remove ONLY devark hooks and preserve user\'s other hooks across all hook types', async () => {
       // Import mocked modules
       const { readGlobalSettings, writeGlobalSettings } = await import('../../../../src/lib/claude-settings-reader');
       const { discoverProjects } = await import('../../../../src/lib/claude-core');
       const { sendTelemetryUpdate } = await import('../../../../src/lib/telemetry');
 
-      // Setup: Create settings with both vibe-log and user hooks across all three hook types
+      // Setup: Create settings with both devark and user hooks across all three hook types
       const mockSettings: ClaudeSettings = {
         hooks: {
           SessionStart: [{
@@ -197,7 +197,7 @@ describe('Hooks Controller', () => {
               },
               {
                 type: 'command',
-                command: 'npx vibe-log-cli send --silent --background --hook-trigger=sessionstart' // vibe-log - SHOULD BE REMOVED
+                command: 'npx devark-cli send --silent --background --hook-trigger=sessionstart' // devark - SHOULD BE REMOVED
               }
             ]
           }],
@@ -210,7 +210,7 @@ describe('Hooks Controller', () => {
               },
               {
                 type: 'command',
-                command: 'node /path/to/vibe-log send --hook-trigger=precompact' // vibe-log - SHOULD BE REMOVED
+                command: 'npx devark-cli send --hook-trigger=precompact' // devark - SHOULD BE REMOVED
               }
             ]
           }],
@@ -219,7 +219,7 @@ describe('Hooks Controller', () => {
             hooks: [
               {
                 type: 'command',
-                command: '/usr/local/bin/vibe-log send --hook-trigger=sessionend' // vibe-log - SHOULD BE REMOVED
+                command: 'npx devark-cli send --hook-trigger=sessionend' // devark - SHOULD BE REMOVED
               },
               {
                 type: 'command',
@@ -262,14 +262,14 @@ describe('Hooks Controller', () => {
       expect(writtenSettings.hooks?.SessionEnd![0].hooks).toHaveLength(1);
       expect(writtenSettings.hooks?.SessionEnd![0].hooks[0].command).toBe('notify-send "Session ended"');
 
-      // Verify vibe-log hooks were removed (no commands containing 'vibe-log')
+      // Verify devark hooks were removed (no commands containing 'devark')
       const allCommands = [
         ...(writtenSettings.hooks?.SessionStart?.[0]?.hooks || []),
         ...(writtenSettings.hooks?.PreCompact?.[0]?.hooks || []),
         ...(writtenSettings.hooks?.SessionEnd?.[0]?.hooks || [])
       ].map(h => h.command);
 
-      expect(allCommands.every(cmd => !cmd.includes('vibe-log'))).toBe(true);
+      expect(allCommands.every(cmd => !cmd.includes('devark'))).toBe(true);
     });
   });
 });

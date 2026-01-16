@@ -28,7 +28,7 @@ describe('Secure Authentication', () => {
 
   describe('browserAuth', () => {
     it.skip('should use cryptographically secure session IDs', async () => {
-      const authUrl = 'https://vibe-log.dev/auth/cli/test-session';
+      const authUrl = 'https://devark.ai/auth/cli/test-session';
       const sessionToken = 'session123456789012345678901234567890';
       const apiToken = 'apitoken123456789012345678901234567890';
 
@@ -40,7 +40,7 @@ describe('Secure Authentication', () => {
       
       vi.mocked(config.storeToken).mockResolvedValue(undefined);
       vi.mocked(config.clearToken).mockResolvedValue(undefined);
-      vi.mocked(config.getApiUrl).mockReturnValue('https://test.vibe-log.dev');
+      vi.mocked(config.getApiUrl).mockReturnValue('https://test.devark.ai');
       vi.mocked(open).mockResolvedValue(undefined);
       
       // Mock SSE response
@@ -86,7 +86,7 @@ describe('Secure Authentication', () => {
       const pollTimes: number[] = [];
 
       (apiClient.apiClient.createAuthSession as any) = vi.fn().mockResolvedValue({
-        authUrl: 'https://vibe-log.dev/auth',
+        authUrl: 'https://devark.ai/auth',
       });
 
       (apiClient.apiClient.pollAuthSession as any) = vi.fn().mockImplementation(() => {
@@ -130,7 +130,7 @@ describe('Secure Authentication', () => {
       const consoleSpy = vi.spyOn(console, 'log');
       
       (apiClient.apiClient.createAuthSession as any) = vi.fn().mockResolvedValue({
-        authUrl: 'https://vibe-log.dev/auth/session-12345',
+        authUrl: 'https://devark.ai/auth/session-12345',
       });
 
       (apiClient.apiClient.pollAuthSession as any) = vi.fn().mockResolvedValue({
@@ -150,7 +150,7 @@ describe('Secure Authentication', () => {
       // Should not log sensitive data
       expect(allLogs).not.toContain('session-12345');
       expect(allLogs).not.toContain('secret-token-xyz');
-      expect(allLogs).not.toContain('https://vibe-log.dev/auth/session-12345');
+      expect(allLogs).not.toContain('https://devark.ai/auth/session-12345');
     });
   });
 

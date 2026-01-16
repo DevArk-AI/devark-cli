@@ -19,8 +19,8 @@ const { storeToken, getToken, clearToken } = await import('../../../src/lib/conf
 
 describe('Secure Config', () => {
   const mockHomeDir = '/mock/home';
-  const keyFile = path.join(mockHomeDir, '.vibe-log', '.key');
-  const configDir = path.join(mockHomeDir, '.config', 'vibelog');
+  const keyFile = path.join(mockHomeDir, '.devark', '.key');
+  const configDir = path.join(mockHomeDir, '.config', 'devark');
   
   beforeEach(() => {
     vi.clearAllMocks();

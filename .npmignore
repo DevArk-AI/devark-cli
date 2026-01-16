@@ -91,7 +91,7 @@ CHANGELOG.md
 SECURITY.md
 
 # HTML reports - should never be published
-vibe-log-report-*.html
+devark-report-*.html
 
 # Build info
 *.tsbuildinfo
@@ -134,7 +134,7 @@ temp/
 node_modules/
 
 # Local data
-.vibelog/
+.devark/
 .claude/
 
 # Private/sensitive folders

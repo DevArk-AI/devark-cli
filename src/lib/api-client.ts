@@ -294,7 +294,7 @@ class SecureApiClient {
       return validateUrl(url);
     } catch (error) {
       console.error('Invalid API URL, using default');
-      return 'https://app.devark.dev';
+      return 'https://app.devark.ai';
     }
   }
 
@@ -470,8 +470,8 @@ class SecureApiClient {
           // Prepare configuration headers
           const configHeaders: Record<string, string> = {};
           if (cliConfig) {
-            configHeaders['x-vibe-config-statusline'] = JSON.stringify(cliConfig.statusline);
-            configHeaders['x-vibe-config-hooks'] = JSON.stringify(cliConfig.hooks);
+            configHeaders['x-devark-config-statusline'] = JSON.stringify(cliConfig.statusline);
+            configHeaders['x-devark-config-hooks'] = JSON.stringify(cliConfig.hooks);
           }
 
           // Use /cli/sessions endpoint for CLI uploads (bearer token auth)

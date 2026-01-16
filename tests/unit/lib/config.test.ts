@@ -5,8 +5,8 @@ import { setupTestEnv, cleanupTestEnv } from '../../test-utils';
 const createMockConfig = () => {
   const store = new Map<string, any>();
   // Set default values to match the actual config schema
-  store.set('apiUrl', 'https://vibe-log.dev');
-  store.set('cliPath', 'npx vibe-log-cli');
+  store.set('apiUrl', 'https://devark.ai');
+  store.set('cliPath', 'npx devark-cli');
   
   return {
     store,
@@ -144,24 +144,24 @@ describe('Configuration Module', () => {
 
   describe('API URL Management', () => {
     it('should get API URL from environment variable if set', () => {
-      process.env.VIBELOG_API_URL = 'https://custom.vibe-log.dev';
+      process.env.DEVARK_API_URL = 'https://custom.devark.ai';
       
       const url = getApiUrl();
       
-      expect(url).toBe('https://custom.vibe-log.dev');
+      expect(url).toBe('https://custom.devark.ai');
     });
 
     it('should get API URL from config if env var not set', () => {
-      delete process.env.VIBELOG_API_URL;
-      mockConfigInstance.store.set('apiUrl', 'https://vibe-log.dev');
+      delete process.env.DEVARK_API_URL;
+      mockConfigInstance.store.set('apiUrl', 'https://devark.ai');
       
       const url = getApiUrl();
       
-      expect(url).toBe('https://vibe-log.dev');
+      expect(url).toBe('https://devark.ai');
     });
 
     it.skip('should set API URL', () => {
-      const newUrl = 'https://new.vibe-log.dev';
+      const newUrl = 'https://new.devark.ai';
       
       setApiUrl(newUrl);
       
@@ -231,7 +231,7 @@ describe('Configuration Module', () => {
 
   describe('Config Value Access', () => {
     it.skip('should get all config', () => {
-      mockConfigInstance.store.set('apiUrl', 'https://vibe-log.dev');
+      mockConfigInstance.store.set('apiUrl', 'https://devark.ai');
       mockConfigInstance.store.set('token', 'encrypted-token');
       mockConfigInstance.store.set('lastSync', '2024-01-15T10:00:00Z');
       mockConfigInstance.store.set('preferences', { colorScheme: 'default' });
@@ -239,7 +239,7 @@ describe('Configuration Module', () => {
       const config = getAllConfig();
       
       expect(config).toEqual({
-        apiUrl: 'https://vibe-log.dev',
+        apiUrl: 'https://devark.ai',
         token: '<encrypted>',
         lastSync: '2024-01-15T10:00:00Z',
         preferences: { colorScheme: 'default' },
@@ -255,11 +255,11 @@ describe('Configuration Module', () => {
     });
 
     it.skip('should return actual value for non-token keys', () => {
-      mockConfigInstance.store.set('apiUrl', 'https://vibe-log.dev');
+      mockConfigInstance.store.set('apiUrl', 'https://devark.ai');
       
       const value = getConfigValue('apiUrl');
       
-      expect(value).toBe('https://vibe-log.dev');
+      expect(value).toBe('https://devark.ai');
     });
 
     it.skip('should clear all config', () => {

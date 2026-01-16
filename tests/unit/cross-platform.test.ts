@@ -49,26 +49,26 @@ describe('Cross-Platform Emulation Tests', () => {
       const paths = emulator.getPaths();
       
       if (platform === 'win32') {
-        expect(paths.config).toBe('C:\\Users\\testuser\\.vibelog\\config.json');
-        expect(paths.key).toBe('C:\\Users\\testuser\\.vibelog\\.key');
+        expect(paths.config).toBe('C:\\Users\\testuser\\.devark\\config.json');
+        expect(paths.key).toBe('C:\\Users\\testuser\\.devark\\.key');
       } else if (platform === 'darwin') {
-        expect(paths.config).toBe('/Users/testuser/.vibelog/config.json');
-        expect(paths.key).toBe('/Users/testuser/.vibelog/.key');
+        expect(paths.config).toBe('/Users/testuser/.devark/config.json');
+        expect(paths.key).toBe('/Users/testuser/.devark/.key');
       } else {
-        expect(paths.config).toBe('/home/testuser/.vibelog/config.json');
-        expect(paths.key).toBe('/home/testuser/.vibelog/.key');
+        expect(paths.config).toBe('/home/testuser/.devark/config.json');
+        expect(paths.key).toBe('/home/testuser/.devark/.key');
       }
     });
 
     testOnPlatforms(['win32', 'darwin', 'linux'], 'should join paths correctly', (platform) => {
       const home = os.homedir();
-      const configPath = path.join(home, '.vibelog', 'config.json');
+      const configPath = path.join(home, '.devark', 'config.json');
       
       if (platform === 'win32') {
         // On Windows, path.join might mix separators in our emulation
         // The important thing is that it produces a valid Windows path
         expect(configPath).toMatch(/^[A-Z]:\\/); // Starts with drive letter
-        expect(configPath).toContain('.vibelog');
+        expect(configPath).toContain('.devark');
         expect(configPath).toContain('config.json');
       } else {
         expect(configPath).toContain('/');

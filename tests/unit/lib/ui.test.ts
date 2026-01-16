@@ -210,7 +210,7 @@ describe('UI Utilities', () => {
       showWelcome();
       
       expect(mockConsole.log).toHaveBeenCalledWith(
-        expect.stringContaining('Welcome to vibe-log')
+        expect.stringContaining('Welcome to devark')
       );
       expect(mockConsole.log).toHaveBeenCalledWith(
         expect.stringContaining('Track your building journey')

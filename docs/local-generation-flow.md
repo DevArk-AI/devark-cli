@@ -4,14 +4,14 @@ flowchart TD
         Start([Work with Claude Code]) --> Sessions[Claude stores sessions<br/>in ~/.claude/projects]
     end
 
-    subgraph Preparation ["📁 Data Preparation by vibe-log-cli"]
-        Sessions --> Extract[vibe-log-cli extracts<br/>chosen sessions]
-        Extract --> TempFolder[Copy sessions to<br/>~/.vibe-log-temp/]
+    subgraph Preparation ["📁 Data Preparation by devark-cli"]
+        Sessions --> Extract[devark-cli extracts<br/>chosen sessions]
+        Extract --> TempFolder[Copy sessions to<br/>~/.devark-temp/]
         TempFolder --> Manifest[📋 Create manifest file<br/>with session index & metadata]
     end
 
     subgraph Orchestration ["🎯 Claude Code Orchestration"]
-        Manifest --> LaunchMain[vibe-log-cli launches Claude Code<br/>with instructions to read manifest]
+        Manifest --> LaunchMain[devark-cli launches Claude Code<br/>with instructions to read manifest]
         
         LaunchMain --> Orchestrator{Claude reads manifest<br/>& launches sub-agents}
         
@@ -31,7 +31,7 @@ flowchart TD
 
     subgraph Output ["📄 Final Output"]
         Build --> Format[Format as<br/>HTML/Markdown]
-        Format --> LocalReport[Save report to<br/>~/.vibe-log/reports/]
+        Format --> LocalReport[Save report to<br/>~/.devark/reports/]
         LocalReport --> Open[Open in browser<br/>for viewing]
     end
 ```

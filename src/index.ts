@@ -205,7 +205,7 @@ function showHelp(): void {
   console.log('For hooks (automatic sync):');
   console.log('  npx devark-cli send --silent    Used by Claude Code hooks');
   console.log('');
-  console.log('Learn more at: https://devark.dev');
+  console.log('Learn more at: https://devark.ai');
   console.log('');
   process.exit(0);
 }

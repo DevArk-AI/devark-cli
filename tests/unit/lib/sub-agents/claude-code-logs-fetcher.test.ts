@@ -13,9 +13,9 @@ import { SUB_AGENT_TEMPLATES } from '../../../../src/lib/sub-agents/templates';
 vi.mock('fs/promises');
 vi.mock('os');
 
-describe.skip('vibe-log-claude-code-logs-fetcher sub-agent', () => {
+describe.skip('devark-claude-code-logs-fetcher sub-agent', () => {
   const mockHomeDir = '/home/testuser';
-  const subAgentName = 'vibe-log-claude-code-logs-fetcher.md';
+  const subAgentName = 'devark-claude-code-logs-fetcher.md';
   
   beforeEach(() => {
     vi.clearAllMocks();
@@ -36,7 +36,7 @@ describe.skip('vibe-log-claude-code-logs-fetcher sub-agent', () => {
       const template = SUB_AGENT_TEMPLATES[subAgentName];
       
       // Check for key sections
-      expect(template).toContain('# vibe-log-claude-code-logs-fetcher');
+      expect(template).toContain('# devark-claude-code-logs-fetcher');
       expect(template).toContain('## Purpose');
       expect(template).toContain('## Instructions');
       expect(template).toContain('## Directory Name Handling');
@@ -55,7 +55,7 @@ describe.skip('vibe-log-claude-code-logs-fetcher sub-agent', () => {
       // Check for specific examples
       // Note: These tests check for generic examples in the template
       expect(template).toContain('compound project names');
-      expect(template).toContain('vibe-log, vibelog-cli');
+      expect(template).toContain('devark, devark-cli');
       expect(template).toContain('canvas-genie');
     });
     
@@ -89,7 +89,7 @@ describe.skip('vibe-log-claude-code-logs-fetcher sub-agent', () => {
       
       expect(fs.writeFile).toHaveBeenCalledWith(
         expectedPath,
-        expect.stringContaining('vibe-log-claude-code-logs-fetcher'),
+        expect.stringContaining('devark-claude-code-logs-fetcher'),
         'utf-8'
       );
     });
@@ -99,8 +99,8 @@ describe.skip('vibe-log-claude-code-logs-fetcher sub-agent', () => {
       
       vi.mocked(fs.access).mockResolvedValue(undefined);
       vi.mocked(fs.readdir).mockResolvedValue([
-        'vibe-log-track-analyzer.md',
-        'vibe-log-claude-code-logs-fetcher.md'
+        'devark-track-analyzer.md',
+        'devark-claude-code-logs-fetcher.md'
       ] as any);
       
       const status = await checkInstalledSubAgents();
@@ -112,7 +112,7 @@ describe.skip('vibe-log-claude-code-logs-fetcher sub-agent', () => {
     it('should be detected as missing when not installed', async () => {
       vi.mocked(fs.access).mockResolvedValue(undefined);
       vi.mocked(fs.readdir).mockResolvedValue([
-        'vibe-log-track-analyzer.md'
+        'devark-track-analyzer.md'
       ] as any);
       
       const status = await checkInstalledSubAgents();
@@ -140,14 +140,14 @@ describe.skip('vibe-log-claude-code-logs-fetcher sub-agent', () => {
   
   describe('Template Content Validation', () => {
     it.skip('should handle directory name decoding examples correctly', () => {
-      // NOTE: This test is skipped because the vibe-log-claude-code-logs-fetcher
+      // NOTE: This test is skipped because the devark-claude-code-logs-fetcher
       // sub-agent doesn't exist in the current templates.
       // Keeping for reference if the sub-agent is added in the future.
       const template = SUB_AGENT_TEMPLATES[subAgentName];
       
       // Validate the examples match our actual parsing logic
       const examples = [
-        { encoded: '-Users-testuser-dev-personal-vibe-log', project: 'vibe-log' },
+        { encoded: '-Users-testuser-dev-personal-devark', project: 'devark' },
         { encoded: '-Users-testuser-dev-personal-canvas-genie', project: 'canvas-genie' },
       ];
       

@@ -6,14 +6,14 @@ flowchart LR
     end
 
     subgraph Analysis ["🧠 Local Prompt Analysis via Claude Code SDK"]
-        Hook --> CLI[Vibe-log CLI<br/>receives prompt]
+        Hook --> CLI[DevArk CLI<br/>receives prompt]
         CLI --> Check{Is new chat?}
         Check -->|No| Context[📝 Include previous<br/>conversation]
         Check -->|Yes| Direct[💭 Analyze prompt<br/>standalone]
         
         subgraph Personality ["🎭 Infuse Coach Personality"]
             Gordon[🧑‍🍳 Gordon<br/>Tough love]
-            Vibe[💜 Vibe-log<br/>Encouraging]
+            Vibe[💜 DevArk<br/>Encouraging]
             Custom[✨ Custom<br/>Your style]
         end
         
@@ -24,7 +24,7 @@ flowchart LR
     end
 
     subgraph Display ["💬 Status Line Feedback"]
-        Score --> Save[💾 Save to<br/>~/.vibe-log]
+        Score --> Save[💾 Save to<br/>~/.devark]
         Save --> Status[Status bar<br/>reads result]
         Status --> Show[🟢 85/100<br/>✨ Gordon says:<br/>Add more context chef!]
     end

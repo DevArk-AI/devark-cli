@@ -30,7 +30,7 @@ export function generatePromotionalTip(
   if (isAuthenticated) {
     // Cloud mode: Show clickable hyperlink to analytics dashboard
     // Terminal hyperlink format: OSC 8 escape sequence
-    const analyticsUrl = 'https://app.devark.dev/dashboard/analytics?tab=improve&time=week';
+    const analyticsUrl = 'https://app.devark.ai/dashboard/analytics?tab=improve&time=week';
     
     // Using ANSI escape codes for color and hyperlink
     const yellow = '\u001b[93m';

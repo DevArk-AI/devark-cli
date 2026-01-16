@@ -58,7 +58,7 @@ const config = new Conf<ConfigSchema>({
   schema: {
     apiUrl: {
       type: 'string',
-      default: 'https://app.devark.dev',
+      default: 'https://app.devark.ai',
     },
     cliPath: {
       type: 'string',
@@ -191,11 +191,11 @@ export function getApiUrl(): string {
       return url;
     }
     
-    // Only allow *.devark.dev and *.devark.ai domains
-    const allowedDomains = ['devark.dev', 'devark.ai'];
+    // Only allow *.devark.ai domains
+    const allowedDomains = ['devark.ai'];
     const isAllowed = allowedDomains.some(domain => parsed.hostname.endsWith(domain));
     if (!isAllowed) {
-      throw new Error(`Invalid API host: ${parsed.hostname}. Only *.devark.dev and *.devark.ai domains allowed.`);
+      throw new Error(`Invalid API host: ${parsed.hostname}. Only *.devark.ai domains allowed.`);
     }
     
     return url;
@@ -211,9 +211,9 @@ export function getDashboardUrl(): string {
     const parsed = new URL(apiUrl);
     
     // Special handling for production API
-    if (parsed.hostname === 'devark.dev' || parsed.hostname === 'www.devark.dev') {
+    if (parsed.hostname === 'devark.ai' || parsed.hostname === 'www.devark.ai') {
       // Production API uses app subdomain for dashboard
-      return `${parsed.protocol}//app.devark.dev/dashboard`;
+      return `${parsed.protocol}//app.devark.ai/dashboard`;
     }
     
     // For all other URLs (localhost, staging, etc.), append /dashboard
@@ -222,7 +222,7 @@ export function getDashboardUrl(): string {
     return `${baseUrl}/dashboard`;
   } catch (error) {
     // Fallback to production dashboard if URL parsing fails
-    return 'https://app.devark.dev/dashboard';
+    return 'https://app.devark.ai/dashboard';
   }
 }
 

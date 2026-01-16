@@ -208,7 +208,7 @@ export function generateMockProject(options: Partial<ClaudeProject> = {}): Claud
  */
 export function generateMockProjects(count: number = 5): ClaudeProject[] {
   const projectNames = [
-    'vibe-log',
+    'my-project',
     'web-app',
     'api-service',
     'mobile-app',
@@ -307,7 +307,7 @@ export function mockTerminalDimensions(width: number = 80, height: number = 24) 
 }
 
 /**
- * Mock API responses for vibe-log backend
+ * Mock API responses for devark backend
  */
 export function mockApiResponses() {
   return {

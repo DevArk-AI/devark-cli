@@ -160,7 +160,7 @@ jobs:
           
           if [ -z "$NOTES" ]; then
             echo "No release notes found for version $VERSION in CHANGELOG.md"
-            NOTES="See [CHANGELOG.md](https://github.com/vibe-log/vibe-log-cli/blob/main/CHANGELOG.md) for details."
+            NOTES="See [CHANGELOG.md](https://github.com/devark/devark-cli/blob/main/CHANGELOG.md) for details."
           fi
           
           # Save to file to handle multiline content

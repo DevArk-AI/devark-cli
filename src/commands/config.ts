@@ -130,7 +130,7 @@ export async function config(options: ConfigOptions): Promise<void> {
   console.log(chalk.gray('\nExamples:'));
   console.log('  devark config --list');
   console.log('  devark config --get apiUrl');
-  console.log('  devark config --set apiUrl=https://api.devark.dev');
+  console.log('  devark config --set apiUrl=https://api.devark.ai');
   console.log('  devark config --set cliPath="/path/to/devark.js"');
   console.log('  devark config --set preferences.colorScheme=minimal');
 }

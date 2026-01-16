@@ -45,7 +45,7 @@ describe('Browser Authentication Module', () => {
     // Mock config
     vi.mocked(config.storeToken).mockResolvedValue(undefined);
     vi.mocked(config.clearToken).mockResolvedValue(undefined);
-    vi.mocked(config.getApiUrl).mockReturnValue('https://test.vibe-log.dev');
+    vi.mocked(config.getApiUrl).mockReturnValue('https://test.devark.ai');
   });
 
   afterEach(() => {
