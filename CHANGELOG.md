@@ -7,6 +7,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.0] - 2025-01-16
+
+### Added
+- **Initial DevArk CLI Release**: Rebranded from vibe-log-cli to devark-cli
+- Developer productivity CLI for tracking and analyzing Claude Code sessions
+- Session upload and sync functionality
+- Hook system for Claude Code integration (SessionStart, PreCompact, SessionEnd)
+- Push-up challenge gamification feature
+- Status line prompt coaching with AI personalities
+- Daily standup report generation
+- Cursor IDE integration support
+- Cross-platform support (macOS, Windows, Linux)
+
+### Changed
+- Package name changed from `vibe-log-cli` to `devark-cli`
+- Brand updated from Vibe-Log to DevArk
+- Repository moved to github.com/DevArk-AI/devark-cli
+
+---
+
+## Historical Versions (from vibe-log-cli)
+
+The following changelog entries are preserved from the original vibe-log-cli project.
+
 ## [0.8.2] - 2025-11-18
 
 ### Note
