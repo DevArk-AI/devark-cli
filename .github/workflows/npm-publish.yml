@@ -101,8 +101,8 @@ jobs:
         with:
           node-version: '20.x'
           cache: 'npm'
-          registry-url: 'https://registry.npmjs.org'
-          
+          # Note: Don't set registry-url here - OIDC handles auth automatically
+
       - name: Download build artifacts
         uses: actions/download-artifact@v4
         with:
