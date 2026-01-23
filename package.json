@@ -1,6 +1,6 @@
 {
   "name": "devark-cli",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "DevArk - Developer Productivity CLI",
   "bin": {
     "devark": "./bin/devark.js"
