@@ -87,8 +87,7 @@ jobs:
     name: Publish to NPM
     needs: build-and-test
     runs-on: ubuntu-latest
-    environment: npm-production
-    
+
     permissions:
       contents: write
       id-token: write  # Required for npm provenance
