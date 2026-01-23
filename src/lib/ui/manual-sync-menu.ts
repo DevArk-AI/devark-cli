@@ -5,13 +5,34 @@ import { showSessionSelector, SelectedSessionInfo } from './session-selector';
 import { readClaudeSessions } from '../readers/claude';
 import { parseProjectName } from './project-display';
 import { createSpinner } from '../ui';
+import { apiClient } from '../api-client';
+import { isAuthenticated } from '../auth/token';
 
-export type ManualSyncOption = 
+export type ManualSyncOption =
   | { type: 'selected'; sessions: SelectedSessionInfo[] }
   | { type: 'time-based'; days: number; sessions: SelectedSessionInfo[] }
   | { type: 'projects'; projects: string[] }
   | { type: 'all' }
   | { type: 'cancel' };
+
+/**
+ * Get the server's last session date for incremental sync.
+ * Returns undefined if not authenticated or on error.
+ */
+async function getServerLastSessionDate(): Promise<Date | undefined> {
+  try {
+    if (!await isAuthenticated()) {
+      return undefined;
+    }
+    const result = await apiClient.getLastSessionDate();
+    if (result.lastSessionTimestamp) {
+      return new Date(result.lastSessionTimestamp);
+    }
+    return undefined;
+  } catch {
+    return undefined;
+  }
+}
 
 /**
  * Show the manual sync menu and return the user's choice
@@ -190,27 +211,47 @@ export async function showManualSyncMenu(): Promise<ManualSyncOption> {
     }
     
     case 'all': {
-      // Confirm syncing all
-      const projects = await discoverProjects();
-      const totalSessions = projects.reduce((sum, p) => sum + p.sessions, 0);
-      
-      console.log('');
-      console.log(colors.info(`This will sync ${totalSessions} sessions from ${projects.length} projects.`));
-      
-      const { confirm } = await inquirer.prompt([
-        {
-          type: 'confirm',
-          name: 'confirm',
-          message: 'Continue with syncing all projects?',
-          default: true
+      // Confirm syncing all - show accurate count based on server's last sync
+      const spinner = createSpinner('Calculating sessions to sync...').start();
+
+      try {
+        const serverSince = await getServerLastSessionDate();
+        const sessions = await readClaudeSessions({ since: serverSince });
+
+        // Filter out sessions shorter than 4 minutes (240 seconds)
+        const validSessions = sessions.filter(s => s.duration >= 240);
+
+        // Get unique projects
+        const projectPaths = new Set(validSessions.map(s => s.sourceFile?.claudeProjectPath).filter(Boolean));
+
+        spinner.stop();
+        console.log('');
+
+        if (serverSince) {
+          console.log(colors.info(`This will sync ${validSessions.length} new sessions from ${projectPaths.size} projects`));
+          console.log(colors.subdued(`(Sessions since ${serverSince.toLocaleDateString()})`));
+        } else {
+          console.log(colors.info(`This will sync ${validSessions.length} sessions from ${projectPaths.size} projects.`));
         }
-      ]);
-      
-      if (!confirm) {
+
+        const { confirm } = await inquirer.prompt([
+          {
+            type: 'confirm',
+            name: 'confirm',
+            message: `Continue with syncing ${validSessions.length} sessions?`,
+            default: true
+          }
+        ]);
+
+        if (!confirm) {
+          return { type: 'cancel' };
+        }
+
+        return { type: 'all' };
+      } catch (error) {
+        spinner.fail(colors.error('Failed to calculate sessions'));
         return { type: 'cancel' };
       }
-      
-      return { type: 'all' };
     }
     
     default:

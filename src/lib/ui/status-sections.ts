@@ -93,8 +93,13 @@ export function createSection(
 
 /**
  * Create cloud status section
+ * @param status - Cloud status from local config
+ * @param serverLastSessionDate - Optional server's last synced session date (from API)
  */
-export function createCloudStatusSection(status: CloudStatus): string {
+export function createCloudStatusSection(
+  status: CloudStatus,
+  serverLastSessionDate?: Date
+): string {
   const content: string[] = [];
   
   // Connection status
@@ -127,19 +132,22 @@ export function createCloudStatusSection(status: CloudStatus): string {
   );
   
   // Last sync time with project name
+  // Use server's last session date if available, fall back to local config
   let syncIcon = icons.clock;
   let syncColor = colors.primary;
   let syncText = 'Never synced';
   let syncProject = '';
-  
-  if (status.lastSync) {
-    const timeSince = new Date().getTime() - status.lastSync.getTime();
+
+  const lastSyncDate = serverLastSessionDate || status.lastSync;
+
+  if (lastSyncDate) {
+    const timeSince = new Date().getTime() - lastSyncDate.getTime();
     const minutes = Math.floor(timeSince / 60000);
     const hours = Math.floor(minutes / 60);
     const days = Math.floor(hours / 24);
     
-    // Get the project name if available
-    if (status.lastSyncProject) {
+    // Get the project name if available (only for local config, not server date)
+    if (!serverLastSessionDate && status.lastSyncProject) {
       syncProject = `${status.lastSyncProject} `;
     }
     
@@ -254,14 +262,18 @@ export function createLocalEngineSection(engine: LocalEngine): string {
 
 /**
  * Create a status dashboard with multiple sections
+ * @param cloud - Cloud status from local config
+ * @param local - Local engine status
+ * @param serverLastSessionDate - Optional server's last synced session date (from API)
  */
 export async function createStatusDashboard(
   cloud: CloudStatus,
-  local: LocalEngine
+  local: LocalEngine,
+  serverLastSessionDate?: Date
 ): Promise<string> {
   const sections: string[] = [];
   // Cloud status
-  sections.push(createCloudStatusSection(cloud));
+  sections.push(createCloudStatusSection(cloud, serverLastSessionDate));
   sections.push('');
 
   // Local engine (Claude Code + sub-agents)

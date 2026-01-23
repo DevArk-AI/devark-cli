@@ -93,13 +93,17 @@ export class SendOrchestrator {
     // IMPORTANT: --all flag takes precedence over claudeProjectDir
     // This ensures global hooks capture all projects regardless of CLAUDE_PROJECT_DIR
     if (options.all) {
-      // For --all mode, don't use project-specific date filtering
-      const sessions = await readClaudeSessions({ since: undefined });
+      // For --all mode, try server-side incremental sync first
+      const serverSince = await this.getServerLastSessionDate();
+      if (serverSince) {
+        logger.debug(`Using server timestamp for incremental sync: ${serverSince.toISOString()}`);
+      }
+      const sessions = await readClaudeSessions({ since: serverSince });
       return sessions;
     }
 
     // Determine date filter only for non-all modes
-    const sinceDate = this.determineSinceDate(options);
+    const sinceDate = await this.determineSinceDateWithServerFallback(options);
 
     // Handle explicit Claude project directory (only when --all is not set)
     if (options.claudeProjectDir && options.claudeProjectDir.trim() !== '') {
@@ -120,17 +124,52 @@ export class SendOrchestrator {
     if (options.hookTrigger && options.claudeProjectDir) {
       const claudeFolderName = parseProjectName(options.claudeProjectDir);
       const projectSync = getProjectSyncData(claudeFolderName);
-      
+
       if (projectSync?.newestSyncedTimestamp) {
         return new Date(projectSync.newestSyncedTimestamp);
       }
-      
+
       // First sync - default to 30 days
       return new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
     }
 
     // Manual sync - no date filter
     return undefined;
+  }
+
+  /**
+   * Get the server's last session timestamp for incremental sync.
+   * Returns undefined on error to allow fallback to local sync state.
+   */
+  private async getServerLastSessionDate(): Promise<Date | undefined> {
+    try {
+      const result = await apiClient.getLastSessionDate();
+      if (result.lastSessionTimestamp) {
+        return new Date(result.lastSessionTimestamp);
+      }
+      // User has no sessions on server, return undefined (upload all)
+      return undefined;
+    } catch (error) {
+      // Log warning but don't fail - fall back to local sync state
+      logger.warn(`Failed to get server last session date, falling back to local sync: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      return undefined;
+    }
+  }
+
+  /**
+   * Determine since date with server-side incremental sync fallback.
+   * First tries server timestamp, then falls back to local sync state.
+   */
+  private async determineSinceDateWithServerFallback(options: SendOptions): Promise<Date | undefined> {
+    // First, try to get server's last session timestamp for true incremental sync
+    const serverSince = await this.getServerLastSessionDate();
+    if (serverSince) {
+      logger.debug(`Using server timestamp for incremental sync: ${serverSince.toISOString()}`);
+      return serverSince;
+    }
+
+    // Fall back to local sync state
+    return this.determineSinceDate(options);
   }
 
   private async loadProjectSessions(claudeProjectDir: string, sinceDate?: Date): Promise<SessionData[]> {

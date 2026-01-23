@@ -606,6 +606,26 @@ class SecureApiClient {
     // Fallback for backward compatibility (if API changes)
     return response.data;
   }
+
+  /**
+   * Get the timestamp of the user's most recent session for incremental sync.
+   * @returns Last session timestamp (ISO string) and ID, or null if no sessions exist
+   */
+  async getLastSessionDate(): Promise<{ lastSessionTimestamp: string | null; lastSessionId: number | null }> {
+    try {
+      const response = await this.client.get('/api/sessions/last');
+      return {
+        lastSessionTimestamp: response.data.lastSessionTimestamp || null,
+        lastSessionId: response.data.lastSessionId || null,
+      };
+    } catch (error: any) {
+      // If endpoint returns 404, user has no sessions
+      if (error.response?.status === 404) {
+        return { lastSessionTimestamp: null, lastSessionId: null };
+      }
+      throw error;
+    }
+  }
   
   getBaseUrl(): string {
     return this.client.defaults.baseURL || 'http://localhost:3000';

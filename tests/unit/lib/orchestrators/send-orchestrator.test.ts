@@ -1247,4 +1247,141 @@ describe('SendOrchestrator', () => {
       expect(sessions[0].metadata?.files_edited).toBe(2); // Two files tracked
     });
   });
+
+  describe('Server-based incremental sync', () => {
+    const mockSessions = [
+      {
+        id: 'session1',
+        tool: 'claude_code' as const,
+        projectPath: '/home/user/projects/app1',
+        timestamp: new Date('2024-01-20'),
+        duration: 300,
+        messages: [
+          { role: 'user' as const, content: 'Hello', timestamp: new Date() }
+        ],
+        metadata: {}
+      },
+      {
+        id: 'session2',
+        tool: 'claude_code' as const,
+        projectPath: '/home/user/projects/app2',
+        timestamp: new Date('2024-01-21'),
+        duration: 400,
+        messages: [
+          { role: 'user' as const, content: 'World', timestamp: new Date() }
+        ],
+        metadata: {}
+      }
+    ];
+
+    it('should use server last session date for --all mode', async () => {
+      const serverDate = new Date('2024-01-15T00:00:00Z');
+      mockApiClient.getLastSessionDate = vi.fn().mockResolvedValue({
+        lastSessionTimestamp: serverDate.toISOString(),
+        lastSessionId: 123
+      });
+      mockReadClaudeSessions.mockResolvedValue(mockSessions);
+
+      await orchestrator.loadSessions({ all: true });
+
+      // Should have called getLastSessionDate
+      expect(mockApiClient.getLastSessionDate).toHaveBeenCalled();
+
+      // Should have called readClaudeSessions with the server date
+      expect(mockReadClaudeSessions).toHaveBeenCalledWith({
+        since: serverDate
+      });
+    });
+
+    it('should use server date for non-all mode with fallback', async () => {
+      const serverDate = new Date('2024-01-15T00:00:00Z');
+      mockApiClient.getLastSessionDate = vi.fn().mockResolvedValue({
+        lastSessionTimestamp: serverDate.toISOString(),
+        lastSessionId: 123
+      });
+      mockReadClaudeSessions.mockResolvedValue(mockSessions);
+
+      // Filter sessions to current directory
+      Object.defineProperty(process, 'cwd', {
+        value: () => '/home/user/projects/app1',
+        configurable: true
+      });
+
+      await orchestrator.loadSessions({});
+
+      // Should have called getLastSessionDate
+      expect(mockApiClient.getLastSessionDate).toHaveBeenCalled();
+
+      // Should have called readClaudeSessions with the server date
+      expect(mockReadClaudeSessions).toHaveBeenCalledWith({
+        since: serverDate
+      });
+    });
+
+    it('should fall back to local sync state when server returns null', async () => {
+      mockApiClient.getLastSessionDate = vi.fn().mockResolvedValue({
+        lastSessionTimestamp: null,
+        lastSessionId: null
+      });
+      mockReadClaudeSessions.mockResolvedValue(mockSessions);
+
+      await orchestrator.loadSessions({ all: true });
+
+      // Should have called getLastSessionDate
+      expect(mockApiClient.getLastSessionDate).toHaveBeenCalled();
+
+      // Should have called readClaudeSessions without since date (upload all)
+      expect(mockReadClaudeSessions).toHaveBeenCalledWith({
+        since: undefined
+      });
+    });
+
+    it('should fall back to local sync state when server call fails', async () => {
+      mockApiClient.getLastSessionDate = vi.fn().mockRejectedValue(new Error('Network error'));
+      mockReadClaudeSessions.mockResolvedValue(mockSessions);
+
+      await orchestrator.loadSessions({ all: true });
+
+      // Should have attempted to call getLastSessionDate
+      expect(mockApiClient.getLastSessionDate).toHaveBeenCalled();
+
+      // Should have called readClaudeSessions without since date (fallback)
+      expect(mockReadClaudeSessions).toHaveBeenCalledWith({
+        since: undefined
+      });
+    });
+
+    it('should use hook trigger local sync when server fails and hook mode', async () => {
+      mockApiClient.getLastSessionDate = vi.fn().mockRejectedValue(new Error('Network error'));
+
+      const recentDate = new Date('2024-01-10');
+      mockGetProjectSyncData.mockReturnValue({
+        newestSyncedTimestamp: recentDate.toISOString(),
+        oldestSyncedTimestamp: new Date('2024-01-01').toISOString(),
+        lastUpdated: Date.now(),
+        projectName: 'my-app',
+        sessionCount: 5
+      });
+
+      mockAnalyzeProject.mockResolvedValue({
+        name: 'my-app',
+        claudePath: '/home/user/.claude/projects/-home-user-projects-my-app',
+        actualPath: '/home/user/projects/my-app',
+        lastModified: new Date()
+      });
+
+      mockReadClaudeSessions.mockResolvedValue(mockSessions);
+
+      await orchestrator.loadSessions({
+        hookTrigger: 'sessionstart',
+        claudeProjectDir: '/home/user/.claude/projects/-home-user-projects-my-app'
+      });
+
+      // Should have attempted server call
+      expect(mockApiClient.getLastSessionDate).toHaveBeenCalled();
+
+      // Should fall back to local project sync data
+      expect(mockGetProjectSyncData).toHaveBeenCalled();
+    });
+  });
 });

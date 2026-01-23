@@ -177,8 +177,22 @@ export async function showMainMenu(
     statusLineStatus: state.statusLineStatus,
     configPath: '~/.claude/config'
   };
-  
-  console.log(await createStatusDashboard(cloudStatus, localEngine));
+
+  // Fetch server's last session date if authenticated for accurate sync status
+  let serverLastSessionDate: Date | undefined;
+  if (state.hasAuth) {
+    try {
+      const { apiClient } = await import('../api-client');
+      const result = await apiClient.getLastSessionDate();
+      if (result.lastSessionTimestamp) {
+        serverLastSessionDate = new Date(result.lastSessionTimestamp);
+      }
+    } catch {
+      // Fall back to local config if server call fails
+    }
+  }
+
+  console.log(await createStatusDashboard(cloudStatus, localEngine, serverLastSessionDate));
   console.log('');
   
   // Build context-aware menu
