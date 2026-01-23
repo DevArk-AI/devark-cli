@@ -99,7 +99,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20.x'
+          node-version: '22.x'  # Requires Node 22+ for npm OIDC (npm >= 11.5.1)
           cache: 'npm'
           # Note: Don't set registry-url here - OIDC handles auth automatically
 
@@ -132,8 +132,9 @@ jobs:
         run: npm pack --dry-run
         
       - name: Publish to NPM with provenance
-        run: |
-          npm publish --provenance --access public
+        run: npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ""  # Clear any auto-set token to use OIDC
           
       - name: Extract version from tag or input
         id: get_version
