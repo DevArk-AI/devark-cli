@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.1] - 2025-01-23
+
+### Improved
+- **Accurate Sync Status**: Main menu now displays the actual last synced date from the server instead of local config
+- **Accurate Session Counts**: "Sync all projects" now shows how many NEW sessions will be uploaded, filtered by server's last sync date
+- **Incremental Sync**: Hook-based auto-sync now uses server's last session timestamp for true incremental uploads
+
+### Fixed
+- "Last synced: Never synced" no longer appears incorrectly when sessions exist on server
+- Session count preview no longer shows inflated numbers that include already-synced sessions
+
 ## [0.1.0] - 2025-01-16
 
 ### Added
