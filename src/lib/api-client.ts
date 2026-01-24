@@ -8,6 +8,10 @@ import { claudeSettingsManager } from './claude-settings-manager';
 import crypto from 'crypto';
 import type { CliTelemetry } from './telemetry';
 
+// Size-based batching constants
+const TARGET_BATCH_SIZE_BYTES = 500 * 1024; // 500KB
+const BUFFER_PERCENT = 0.20; // 20% overhead buffer
+
 export interface Session {
   tool: 'claude_code' | 'cursor' | 'vscode';
   timestamp: string;
@@ -386,6 +390,43 @@ class SecureApiClient {
     }
   }
 
+  private estimateSessionSize(session: Session): number {
+    return Buffer.byteLength(JSON.stringify(session));
+  }
+
+  private createSizeBatches(
+    sessions: Session[],
+    targetSizeBytes: number = TARGET_BATCH_SIZE_BYTES,
+    bufferPercent: number = BUFFER_PERCENT
+  ): Session[][] {
+    const effectiveTarget = targetSizeBytes * (1 - bufferPercent);
+    const batches: Session[][] = [];
+    let currentBatch: Session[] = [];
+    let currentSize = 0;
+
+    for (const session of sessions) {
+      const sessionSize = this.estimateSessionSize(session);
+
+      // Only split if batch already has sessions
+      // This ensures oversized sessions get their own batch, never infinite loop
+      if (currentBatch.length > 0 && currentSize + sessionSize > effectiveTarget) {
+        batches.push(currentBatch);
+        currentBatch = [session];
+        currentSize = sessionSize;
+      } else {
+        // Always add to batch - even if session exceeds target (when batch is empty)
+        currentBatch.push(session);
+        currentSize += sessionSize;
+      }
+    }
+
+    if (currentBatch.length > 0) {
+      batches.push(currentBatch);
+    }
+
+    return batches;
+  }
+
   async uploadSessions(
     sessions: Session[],
     onProgress?: (current: number, total: number, sizeKB?: number) => void
@@ -396,23 +437,18 @@ class SecureApiClient {
     // Validate and sanitize sessions
     const sanitizedSessions = sessions.map(session => this.sanitizeSession(session));
 
-    // Chunk large uploads
-    // Using 100 for better performance - modern connections can handle 300-500KB payloads
-    const CHUNK_SIZE = 100;
-    const chunks = [];
-    
-    for (let i = 0; i < sanitizedSessions.length; i += CHUNK_SIZE) {
-      chunks.push(sanitizedSessions.slice(i, i + CHUNK_SIZE));
-    }
-    
+    // Use size-based batching for optimal payload sizes
+    const chunks = this.createSizeBatches(sanitizedSessions);
+
     const results = [];
     let uploadedCount = 0;
     let uploadedSizeKB = 0;
-    
+
     // Calculate total size
     const totalSize = Buffer.byteLength(JSON.stringify(sanitizedSessions)) / 1024;
     if (process.env.DEVARK_DEBUG === 'true') {
-      console.log('[DEBUG] Uploading in', chunks.length, 'chunks', `(Total: ${totalSize.toFixed(2)} KB)`);
+      console.log('[DEBUG] Uploading in', chunks.length, 'size-based batches',
+        `(Total: ${totalSize.toFixed(2)} KB, Target: ~${TARGET_BATCH_SIZE_BYTES / 1024}KB per batch)`);
     }
     
     for (let i = 0; i < chunks.length; i++) {
