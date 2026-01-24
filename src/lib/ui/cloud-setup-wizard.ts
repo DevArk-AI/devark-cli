@@ -38,6 +38,7 @@ function showConnectionErrorHelp(error: unknown): void {
  */
 export async function guidedCloudSetup(): Promise<void> {
   // Get version for logo display
+  // eslint-disable-next-line @typescript-eslint/no-var-requires -- package.json outside rootDir
   const pkg = require('../../../package.json');
   const version = process.env.SIMULATE_OLD_VERSION || pkg.version;
 

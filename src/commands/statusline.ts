@@ -190,13 +190,14 @@ function formatLoadingState(state: LoadingState, format: OutputFormat): string {
  */
 function formatAnalysis(analysis: PromptAnalysis, format: OutputFormat, ccusageOutput?: string | null): string {
   switch (format) {
-    case 'json':
+    case 'json': {
       // For JSON, include ccusage as separate field
-      const jsonOutput: any = { ...analysis };
+      const jsonOutput: Record<string, unknown> = { ...analysis };
       if (ccusageOutput) {
         jsonOutput.ccusage = ccusageOutput;
       }
       return JSON.stringify(jsonOutput);
+    }
     case 'detailed':
       return formatDetailed(analysis);
     case 'emoji':
@@ -271,9 +272,10 @@ function formatDefault(format: OutputFormat): string {
   const baseMessage = `💭 ${personalityName} is ready to analyze and improve your prompts`;
 
   switch (format) {
-    case 'json':
-      const jsonResult: any = { status: 'ready', message: baseMessage, personality: personality.personality };
+    case 'json': {
+      const jsonResult: Record<string, unknown> = { status: 'ready', message: baseMessage, personality: personality.personality };
       return JSON.stringify(jsonResult);
+    }
     case 'detailed':
       return `Status: Ready | ${baseMessage}`;
     case 'emoji':

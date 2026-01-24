@@ -151,6 +151,7 @@ export function validateProjectName(name: string): string {
   
   // Remove potentially dangerous characters
   const sanitized = name
+    // eslint-disable-next-line no-control-regex -- intentionally matching control chars for security
     .replace(/[<>:"\\|?*\u0000-\u001F]/g, '') // Windows forbidden chars
     .replace(/\.\./g, '')                  // Directory traversal
     .replace(/^\.|\.$/g, '')               // Leading/trailing dots

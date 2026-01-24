@@ -3,6 +3,7 @@ import { detectSetupState } from './detector';
 import { getHooksStatus } from './hooks/hooks-controller';
 import { logger } from '../utils/logger';
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires -- package.json outside rootDir
 const pkg = require('../../package.json');
 
 export interface CliTelemetry {

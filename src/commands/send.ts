@@ -38,6 +38,7 @@ export async function send(options: SendOptions): Promise<void> {
     // Check for version updates when triggered by hooks
     // Skip if we're already running from @latest spawn to prevent infinite loops
     if (options.hookTrigger && !process.env.DEVARK_SPAWNED_LATEST) {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires -- package.json outside rootDir
       const currentVersion = process.env.SIMULATE_OLD_VERSION || require('../../package.json').version;
       logger.debug(`Checking version update: hookTrigger=${options.hookTrigger}, currentVersion=${currentVersion}`);
       const versionCheck = await checkForUpdate(currentVersion);

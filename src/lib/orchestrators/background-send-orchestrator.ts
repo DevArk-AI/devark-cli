@@ -22,6 +22,7 @@ export class BackgroundSendOrchestrator {
     // Skip if we're already running from @latest spawn to prevent infinite loops
     if (!process.env.DEVARK_SPAWNED_LATEST) {
       try {
+        // eslint-disable-next-line @typescript-eslint/no-var-requires -- package.json outside rootDir
         const currentVersion = process.env.SIMULATE_OLD_VERSION || require('../../../package.json').version;
         const versionCheck = await checkForUpdate(currentVersion);
 
