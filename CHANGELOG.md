@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.3] - 2025-01-24
+
+### Improved
+- **Size-Based Batching**: Session uploads now use intelligent size-based batching (~400KB per batch) instead of fixed 100-session batches
+- Prevents "payload too large" errors when sessions contain large message summaries (e.g., pasted logs, long conversations)
+- Large sessions automatically get their own batch while small sessions are grouped together efficiently
+
 ## [0.1.2] - 2025-01-23
 
 ### Fixed
